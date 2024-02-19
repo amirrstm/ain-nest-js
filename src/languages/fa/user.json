@@ -17,9 +17,10 @@
   "upload": "Upload Success",
   "login": "Login success.",
   "signUp": "Sign up Success",
+  "signUpMobile": "Otp Code Sent",
   "loginGoogle": "Login with google succeed",
   "error": {
-    "notFound": "User not found azizam.",
+    "notFound": "User not found.",
     "emailExist": "Email user used",
     "mobileNumberExist": "Mobile Number user used",
     "passwordExpired": "User password expired",
@@ -30,6 +31,7 @@
     "inactive": "User is inactive",
     "isActiveInvalid": "User is active invalid",
     "usernameExist": "Username exist",
-    "newPasswordMustDifference": "Old password must difference"
+    "newPasswordMustDifference": "Old password must difference",
+    "alreadyCodeGenerated": "The code has already been generated"
   }
 }

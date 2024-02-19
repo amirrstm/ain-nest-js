@@ -29,7 +29,6 @@ import { ENUM_USER_STATUS_CODE_ERROR } from 'src/modules/user/constants/user.sta
 import { GetUser, UserAuthProtected, UserProtected } from 'src/modules/user/decorators/user.decorator'
 import {
   UserAuthChangePasswordDoc,
-  UserAuthClaimUsernameDoc,
   UserAuthLoginGoogleDoc,
   UserAuthInfoDoc,
   UserAuthLoginDoc,
@@ -37,10 +36,10 @@ import {
   UserAuthRefreshDoc,
   UserAuthUpdateProfileDoc,
   UserAuthUploadProfileDoc,
+  UserAuthLVerifyMobileDoc,
 } from 'src/modules/user/docs/user.auth.doc'
 import { UserChangePasswordDto } from 'src/modules/user/dtos/user.change-password.dto'
 import { UserUpdateNameDto } from 'src/modules/user/dtos/user.update-name.dto'
-import { UserUpdateUsernameDto } from 'src/modules/user/dtos/user.update-username.dto'
 import { IUserDoc } from 'src/modules/user/interfaces/user.interface'
 import { UserDoc } from 'src/modules/user/repository/entities/user.entity'
 import { UserPayloadSerialization } from 'src/modules/user/serializations/user.payload.serialization'
@@ -62,6 +61,12 @@ import { FileRequiredPipe } from 'src/common/file/pipes/file.required.pipe'
 import { FileTypePipe } from 'src/common/file/pipes/file.type.pipe'
 import { ENUM_FILE_MIME } from 'src/common/file/constants/file.enum.constant'
 import { IFile } from 'src/common/file/interfaces/file.interface'
+import { UserVerifyMobileDto } from '../dtos/user.verify-mobile.dto'
+import { OtpService } from 'src/modules/otp/services/otp.service'
+import { ENUM_OTP_TYPE } from 'src/modules/otp/constants/otp.enum.constant'
+import { OtpDoc } from 'src/modules/otp/repository/entities/otp.entity'
+import { HelperDateService } from 'src/common/helper/services/helper.date.service'
+import { ENUM_HELPER_DATE_DIFF } from 'src/common/helper/constants/helper.enum.constant'
 
 @ApiTags('Modules.Auth.User')
 @Controller({
@@ -71,8 +76,10 @@ import { IFile } from 'src/common/file/interfaces/file.interface'
 export class UserAuthController {
   constructor(
     @DatabaseConnection() private readonly databaseConnection: Connection,
+    private readonly otpService: OtpService,
     private readonly userService: UserService,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
+    private readonly helperDateService: HelperDateService
   ) {}
 
   @UserAuthLoginDoc()
@@ -172,6 +179,130 @@ export class UserAuthController {
         message: 'user.error.passwordExpired',
       })
     }
+
+    return {
+      data: {
+        tokenType,
+        roleType,
+        expiresIn,
+        accessToken,
+        refreshToken,
+      },
+    }
+  }
+
+  @UserAuthLVerifyMobileDoc()
+  @Response('user.verifyMobile', {
+    serialization: UserLoginSerialization,
+  })
+  @HttpCode(HttpStatus.OK)
+  @Post('/verify-mobile')
+  async verifyMobile(@Body() { code, userId }: UserVerifyMobileDto): Promise<IResponse> {
+    const user: UserDoc = await this.userService.findOneById(userId)
+
+    if (!user) {
+      throw new NotFoundException({
+        statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_NOT_FOUND_ERROR,
+        message: 'user.error.notFound',
+      })
+    }
+
+    const passwordAttempt: boolean = await this.authService.getPasswordAttempt()
+    const maxPasswordAttempt: number = await this.authService.getMaxPasswordAttempt()
+    if (passwordAttempt && user.passwordAttempt >= maxPasswordAttempt) {
+      throw new ForbiddenException({
+        statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_PASSWORD_ATTEMPT_MAX_ERROR,
+        message: 'user.error.passwordAttemptMax',
+      })
+    }
+
+    if (user.blocked) {
+      throw new ForbiddenException({
+        statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_BLOCKED_ERROR,
+        message: 'user.error.blocked',
+      })
+    } else if (user.inactivePermanent) {
+      throw new ForbiddenException({
+        statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_INACTIVE_PERMANENT_ERROR,
+        message: 'user.error.inactivePermanent',
+      })
+    } else if (!user.isActive) {
+      throw new ForbiddenException({
+        statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_INACTIVE_ERROR,
+        message: 'user.error.inactive',
+      })
+    }
+
+    const userWithRole: IUserDoc = await this.userService.joinWithRole(user)
+    if (!userWithRole.role.isActive) {
+      throw new ForbiddenException({
+        statusCode: ENUM_ROLE_STATUS_CODE_ERROR.ROLE_INACTIVE_ERROR,
+        message: 'role.error.inactive',
+      })
+    }
+
+    const validate: OtpDoc = await this.otpService.findOneByUser({
+      user: userId,
+      type: ENUM_OTP_TYPE.MOBILE,
+    })
+
+    if (!validate) {
+      throw new BadRequestException({
+        statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_MOBILE_OTP_EXIST_ERROR,
+        message: 'user.error.mobileOtpExist',
+      })
+    }
+
+    if (code !== validate.code) {
+      throw new BadRequestException({
+        statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_MOBILE_OTP_NOT_MATCH_ERROR,
+        message: 'user.error.codeNotMatch',
+      })
+    }
+
+    const diffDateInMins = this.helperDateService.diff(new Date(), validate.expiredAt, {
+      format: ENUM_HELPER_DATE_DIFF.MINUTES,
+    })
+    const codeIsNotExpired = diffDateInMins < 0
+
+    if (codeIsNotExpired) {
+      throw new BadRequestException({
+        statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_MOBILE_OTP_EXPIRED_ERROR,
+        message: 'user.error.codeExpired',
+      })
+    }
+
+    await this.userService.resetPasswordAttempt(user)
+
+    const payload: UserPayloadSerialization = await this.userService.payloadSerialization(userWithRole)
+    const tokenType: string = await this.authService.getTokenType()
+    const expiresIn: number = await this.authService.getAccessTokenExpirationTime()
+    const loginDate: Date = await this.authService.getLoginDate()
+    const payloadAccessToken: AuthAccessPayloadSerialization = await this.authService.createPayloadAccessToken(
+      payload,
+      {
+        loginWith: ENUM_AUTH_LOGIN_WITH.EMAIL,
+        loginFrom: ENUM_AUTH_LOGIN_FROM.PASSWORD,
+        loginDate,
+      }
+    )
+    const payloadRefreshToken: AuthRefreshPayloadSerialization = await this.authService.createPayloadRefreshToken(
+      payload._id,
+      payloadAccessToken
+    )
+
+    const payloadEncryption = await this.authService.getPayloadEncryption()
+    let payloadHashedAccessToken: AuthAccessPayloadSerialization | string = payloadAccessToken
+    let payloadHashedRefreshToken: AuthRefreshPayloadSerialization | string = payloadRefreshToken
+
+    if (payloadEncryption) {
+      payloadHashedAccessToken = await this.authService.encryptAccessToken(payloadAccessToken)
+      payloadHashedRefreshToken = await this.authService.encryptRefreshToken(payloadRefreshToken)
+    }
+
+    const roleType = userWithRole.role.type
+    const accessToken: string = await this.authService.createAccessToken(payloadHashedAccessToken)
+    const refreshToken: string = await this.authService.createRefreshToken(payloadHashedRefreshToken)
 
     return {
       data: {
@@ -417,25 +548,6 @@ export class UserAuthController {
   @Patch('/profile/update')
   async updateProfile(@GetUser() user: UserDoc, @Body() body: UserUpdateNameDto): Promise<void> {
     await this.userService.updateName(user, body)
-
-    return
-  }
-
-  @UserAuthClaimUsernameDoc()
-  @Response('user.claimUsername')
-  @UserProtected()
-  @AuthJwtAccessProtected()
-  @Patch('/profile/claim-username')
-  async claimUsername(@GetUser() user: UserDoc, @Body() { username }: UserUpdateUsernameDto): Promise<void> {
-    const checkUsername: boolean = await this.userService.existByUsername(username)
-    if (checkUsername) {
-      throw new ConflictException({
-        statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_USERNAME_EXISTS_ERROR,
-        message: 'user.error.usernameExist',
-      })
-    }
-
-    await this.userService.updateUsername(user, { username })
 
     return
   }

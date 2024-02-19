@@ -84,7 +84,7 @@ import { FileExcelExtractPipe } from 'src/common/file/pipes/file.excel-extract.p
 import { FileExcelValidationPipe } from 'src/common/file/pipes/file.excel-validation.pipe'
 import { ENUM_FILE_MIME } from 'src/common/file/constants/file.enum.constant'
 
-@ApiTags('modules.admin.user')
+@ApiTags('Modules.Admin.User')
 @Controller({
   version: '1',
   path: '/user',

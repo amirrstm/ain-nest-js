@@ -154,16 +154,6 @@ export class UserService implements IUserService {
     return this.userRepository.save(repository, options)
   }
 
-  async updateUsername(
-    repository: UserDoc,
-    { username }: UserUpdateUsernameDto,
-    options?: IDatabaseSaveOptions
-  ): Promise<UserDoc> {
-    repository.username = username
-
-    return this.userRepository.save(repository, options)
-  }
-
   async updatePassword(
     repository: UserDoc,
     { passwordHash, passwordExpired, salt, passwordCreated }: IAuthPassword,

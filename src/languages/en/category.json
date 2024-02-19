@@ -1,0 +1,17 @@
+{
+  "list": "List Category Success.",
+  "get": "Get Category Success.",
+  "create": "Create Succeed",
+  "update": "Update Succeed",
+  "updatePermission": "Update permission Succeed",
+  "delete": "Delete Succeed",
+  "inactive": "Inactive Succeed",
+  "active": "Active Succeed",
+  "error": {
+    "notFound": "Category not found",
+    "inactive": "Category is inactive",
+    "exist": "Category exist",
+    "isActiveInvalid": "Category is active invalid",
+    "typeForbidden": "Category type not allowed"
+  }
+}

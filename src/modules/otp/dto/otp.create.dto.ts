@@ -1,7 +1,8 @@
 import { faker } from '@faker-js/faker'
 import { ApiProperty } from '@nestjs/swagger'
 import { Type } from 'class-transformer'
-import { IsNotEmpty, MaxLength, IsUUID } from 'class-validator'
+import { IsNotEmpty, MaxLength, IsUUID, IsEnum } from 'class-validator'
+import { ENUM_OTP_TYPE } from '../constants/otp.enum.constant'
 
 export class OtpCreateDto {
   @ApiProperty({
@@ -15,6 +16,15 @@ export class OtpCreateDto {
   @MaxLength(6)
   @Type(() => String)
   readonly code: string
+
+  @ApiProperty({
+    required: true,
+    example: 'MOBILE',
+    description: 'Representative for otp type',
+  })
+  @IsEnum(ENUM_OTP_TYPE)
+  @IsNotEmpty()
+  readonly type: ENUM_OTP_TYPE
 
   @ApiProperty({
     required: true,

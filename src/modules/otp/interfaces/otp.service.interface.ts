@@ -12,12 +12,13 @@ import { IOtpDoc } from './otp.interface'
 import { OtpCreateDto } from '../dto/otp.create.dto'
 import { OtpDoc, OtpEntity } from '../repository/entities/otp.entity'
 import { OtpUpdateCodeDto } from '../dto/otp.update-code.dto'
+import { ENUM_OTP_TYPE } from '../constants/otp.enum.constant'
 
 export interface IOtpService {
   findAll<T>(find?: Record<string, any>, options?: IDatabaseFindAllOptions): Promise<T[]>
   findOneById<T>(_id: string, options?: IDatabaseFindOneOptions): Promise<T>
   findOne<T>(find: Record<string, any>, options?: IDatabaseFindOneOptions): Promise<T>
-  findOneByUser<T>(user: string, options?: IDatabaseFindOneOptions): Promise<T>
+  findOneByUser<T>(find: { user: string; type: ENUM_OTP_TYPE }, options?: IDatabaseFindOneOptions): Promise<T>
   existByUser(user: string, options?: IDatabaseExistOptions): Promise<boolean>
   deleteMany(find: Record<string, any>, options?: IDatabaseManyOptions): Promise<boolean>
 
