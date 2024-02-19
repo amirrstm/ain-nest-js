@@ -4,6 +4,7 @@ import { DatabaseEntity } from 'src/common/database/decorators/database.decorato
 
 import { UserEntity } from 'src/modules/user/repository/entities/user.entity'
 import { DatabaseMongoUUIDEntityAbstract } from 'src/common/database/abstracts/mongo/entities/database.mongo.uuid.entity.abstract'
+import { ENUM_OTP_TYPE } from '../../constants/otp.enum.constant'
 
 export const OtpDatabaseName = 'otps'
 
@@ -24,6 +25,14 @@ export class OtpEntity extends DatabaseMongoUUIDEntityAbstract {
     ref: UserEntity.name,
   })
   user: string
+
+  @Prop({
+    required: true,
+    enum: ENUM_OTP_TYPE,
+    index: true,
+    type: String,
+  })
+  type: ENUM_OTP_TYPE
 
   @Prop({
     required: true,

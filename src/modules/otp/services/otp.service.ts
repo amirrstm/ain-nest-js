@@ -19,6 +19,7 @@ import { OtpDoc, OtpEntity } from '../repository/entities/otp.entity'
 import { IOtpDoc } from '../interfaces/otp.interface'
 import { OtpUpdateCodeDto } from '../dto/otp.update-code.dto'
 import { OTP_DEFAULT_EXPIRATION_IN_MINS } from '../constants/otp.constant'
+import { ENUM_OTP_TYPE } from '../constants/otp.enum.constant'
 
 @Injectable()
 export class OtpService implements IOtpService {
@@ -27,7 +28,7 @@ export class OtpService implements IOtpService {
     private readonly helperDateService: HelperDateService
   ) {}
 
-  async findAll<T = IUserDoc>(find?: Record<string, any>, options?: IDatabaseFindAllOptions): Promise<T[]> {
+  async findAll<T>(find?: Record<string, any>, options?: IDatabaseFindAllOptions): Promise<T[]> {
     return this.otpRepository.findAll<T>(find, {
       ...options,
       join: true,
@@ -42,18 +43,22 @@ export class OtpService implements IOtpService {
     return this.otpRepository.findOne<T>(find, options)
   }
 
-  async findOneByUser<T>(user: string, options?: IDatabaseFindOneOptions): Promise<T> {
-    return this.otpRepository.findOne<T>({ user }, options)
+  async findOneByUser<T>(
+    { user, type }: { user: string; type: ENUM_OTP_TYPE },
+    options?: IDatabaseFindOneOptions
+  ): Promise<T> {
+    return this.otpRepository.findOne<T>({ user, type }, options)
   }
 
   async getTotal(find?: Record<string, any>, options?: IDatabaseGetTotalOptions): Promise<number> {
     return this.otpRepository.getTotal(find, { ...options, join: true })
   }
 
-  async create({ code, user }: OtpCreateDto, options?: IDatabaseCreateOptions): Promise<OtpDoc> {
+  async create({ code, user, type }: OtpCreateDto, options?: IDatabaseCreateOptions): Promise<OtpDoc> {
     const create: OtpEntity = new OtpEntity()
     create.code = code
     create.user = user
+    create.type = type
     create.isActive = true
     create.expiredAt = this.helperDateService.forwardInMinutes(OTP_DEFAULT_EXPIRATION_IN_MINS)
 
@@ -62,6 +67,7 @@ export class OtpService implements IOtpService {
 
   updateCode(repository: OtpDoc, { code }: OtpUpdateCodeDto, options?: IDatabaseSaveOptions): Promise<OtpDoc> {
     repository.code = code
+    repository.expiredAt = this.helperDateService.forwardInMinutes(OTP_DEFAULT_EXPIRATION_IN_MINS)
 
     return this.otpRepository.save(repository, options)
   }

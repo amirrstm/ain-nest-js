@@ -17,8 +17,9 @@
   "upload": "Upload Success",
   "login": "Login success.",
   "signUp": "Sign up Success",
-  "signUpMobile": "Sign up Success",
+  "signUpMobile": "Otp Code Sent",
   "loginGoogle": "Login with google succeed",
+  "verifyMobile": "Verify mobile succeed",
   "error": {
     "notFound": "User not found.",
     "emailExist": "Email user used",
@@ -31,6 +32,10 @@
     "inactive": "User is inactive",
     "isActiveInvalid": "User is active invalid",
     "usernameExist": "Username exist",
-    "newPasswordMustDifference": "Old password must difference"
+    "newPasswordMustDifference": "Old password must difference",
+    "mobileOtpExist": "Mobile otp not exist",
+    "alreadyCodeGenerated": "The code has already been generated",
+    "codeNotMatch": "Code not match",
+    "codeExpired": "Code expired"
   }
 }

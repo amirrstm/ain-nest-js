@@ -75,6 +75,7 @@ export class ErrorHttpFilter implements ExceptionFilter {
     if (exception instanceof HttpException) {
       // Restructure
       const responseException = exception.getResponse()
+
       statusHttp = exception.getStatus()
       messagePath = `http.${statusHttp}`
       statusCode = exception.getStatus()

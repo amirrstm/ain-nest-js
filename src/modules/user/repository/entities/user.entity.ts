@@ -1,25 +1,15 @@
 import { Prop, SchemaFactory } from '@nestjs/mongoose'
-import { CallbackWithoutResultAndOptionalError, Document } from 'mongoose'
-import { DatabaseMongoUUIDEntityAbstract } from 'src/common/database/abstracts/mongo/entities/database.mongo.uuid.entity.abstract'
-import { DatabaseEntity } from 'src/common/database/decorators/database.decorator'
+import { Document } from 'mongoose'
+
 import { RoleEntity } from 'src/modules/role/repository/entities/role.entity'
+import { DatabaseEntity } from 'src/common/database/decorators/database.decorator'
 import { ENUM_USER_SIGN_UP_FROM } from 'src/modules/user/constants/user.enum.constant'
+import { DatabaseMongoUUIDEntityAbstract } from 'src/common/database/abstracts/mongo/entities/database.mongo.uuid.entity.abstract'
 
 export const UserDatabaseName = 'users'
 
 @DatabaseEntity({ collection: UserDatabaseName })
 export class UserEntity extends DatabaseMongoUUIDEntityAbstract {
-  @Prop({
-    required: false,
-    sparse: true,
-    index: true,
-    trim: true,
-    type: String,
-    unique: true,
-    maxlength: 100,
-  })
-  username?: string
-
   @Prop({
     required: false,
     index: true,
@@ -53,13 +43,14 @@ export class UserEntity extends DatabaseMongoUUIDEntityAbstract {
   @Prop({
     required: false,
     index: true,
-    unique: true,
     trim: true,
+    unique: true,
+    sparse: true,
     lowercase: true,
     type: String,
     maxlength: 100,
   })
-  email: string
+  email?: string
 
   @Prop({
     required: true,

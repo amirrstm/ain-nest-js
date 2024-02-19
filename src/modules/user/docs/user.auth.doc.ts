@@ -10,6 +10,7 @@ import { UserUpdateUsernameDto } from 'src/modules/user/dtos/user.update-usernam
 import { UserLoginSerialization } from 'src/modules/user/serializations/user.login.serialization'
 import { UserProfileSerialization } from 'src/modules/user/serializations/user.profile.serialization'
 import { UserRefreshSerialization } from 'src/modules/user/serializations/user.refresh.serialization'
+import { UserVerifyMobileDto } from '../dtos/user.verify-mobile.dto'
 
 export function UserAuthLoginDoc(): MethodDecorator {
   return applyDecorators(
@@ -19,6 +20,21 @@ export function UserAuthLoginDoc(): MethodDecorator {
     DocRequest({
       bodyType: ENUM_DOC_REQUEST_BODY_TYPE.JSON,
       body: UserLoginDto,
+    }),
+    DocResponse<UserLoginSerialization>('user.login', {
+      serialization: UserLoginSerialization,
+    })
+  )
+}
+
+export function UserAuthLVerifyMobileDoc(): MethodDecorator {
+  return applyDecorators(
+    Doc({
+      summary: 'verify mobile number',
+    }),
+    DocRequest({
+      body: UserVerifyMobileDto,
+      bodyType: ENUM_DOC_REQUEST_BODY_TYPE.JSON,
     }),
     DocResponse<UserLoginSerialization>('user.login', {
       serialization: UserLoginSerialization,

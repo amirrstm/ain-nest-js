@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common'
 import { OtpRepositoryModule } from './repository/otp.repository.module'
+import { OtpService } from './services/otp.service'
 
 @Module({
-  exports: [],
-  providers: [],
+  exports: [OtpService],
+  providers: [OtpService],
   controllers: [],
   imports: [OtpRepositoryModule],
 })

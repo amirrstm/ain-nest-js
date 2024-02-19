@@ -44,11 +44,6 @@ export interface IUserService {
     { firstName, lastName }: UserUpdateNameDto,
     options?: IDatabaseSaveOptions
   ): Promise<UserDoc>
-  updateUsername(
-    repository: UserDoc,
-    { username }: UserUpdateUsernameDto,
-    options?: IDatabaseSaveOptions
-  ): Promise<UserDoc>
 
   updatePassword(
     repository: UserDoc,
