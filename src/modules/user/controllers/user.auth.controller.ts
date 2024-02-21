@@ -68,7 +68,7 @@ import { OtpDoc } from 'src/modules/otp/repository/entities/otp.entity'
 import { HelperDateService } from 'src/common/helper/services/helper.date.service'
 import { ENUM_HELPER_DATE_DIFF } from 'src/common/helper/constants/helper.enum.constant'
 
-@ApiTags('Modules.Auth.User')
+@ApiTags('Modules.User.Auth')
 @Controller({
   version: '1',
   path: '/user',

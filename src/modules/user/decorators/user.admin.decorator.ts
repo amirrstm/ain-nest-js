@@ -10,6 +10,7 @@ import { UserCanNotOurSelfGuard } from 'src/modules/user/guards/user.can-not-our
 import { UserInactivePermanentGuard } from 'src/modules/user/guards/user.inactive-permanent.guard'
 import { UserNotFoundGuard } from 'src/modules/user/guards/user.not-found.guard'
 import { UserPutToRequestGuard } from 'src/modules/user/guards/user.put-to-request.guard'
+import { UserUnblockedGuard } from '../guards/user.unblocked.guard'
 
 export function UserAdminGetGuard(): MethodDecorator {
   return applyDecorators(UseGuards(UserPutToRequestGuard, UserNotFoundGuard))
@@ -58,6 +59,13 @@ export function UserAdminUpdateActiveGuard(): MethodDecorator {
 export function UserAdminUpdateBlockedGuard(): MethodDecorator {
   return applyDecorators(
     UseGuards(UserPutToRequestGuard, UserNotFoundGuard, UserCanNotOurSelfGuard, UserBlockedGuard),
+    SetMetadata(USER_BLOCKED_META_KEY, [false])
+  )
+}
+
+export function UserAdminUpdateUnblockedGuard(): MethodDecorator {
+  return applyDecorators(
+    UseGuards(UserPutToRequestGuard, UserNotFoundGuard, UserCanNotOurSelfGuard, UserUnblockedGuard),
     SetMetadata(USER_BLOCKED_META_KEY, [false])
   )
 }

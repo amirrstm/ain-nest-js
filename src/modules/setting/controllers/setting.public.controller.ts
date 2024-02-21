@@ -14,7 +14,7 @@ import { SettingFileSerialization } from 'src/modules/setting/serializations/set
 import { SettingTimezoneSerialization } from 'src/modules/setting/serializations/setting.timezone.serialization'
 import { SettingService } from 'src/modules/setting/services/setting.service'
 
-@ApiTags('modules.public.setting')
+@ApiTags('Modules.Public.Setting')
 @Controller({
   version: '1',
   path: '/setting',
