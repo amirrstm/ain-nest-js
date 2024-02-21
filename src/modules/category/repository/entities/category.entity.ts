@@ -30,7 +30,7 @@ export class CategoryEntity extends DatabaseMongoUUIDEntityAbstract {
     required: false,
     ref: CategoryEntity.name,
   })
-  parent?: string
+  parentId?: string
 
   @Prop({
     required: true,

@@ -22,4 +22,11 @@ export class CategoryUpdateDto {
   })
   @Type(() => Object)
   readonly description: Record<string, string>
+
+  @ApiProperty({
+    required: true,
+    description: 'Active flag of category',
+    example: true,
+  })
+  readonly isActive: boolean
 }

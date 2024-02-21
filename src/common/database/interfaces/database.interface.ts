@@ -51,6 +51,6 @@ export type IDatabaseRawOptions<T = any> = Pick<IDatabaseFindOneOptions<T>, 'ses
 export type IDatabaseRawFindAllOptions<T = any> = Pick<
   IDatabaseFindAllOptions<T>,
   'order' | 'paging' | 'session' | 'withDeleted'
->
+> & { search?: Record<string, any> }
 
 export type IDatabaseRawGetTotalOptions<T = any> = Pick<IDatabaseRawFindAllOptions<T>, 'session' | 'withDeleted'>

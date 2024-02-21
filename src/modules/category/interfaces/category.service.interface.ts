@@ -1,3 +1,4 @@
+import { PipelineStage } from 'mongoose'
 import {
   IDatabaseCreateOptions,
   IDatabaseFindAllOptions,
@@ -7,6 +8,7 @@ import {
   IDatabaseGetTotalOptions,
   IDatabaseSaveOptions,
   IDatabaseExistOptions,
+  IDatabaseRawFindAllOptions,
 } from 'src/common/database/interfaces/database.interface'
 
 import { CategoryDoc } from '../repository/entities/category.entity'
@@ -15,6 +17,7 @@ import { CategoryUpdateDto } from '../dto/category.update.dto'
 
 export interface ICategoryService {
   findAll<T>(find?: Record<string, any>, options?: IDatabaseFindAllOptions): Promise<T[]>
+  rawFindAll<T>(find?: PipelineStage[], options?: IDatabaseRawFindAllOptions): Promise<T[]>
   findOneById(_id: string, options?: IDatabaseFindOneOptions): Promise<CategoryDoc>
   findOne(find: Record<string, any>, options?: IDatabaseFindOneOptions): Promise<CategoryDoc>
   getTotal(find?: Record<string, any>, options?: IDatabaseGetTotalOptions): Promise<number>
