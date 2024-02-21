@@ -609,6 +609,12 @@ export abstract class DatabaseMongoUUIDRepositoryAbstract<
       })
     }
 
+    if (options?.search) {
+      pipeline.push({
+        $match: options.search,
+      })
+    }
+
     if (options?.order) {
       const keysOrder = Object.keys(options?.order)
       pipeline.push({

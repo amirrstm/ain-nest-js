@@ -22,6 +22,7 @@
   "minDate": "{property} has less date than the minimum allowed.",
   "maxDate": "{property} has  more elements than the maximum allowed.",
   "isDate": "{property} should be a date",
+  "isUuid": "{property} should be a UUID",
 
   "isPasswordStrong": "{property} must have strong pattern",
   "isPasswordMedium": "{property} must have medium pattern",

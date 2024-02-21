@@ -38,7 +38,7 @@ export class CategoryCreateDto {
     required: false,
     example: faker.string.uuid(),
   })
-  @ValidateIf(e => !!e.parent)
+  @ValidateIf(e => !!e.parentId)
   @IsUUID('4')
-  readonly parent?: string
+  readonly parentId?: string
 }
