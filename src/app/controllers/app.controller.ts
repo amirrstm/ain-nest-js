@@ -9,7 +9,7 @@ import { Response } from 'src/common/response/decorators/response.decorator'
 import { IResponse } from 'src/common/response/interfaces/response.interface'
 import { IResult } from 'ua-parser-js'
 
-@ApiTags('hello')
+@ApiTags('App Test')
 @Controller({ version: VERSION_NEUTRAL, path: '/' })
 export class AppController {
   private readonly serviceName: string

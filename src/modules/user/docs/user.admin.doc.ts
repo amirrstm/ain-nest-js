@@ -108,6 +108,22 @@ export function UserAdminBlockedDoc(): MethodDecorator {
   )
 }
 
+export function UserAdminUnblockedDoc(): MethodDecorator {
+  return applyDecorators(
+    Doc({
+      summary: 'unblock a user',
+    }),
+    DocRequest({
+      params: UserDocParamsId,
+    }),
+    DocAuth({
+      jwtAccessToken: true,
+    }),
+    DocGuard({ role: true, policy: true }),
+    DocResponse('user.unblocked')
+  )
+}
+
 export function UserAdminCreateDoc(): MethodDecorator {
   return applyDecorators(
     Doc({

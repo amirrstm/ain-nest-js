@@ -1,5 +1,6 @@
-import { DynamicModule, ForwardReference, Module, Type } from '@nestjs/common'
 import { RouterModule as NestJsRouterModule } from '@nestjs/core'
+import { DynamicModule, ForwardReference, Module, Type } from '@nestjs/common'
+
 import { RoutesAdminModule } from './routes/routes.admin.module'
 import { RoutesUserModule } from 'src/router/routes/routes.user.module'
 import { RoutesPublicModule } from 'src/router/routes/routes.public.module'

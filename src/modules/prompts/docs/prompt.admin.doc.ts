@@ -10,119 +10,122 @@ import {
 } from 'src/common/doc/decorators/doc.decorator'
 import { ResponseIdSerialization } from 'src/common/response/serializations/response.id.serialization'
 
-import { CategoryDocParamsId } from '../constants/category.doc.constant'
-import { CategoryCreateDto } from '../dto/category.create.dto'
-import { CategoryUpdateDto } from '../dto/category.update.dto'
-import { CategoryGetSerialization } from '../serializations/category.get.serialization'
+import { PromptCreateDto } from '../dto/prompt.create.dto'
+import { PromptUpdateDto } from '../dto/prompt.update.dto'
+import { PromptDocParamsId } from '../constants/prompt.doc.constant'
+import { PromptGetSerialization } from '../serializations/prompt.get.serialization'
 
-export function CategoryAdminListDoc(): MethodDecorator {
+export function PromptAdminListDoc(): MethodDecorator {
   return applyDecorators(
     Doc({
-      summary: 'get all of categories',
+      summary: 'get all of prompts',
     }),
     DocAuth({
       jwtAccessToken: true,
     }),
     DocGuard({ role: true, policy: true }),
-    DocResponsePaging<CategoryGetSerialization>('category.get', {
-      serialization: CategoryGetSerialization,
+    DocResponsePaging<PromptGetSerialization>('prompt.get', {
+      serialization: PromptGetSerialization,
     })
   )
 }
 
-export function CategoryAdminGetDoc(): MethodDecorator {
+export function PromptAdminGetDoc(): MethodDecorator {
   return applyDecorators(
     Doc({
-      summary: 'get detail a category',
+      summary: 'get detail a prompt',
     }),
-    DocRequest({ params: CategoryDocParamsId }),
+    DocRequest({ params: PromptDocParamsId }),
     DocAuth({ jwtAccessToken: true }),
-    DocGuard({ role: true, policy: true })
+    DocGuard({ role: true, policy: true }),
+    DocResponse<PromptGetSerialization>('prompt.get', {
+      serialization: PromptGetSerialization,
+    })
   )
 }
 
-export function CategoryAdminCreateDoc(): MethodDecorator {
+export function PromptAdminCreateDoc(): MethodDecorator {
   return applyDecorators(
     Doc({
-      summary: 'create a category',
+      summary: 'create a prompt',
     }),
     DocAuth({ jwtAccessToken: true }),
     DocRequest({
-      body: CategoryCreateDto,
+      body: PromptCreateDto,
       bodyType: ENUM_DOC_REQUEST_BODY_TYPE.JSON,
     }),
     DocGuard({ role: true, policy: true }),
-    DocResponse<ResponseIdSerialization>('category.create', {
+    DocResponse<ResponseIdSerialization>('prompt.create', {
       httpStatus: HttpStatus.CREATED,
       serialization: ResponseIdSerialization,
     })
   )
 }
 
-export function CategoryAdminActiveDoc(): MethodDecorator {
+export function PromptAdminActiveDoc(): MethodDecorator {
   return applyDecorators(
     Doc({
-      summary: 'make category be active',
+      summary: 'make prompt be active',
     }),
     DocRequest({
-      params: CategoryDocParamsId,
+      params: PromptDocParamsId,
     }),
     DocAuth({
       jwtAccessToken: true,
     }),
     DocGuard({ role: true, policy: true }),
-    DocResponse('category.active')
+    DocResponse('prompt.active')
   )
 }
 
-export function CategoryAdminInactiveDoc(): MethodDecorator {
+export function PromptAdminInactiveDoc(): MethodDecorator {
   return applyDecorators(
     Doc({
-      summary: 'make category be inactive',
+      summary: 'make prompt be inactive',
     }),
     DocRequest({
-      params: CategoryDocParamsId,
+      params: PromptDocParamsId,
     }),
     DocAuth({
       jwtAccessToken: true,
     }),
     DocGuard({ role: true, policy: true }),
-    DocResponse('category.inactive')
+    DocResponse('prompt.inactive')
   )
 }
 
-export function CategoryAdminUpdateDoc(): MethodDecorator {
+export function PromptAdminUpdateDoc(): MethodDecorator {
   return applyDecorators(
     Doc({
-      summary: 'update data a category',
+      summary: 'update data a prompt',
     }),
     DocRequest({
-      body: CategoryUpdateDto,
-      params: CategoryDocParamsId,
+      body: PromptUpdateDto,
+      params: PromptDocParamsId,
       bodyType: ENUM_DOC_REQUEST_BODY_TYPE.JSON,
     }),
     DocAuth({
       jwtAccessToken: true,
     }),
     DocGuard({ role: true, policy: true }),
-    DocResponse<ResponseIdSerialization>('category.update', {
+    DocResponse<ResponseIdSerialization>('prompt.update', {
       serialization: ResponseIdSerialization,
     })
   )
 }
 
-export function CategoryAdminDeleteDoc(): MethodDecorator {
+export function PromptAdminDeleteDoc(): MethodDecorator {
   return applyDecorators(
     Doc({
-      summary: 'delete a category',
+      summary: 'delete a prompt',
     }),
     DocRequest({
-      params: CategoryDocParamsId,
+      params: PromptDocParamsId,
     }),
     DocAuth({
       jwtAccessToken: true,
     }),
     DocGuard({ role: true, policy: true }),
-    DocResponse('category.delete')
+    DocResponse('prompt.delete')
   )
 }

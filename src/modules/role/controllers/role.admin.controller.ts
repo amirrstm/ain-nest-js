@@ -54,7 +54,7 @@ import { RoleService } from 'src/modules/role/services/role.service'
 import { UserDoc } from 'src/modules/user/repository/entities/user.entity'
 import { UserService } from 'src/modules/user/services/user.service'
 
-@ApiTags('modules.admin.role')
+@ApiTags('Modules.Admin.Role')
 @Controller({
   version: '1',
   path: '/role',

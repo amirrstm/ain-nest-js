@@ -32,7 +32,7 @@ import { SettingGetSerialization } from 'src/modules/setting/serializations/sett
 import { SettingListSerialization } from 'src/modules/setting/serializations/setting.list.serialization'
 import { SettingService } from 'src/modules/setting/services/setting.service'
 
-@ApiTags('modules.admin.setting')
+@ApiTags('Modules.Admin.Setting')
 @Controller({
   version: '1',
   path: '/setting',

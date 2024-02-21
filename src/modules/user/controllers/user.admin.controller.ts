@@ -30,6 +30,7 @@ import {
   UserAdminUpdateBlockedGuard,
   UserAdminUpdateGuard,
   UserAdminUpdateInactiveGuard,
+  UserAdminUpdateUnblockedGuard,
 } from 'src/modules/user/decorators/user.admin.decorator'
 import { GetUser } from 'src/modules/user/decorators/user.decorator'
 import { UserCreateDto } from 'src/modules/user/dtos/user.create.dto'
@@ -74,6 +75,7 @@ import {
   UserAdminImportDoc,
   UserAdminInactiveDoc,
   UserAdminListDoc,
+  UserAdminUnblockedDoc,
   UserAdminUpdateDoc,
 } from 'src/modules/user/docs/user.admin.doc'
 import { ENUM_USER_SIGN_UP_FROM } from 'src/modules/user/constants/user.enum.constant'
@@ -146,8 +148,8 @@ export class UserAdminController {
     const totalPage: number = this.paginationService.totalPage(total, _limit)
 
     return {
-      _pagination: { total, totalPage },
       data: users,
+      _pagination: { total, totalPage },
     }
   }
 
@@ -293,6 +295,22 @@ export class UserAdminController {
   @Patch('/update/:user/blocked')
   async blocked(@GetUser() user: UserDoc): Promise<void> {
     await this.userService.blocked(user)
+
+    return
+  }
+
+  @UserAdminUnblockedDoc()
+  @Response('user.unblocked')
+  @UserAdminUpdateUnblockedGuard()
+  @PolicyAbilityProtected({
+    subject: ENUM_POLICY_SUBJECT.USER,
+    action: [ENUM_POLICY_ACTION.READ, ENUM_POLICY_ACTION.UPDATE],
+  })
+  @AuthJwtAdminAccessProtected()
+  @RequestParamGuard(UserRequestDto)
+  @Patch('/update/:user/unblocked')
+  async unblocked(@GetUser() user: UserDoc): Promise<void> {
+    await this.userService.unblocked(user)
 
     return
   }

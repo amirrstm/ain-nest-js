@@ -1,3 +1,4 @@
+import { PipelineStage } from 'mongoose'
 import { Injectable } from '@nestjs/common'
 import {
   IDatabaseCreateOptions,
@@ -11,12 +12,11 @@ import {
   IDatabaseRawFindAllOptions,
 } from 'src/common/database/interfaces/database.interface'
 
-import { ICategoryService } from '../interfaces/category.service.interface'
-import { CategoryDoc, CategoryEntity } from '../repository/entities/category.entity'
 import { CategoryCreateDto } from '../dto/category.create.dto'
-import { CategoryRepository } from '../repository/repositories/category.repository'
 import { CategoryUpdateDto } from '../dto/category.update.dto'
-import { PipelineStage } from 'mongoose'
+import { ICategoryService } from '../interfaces/category.service.interface'
+import { CategoryRepository } from '../repository/repositories/category.repository'
+import { CategoryDoc, CategoryEntity } from '../repository/entities/category.entity'
 
 @Injectable()
 export class CategoryService implements ICategoryService {

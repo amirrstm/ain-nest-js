@@ -1,0 +1,16 @@
+{
+  "list": "List Prompt Success.",
+  "get": "Get Prompt Success.",
+  "create": "Create Succeed",
+  "update": "Update Succeed",
+  "delete": "Delete Succeed",
+  "inactive": "Inactive Succeed",
+  "active": "Active Succeed",
+  "error": {
+    "notFound": "Prompt not found",
+    "inactive": "Prompt is inactive",
+    "exist": "Prompt exist",
+    "isActiveInvalid": "Prompt is active invalid",
+    "typeForbidden": "Prompt type not allowed"
+  }
+}
