@@ -1,6 +1,7 @@
 import { Body, ConflictException, Controller, Get, Post, Put } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 
+import { InputService } from 'src/modules/inputs/services/input.service'
 import { AuthJwtAdminAccessProtected } from 'src/common/auth/decorators/auth.jwt.decorator'
 import { ENUM_POLICY_ACTION, ENUM_POLICY_SUBJECT } from 'src/common/policy/constants/policy.enum.constant'
 import { PolicyAbilityProtected } from 'src/common/policy/decorators/policy.decorator'
@@ -9,14 +10,20 @@ import { IResponse, IResponsePaging } from 'src/common/response/interfaces/respo
 import { PaginationListDto } from 'src/common/pagination/dtos/pagination.list.dto'
 import { ResponseIdSerialization } from 'src/common/response/serializations/response.id.serialization'
 
-import { CategoryAdminCreateDoc, CategoryAdminListDoc, CategoryAdminUpdateDoc } from '../docs/category.admin.doc'
+import {
+  CategoryAdminCreateDoc,
+  CategoryAdminGetDoc,
+  CategoryAdminInputListDoc,
+  CategoryAdminListDoc,
+  CategoryAdminUpdateDoc,
+} from '../docs/category.admin.doc'
 import { CategoryCreateDto } from '../dto/category.create.dto'
 import { CategoryService } from '../services/category.service'
 import { ENUM_CATEGORY_STATUS_CODE_ERROR } from '../constants/category.status-code.constant'
 import { CategoryRequestDto } from '../dto/category.request.dto'
-import { RequestParamGuard } from 'src/common/request/decorators/request.decorator'
+import { RequestCustomLang, RequestParamGuard } from 'src/common/request/decorators/request.decorator'
 import { CategoryUpdateDto } from '../dto/category.update.dto'
-import { CategoryAdminUpdateGuard, GetCategory } from '../decorators/category.admin.decorator'
+import { CategoryAdminGetGuard, CategoryAdminUpdateGuard, GetCategory } from '../decorators/category.admin.decorator'
 import { CategoryDoc, CategoryEntity } from '../repository/entities/category.entity'
 import { CategoryListSerialization } from '../serializations/category.list.serialization'
 import { PaginationQuery, PaginationQueryFilterInBoolean } from 'src/common/pagination/decorators/pagination.decorator'
@@ -29,11 +36,15 @@ import {
   CATEGORY_DEFAULT_PER_PAGE,
 } from '../constants/category.list.constant'
 import { PaginationService } from 'src/common/pagination/services/pagination.service'
+import { CategoryGetSerialization } from '../serializations/category.get.serialization'
+import { CategoryInputSerialization } from '../serializations/category.inputs.serialization'
+import { InputEntity } from 'src/modules/inputs/repository/entities/input.entity'
 
 @ApiTags('Modules.Admin.Category')
 @Controller({ version: '1', path: '/category' })
 export class CategoryAdminController {
   constructor(
+    private readonly inputService: InputService,
     private readonly categoryService: CategoryService,
     private readonly paginationService: PaginationService
   ) {}
@@ -81,6 +92,46 @@ export class CategoryAdminController {
       _pagination: { total, totalPage },
       data: categories,
     }
+  }
+
+  @CategoryAdminGetDoc()
+  @Response('category.get', {
+    serialization: CategoryGetSerialization,
+  })
+  @CategoryAdminGetGuard()
+  @PolicyAbilityProtected({
+    subject: ENUM_POLICY_SUBJECT.ROLE,
+    action: [ENUM_POLICY_ACTION.READ],
+  })
+  @AuthJwtAdminAccessProtected()
+  @RequestParamGuard(CategoryRequestDto)
+  @Get('get/:category')
+  async get(@GetCategory(true) category: CategoryEntity): Promise<IResponse> {
+    return { data: category }
+  }
+
+  @CategoryAdminInputListDoc()
+  @Response('category.get', {
+    serialization: CategoryInputSerialization,
+  })
+  @CategoryAdminGetGuard()
+  @PolicyAbilityProtected({
+    subject: ENUM_POLICY_SUBJECT.ROLE,
+    action: [ENUM_POLICY_ACTION.READ],
+  })
+  @AuthJwtAdminAccessProtected()
+  @RequestParamGuard(CategoryRequestDto)
+  @Get('inputs/:category')
+  async getInputs(
+    @GetCategory(true) category: CategoryEntity,
+    @RequestCustomLang()
+    customLang: string
+  ): Promise<IResponse> {
+    const inputs: InputEntity[] = await this.inputService.findAllWithTranslation<InputEntity>(customLang, {
+      category: category._id,
+    })
+
+    return { data: { ...category, inputs } }
   }
 
   @CategoryAdminCreateDoc()

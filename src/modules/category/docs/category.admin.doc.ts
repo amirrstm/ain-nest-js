@@ -14,6 +14,7 @@ import { CategoryDocParamsId } from '../constants/category.doc.constant'
 import { CategoryCreateDto } from '../dto/category.create.dto'
 import { CategoryUpdateDto } from '../dto/category.update.dto'
 import { CategoryGetSerialization } from '../serializations/category.get.serialization'
+import { CategoryInputSerialization } from '../serializations/category.inputs.serialization'
 
 export function CategoryAdminListDoc(): MethodDecorator {
   return applyDecorators(
@@ -30,6 +31,19 @@ export function CategoryAdminListDoc(): MethodDecorator {
   )
 }
 
+export function CategoryAdminInputListDoc(): MethodDecorator {
+  return applyDecorators(
+    Doc({
+      summary: 'get all the inputs of the category',
+    }),
+    DocAuth({ jwtAccessToken: true }),
+    DocGuard({ role: true, policy: true }),
+    DocResponse<CategoryInputSerialization>('category.get', {
+      serialization: CategoryInputSerialization,
+    })
+  )
+}
+
 export function CategoryAdminGetDoc(): MethodDecorator {
   return applyDecorators(
     Doc({
@@ -37,7 +51,10 @@ export function CategoryAdminGetDoc(): MethodDecorator {
     }),
     DocRequest({ params: CategoryDocParamsId }),
     DocAuth({ jwtAccessToken: true }),
-    DocGuard({ role: true, policy: true })
+    DocGuard({ role: true, policy: true }),
+    DocResponse<ResponseIdSerialization>('category.get', {
+      serialization: CategoryGetSerialization,
+    })
   )
 }
 

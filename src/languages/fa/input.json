@@ -1,0 +1,16 @@
+{
+  "list": "List Input Success.",
+  "get": "Get Input Success.",
+  "create": "Create Succeed",
+  "update": "Update Succeed",
+  "delete": "Delete Succeed",
+  "inactive": "Inactive Succeed",
+  "active": "Active Succeed",
+  "error": {
+    "notFound": "Input not found",
+    "inactive": "Input is inactive",
+    "exist": "Input exist",
+    "isActiveInvalid": "Input is active invalid",
+    "typeForbidden": "Input type not allowed"
+  }
+}
