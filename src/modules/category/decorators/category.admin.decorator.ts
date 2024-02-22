@@ -7,6 +7,10 @@ import { CategoryPutToRequestGuard } from '../guards/category.put-to-request.gua
 import { CategoryNotFoundGuard } from '../guards/category.not-found.guard'
 import { CategoryDoc } from '../repository/entities/category.entity'
 
+export function CategoryAdminGetGuard(): MethodDecorator {
+  return applyDecorators(UseGuards(CategoryPutToRequestGuard, CategoryNotFoundGuard))
+}
+
 export function CategoryAdminUpdateGuard(): MethodDecorator {
   return applyDecorators(
     UseGuards(CategoryPutToRequestGuard, CategoryNotFoundGuard),
@@ -16,5 +20,14 @@ export function CategoryAdminUpdateGuard(): MethodDecorator {
 
 export const GetCategory = createParamDecorator(<T>(returnPlain: boolean, ctx: ExecutionContext): T => {
   const { __category } = ctx.switchToHttp().getRequest<IRequestApp & { __category: CategoryDoc }>()
-  return (returnPlain ? __category.toObject() : __category) as T
+
+  if (returnPlain) {
+    const obj = __category.toObject()
+    obj.name = Object.fromEntries(obj.name)
+    obj.description = Object.fromEntries(obj.description)
+
+    return obj as T
+  }
+
+  return __category as T
 })
