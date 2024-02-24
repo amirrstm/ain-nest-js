@@ -86,13 +86,32 @@ export class UserPublicController {
     const promises: Promise<any>[] = [this.roleService.findOneByName('user')]
     const [role] = await Promise.all(promises)
 
-    const mobileNumberExist = await this.userService.findOneByMobileNumber<IUserDoc>(mobileNumber)
+    if (!mobileNumber) {
+      throw new ConflictException({
+        statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_MOBILE_NUMBER_EXIST_ERROR,
+        message: 'user.error.mobileNumberExist',
+      })
+    }
 
-    if (mobileNumberExist) {
+    const existUser = await this.userService.findOneByMobileNumber<IUserDoc>(mobileNumber)
+
+    if (existUser) {
       const existCode = await this.otpService.findOneByUser<OtpDoc>({
         type: ENUM_OTP_TYPE.MOBILE,
-        user: mobileNumberExist._id,
+        user: existUser._id,
       })
+
+      if (!existCode) {
+        const generateCode = this.helperNumberService.random(6)
+        const otp = await this.otpService.create({
+          user: existUser._id,
+          code: String(generateCode),
+          type: ENUM_OTP_TYPE.MOBILE,
+        })
+
+        // Send Otp Code SMS
+        return { data: { code: otp.code, userId: existUser._id } }
+      }
 
       const diffDateInMins = this.helperDateService.diff(new Date(), existCode.expiredAt, {
         format: ENUM_HELPER_DATE_DIFF.MINUTES,
@@ -110,7 +129,7 @@ export class UserPublicController {
       const updateCode = await this.otpService.updateCode(existCode, { code: String(generateCode) })
 
       // Send Otp Code SMS
-      return { data: { code: updateCode.code, userId: mobileNumberExist._id } }
+      return { data: { code: updateCode.code, userId: existUser._id } }
     }
 
     const user: UserDoc = await this.userService.createWithMobile({
