@@ -29,7 +29,7 @@ import { PolicyModule } from 'src/common/policy/policy.module'
       envFilePath: ['.env'],
       expandVariables: true,
       validationSchema: Joi.object({
-        APP_NAME: Joi.string().required(),
+        APP_NAME: Joi.string(),
         APP_ENV: Joi.string()
           .valid(...Object.values(ENUM_APP_ENVIRONMENT))
           .default('development')
