@@ -44,5 +44,6 @@
     "userAgentBrowserInvalid": "Request user agent Browser not acceptable",
     "timestampInvalid": "Timestamp invalid",
     "toleranceTimeInMs": "Timestamp out of tolerance"
-  }
+  },
+  "MobileNumberAllowedConstraint": "Mobile number is not allowed"
 }
