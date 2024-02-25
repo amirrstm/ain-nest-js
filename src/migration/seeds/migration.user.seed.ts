@@ -23,57 +23,19 @@ export class MigrationUserSeed {
     const password = 'aaAA@123'
     const passwordHash = await this.authService.createPassword(password)
     const superAdminRole: RoleDoc = await this.roleService.findOneByName('superadmin')
-    const adminRole: RoleDoc = await this.roleService.findOneByName('admin')
-    const memberRole: RoleDoc = await this.roleService.findOneByName('member')
-    const userRole: RoleDoc = await this.roleService.findOneByName('user')
+
     const user1: Promise<UserDoc> = this.userService.create(
       {
-        firstName: 'superadmin',
-        lastName: 'test',
-        email: 'superadmin@mail.com',
         password,
-        mobileNumber: '628111111222',
+        mobileNumber: '09912821030',
         signUpFrom: ENUM_USER_SIGN_UP_FROM.ADMIN,
         role: superAdminRole._id,
       },
       passwordHash
     )
-    const user2: Promise<UserDoc> = this.userService.create(
-      {
-        firstName: 'admin',
-        lastName: 'test',
-        email: 'admin@mail.com',
-        password,
-        signUpFrom: ENUM_USER_SIGN_UP_FROM.ADMIN,
-        role: adminRole._id,
-      },
-      passwordHash
-    )
-    const user3: Promise<UserDoc> = this.userService.create(
-      {
-        firstName: 'user',
-        lastName: 'test',
-        email: 'user@mail.com',
-        password,
-        signUpFrom: ENUM_USER_SIGN_UP_FROM.ADMIN,
-        role: userRole._id,
-      },
-      passwordHash
-    )
-    const user4: Promise<UserDoc> = this.userService.create(
-      {
-        firstName: 'member',
-        lastName: 'test',
-        email: 'member@mail.com',
-        password,
-        signUpFrom: ENUM_USER_SIGN_UP_FROM.ADMIN,
-        role: memberRole._id,
-      },
-      passwordHash
-    )
 
     try {
-      await Promise.all([user1, user2, user3, user4])
+      await Promise.all([user1])
     } catch (err: any) {
       throw new Error(err.message)
     }
