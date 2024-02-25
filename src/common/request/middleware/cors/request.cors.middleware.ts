@@ -21,8 +21,6 @@ export class RequestCorsMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction): void {
     const allowOrigin = this.appEnv === ENUM_APP_ENVIRONMENT.PRODUCTION ? this.allowOrigin : '*'
 
-    console.log(allowOrigin)
-
     const corsOptions: CorsOptions = {
       origin: allowOrigin,
       methods: this.allowMethod,
