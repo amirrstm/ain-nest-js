@@ -41,8 +41,8 @@
     "rollback:role": "nestjs-command remove:role",
     "rollback:user": "nestjs-command remove:user",
     "rollback:email": "nestjs-command remove:email",
-    "seed": "yarn seed:email && yarn seed:role && yarn seed:user",
-    "rollback": "yarn rollback:email && yarn rollback:user && yarn rollback:role"
+    "seed": "yarn seed:role && yarn seed:user",
+    "rollback": "yarn rollback:user && yarn rollback:role"
   },
   "dependencies": {
     "@casl/ability": "^6.5.0",
