@@ -35,7 +35,7 @@ export default registerAs(
         ENUM_REQUEST_METHOD.PATCH,
         ENUM_REQUEST_METHOD.POST,
       ],
-      allowOrigin: '/ainevis.com$/', // allow all origin
+      allowOrigin: 'https://ainevis.com', // allow all origin
 
       allowHeader: [
         'Accept',
