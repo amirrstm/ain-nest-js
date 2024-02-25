@@ -43,6 +43,7 @@ async function bootstrap() {
   await swaggerInit(app)
 
   // Listen
+  app.enableCors()
   await app.listen(port, host)
 
   logger.log(`==========================================================`)
