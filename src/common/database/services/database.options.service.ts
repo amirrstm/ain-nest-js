@@ -36,8 +36,11 @@ export class DatabaseOptionsService implements IDatabaseOptionsService {
     const mongooseOptions: MongooseModuleOptions = {
       uri,
       autoCreate: true,
+      authSource: 'admin',
       ...timeoutOptions,
     }
+
+    console.log(mongooseOptions)
 
     if (user && password) {
       mongooseOptions.auth = {
