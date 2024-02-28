@@ -1,0 +1,17 @@
+{
+  "list": "List Plan Success.",
+  "get": "Get Plan Success.",
+  "create": "Create Succeed",
+  "update": "Update Succeed",
+  "updatePermission": "Update permission Succeed",
+  "delete": "Delete Succeed",
+  "inactive": "Inactive Succeed",
+  "active": "Active Succeed",
+  "error": {
+    "notFound": "Plan not found",
+    "inactive": "Plan is inactive",
+    "exist": "Plan exist",
+    "isActiveInvalid": "Plan is active invalid",
+    "typeForbidden": "Plan type not allowed"
+  }
+}
