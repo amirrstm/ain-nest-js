@@ -38,6 +38,9 @@ import {
   UserAuthUploadProfileDoc,
   UserAuthLVerifyMobileDoc,
 } from 'src/modules/user/docs/user.auth.doc'
+import { PlanService } from 'src/modules/plan/services/plan.service'
+import { UserPlanService } from 'src/modules/user-plan/services/user-plan.service'
+
 import { UserChangePasswordDto } from 'src/modules/user/dtos/user.change-password.dto'
 import { UserUpdateNameDto } from 'src/modules/user/dtos/user.update-name.dto'
 import { IUserDoc } from 'src/modules/user/interfaces/user.interface'
@@ -79,6 +82,8 @@ export class UserAuthController {
     private readonly otpService: OtpService,
     private readonly userService: UserService,
     private readonly authService: AuthService,
+    private readonly planService: PlanService,
+    private readonly userPlanService: UserPlanService,
     private readonly helperDateService: HelperDateService
   ) {}
 
@@ -538,7 +543,20 @@ export class UserAuthController {
   @Get('/profile')
   async profile(@GetUser() user: UserDoc): Promise<IResponse> {
     const userWithRole: IUserDoc = await this.userService.joinWithRole(user)
-    return { data: userWithRole.toObject() }
+    const userPlan = await this.userPlanService.findOneByUserId(user._id, { join: true })
+
+    const data = {
+      ...userWithRole.toObject(),
+    }
+
+    if (userPlan) {
+      data['userPlan'] = {
+        ...userPlan.toObject(),
+        user: undefined,
+      }
+    }
+
+    return { data }
   }
 
   @UserAuthUpdateProfileDoc()
