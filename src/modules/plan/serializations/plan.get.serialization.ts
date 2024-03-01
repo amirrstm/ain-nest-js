@@ -51,7 +51,7 @@ export class PlanGetSerialization extends ResponseIdSerialization {
 
   @ApiProperty({
     description: 'Generation count of plan',
-    example: faker.datatype.number(),
+    example: faker.number.int(),
     required: true,
     nullable: false,
   })

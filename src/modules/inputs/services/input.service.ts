@@ -46,6 +46,7 @@ export class InputService implements IInputService {
       isActive: 1,
       category: 1,
       multiline: 1,
+      isRequired: 1,
     }
     return this.inputRepository.rawFindAll(
       [
@@ -82,7 +83,7 @@ export class InputService implements IInputService {
   }
 
   async create(
-    { category, description, multiline, name, placeholder, title, type }: InputCreateDto,
+    { category, description, multiline, isRequired, name, placeholder, title, type }: InputCreateDto,
     options?: IDatabaseCreateOptions
   ): Promise<InputDoc> {
     const create: InputEntity = new InputEntity()
@@ -92,6 +93,7 @@ export class InputService implements IInputService {
     create.title = title
     create.category = category
     create.multiline = multiline
+    create.isRequired = isRequired
     create.description = description
     create.placeholder = placeholder
 
@@ -100,13 +102,14 @@ export class InputService implements IInputService {
 
   async update(
     repository: InputDoc,
-    { description, isActive, multiline, name, placeholder, title }: InputUpdateDto,
+    { description, isActive, multiline, name, placeholder, title, isRequired }: InputUpdateDto,
     options?: IDatabaseSaveOptions
   ): Promise<InputDoc> {
     repository.name = name
     repository.title = title
     repository.isActive = isActive
     repository.multiline = multiline
+    repository.isRequired = isRequired
     repository.placeholder = placeholder
     repository.description = description
 

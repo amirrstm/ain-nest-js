@@ -55,8 +55,12 @@ export class PlanService implements IPlanService {
     )
   }
 
+  async findDefault(options?: IDatabaseExistOptions): Promise<PlanDoc> {
+    return this.planRepository.findOne<PlanDoc>({ isDefault: true }, options)
+  }
+
   async create(
-    { name, slug, description, features, generation, models, offForAnnual, price }: PlanCreateDto,
+    { name, slug, description, features, generation, models, offForAnnual, price, isDefault }: PlanCreateDto,
     options?: IDatabaseCreateOptions
   ): Promise<PlanDoc> {
     const create: PlanEntity = new PlanEntity()
@@ -66,6 +70,7 @@ export class PlanService implements IPlanService {
     create.models = models
     create.isActive = true
     create.features = features
+    create.isDefault = isDefault
     create.generation = generation
     create.description = description
     create.offForAnnual = offForAnnual
@@ -85,6 +90,18 @@ export class PlanService implements IPlanService {
     repository.generation = generation
     repository.description = description
     repository.offForAnnual = offForAnnual
+
+    return this.planRepository.save(repository, options)
+  }
+
+  async makeDefault(repository: PlanDoc, options?: IDatabaseSaveOptions): Promise<PlanDoc> {
+    repository.isDefault = true
+
+    return this.planRepository.save(repository, options)
+  }
+
+  async removeDefault(repository: PlanDoc, options?: IDatabaseSaveOptions): Promise<PlanDoc> {
+    repository.isDefault = false
 
     return this.planRepository.save(repository, options)
   }

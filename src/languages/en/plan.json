@@ -7,6 +7,7 @@
   "delete": "Delete Succeed",
   "inactive": "Inactive Succeed",
   "active": "Active Succeed",
+  "default": "Default Succeed",
   "error": {
     "notFound": "Plan not found",
     "inactive": "Plan is inactive",

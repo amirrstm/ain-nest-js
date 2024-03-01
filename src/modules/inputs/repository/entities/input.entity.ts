@@ -46,6 +46,14 @@ export class InputEntity extends DatabaseMongoUUIDEntityAbstract {
   @Prop({
     index: true,
     required: true,
+    default: false,
+    type: Boolean,
+  })
+  isRequired: boolean
+
+  @Prop({
+    index: true,
+    required: true,
     ref: CategoryEntity.name,
   })
   category: string

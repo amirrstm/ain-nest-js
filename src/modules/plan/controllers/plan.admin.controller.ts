@@ -1,4 +1,4 @@
-import { Body, ConflictException, Controller, Get, Post, Put } from '@nestjs/common'
+import { Body, ConflictException, Controller, Get, Patch, Post, Put } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 
 import { AuthJwtAdminAccessProtected } from 'src/common/auth/decorators/auth.jwt.decorator'
@@ -9,14 +9,25 @@ import { IResponse, IResponsePaging } from 'src/common/response/interfaces/respo
 import { PaginationListDto } from 'src/common/pagination/dtos/pagination.list.dto'
 import { ResponseIdSerialization } from 'src/common/response/serializations/response.id.serialization'
 
-import { PlanAdminListDoc, PlanAdminGetDoc, PlanAdminUpdateDoc } from '../docs/plan.admin.doc'
+import {
+  PlanAdminListDoc,
+  PlanAdminGetDoc,
+  PlanAdminUpdateDoc,
+  PlanAdminCreateDoc,
+  PlanAdminDefaultDoc,
+} from '../docs/plan.admin.doc'
 import { PlanCreateDto } from '../dto/plan.create.dto'
 import { PlanService } from '../services/plan.service'
 import { ENUM_PLAN_STATUS_CODE_ERROR } from '../constants/plan.status-code.constant'
 import { PlanRequestDto } from '../dto/plan.request.dto'
 import { RequestParamGuard } from 'src/common/request/decorators/request.decorator'
 import { PlanUpdateDto } from '../dto/plan.update.dto'
-import { PlanAdminGetGuard, PlanAdminUpdateGuard, GetPlan } from '../decorators/plan.admin.decorator'
+import {
+  PlanAdminGetGuard,
+  PlanAdminUpdateGuard,
+  GetPlan,
+  PlanAdminUpdateDefaultGuard,
+} from '../decorators/plan.admin.decorator'
 import { PlanDoc, PlanEntity } from '../repository/entities/plan.entity'
 import { PlanListSerialization } from '../serializations/plan.list.serialization'
 import { PaginationQuery, PaginationQueryFilterInBoolean } from 'src/common/pagination/decorators/pagination.decorator'
@@ -100,7 +111,7 @@ export class PlanAdminController {
     return { data: plan }
   }
 
-  @PlanAdminListDoc()
+  @PlanAdminCreateDoc()
   @Response('plan.create', {
     serialization: ResponseIdSerialization,
   })
@@ -112,7 +123,7 @@ export class PlanAdminController {
   @Post('/create')
   async create(
     @Body()
-    { name, slug, description, features, generation, models, offForAnnual, price }: PlanCreateDto
+    { name, slug, description, features, generation, models, offForAnnual, price, isDefault }: PlanCreateDto
   ): Promise<IResponse> {
     const exist: boolean = await this.planService.existBySlug(slug)
 
@@ -121,6 +132,14 @@ export class PlanAdminController {
         statusCode: ENUM_PLAN_STATUS_CODE_ERROR.PLAN_EXIST_ERROR,
         message: 'plan.error.exist',
       })
+    }
+
+    if (isDefault) {
+      const defaultPlan: PlanDoc = await this.planService.findDefault()
+
+      if (defaultPlan) {
+        await this.planService.removeDefault(defaultPlan)
+      }
     }
 
     const create = await this.planService.create({
@@ -132,6 +151,7 @@ export class PlanAdminController {
       models,
       offForAnnual,
       price,
+      isDefault,
     })
 
     return {
@@ -162,5 +182,23 @@ export class PlanAdminController {
     return {
       data: { _id: plan._id },
     }
+  }
+
+  @PlanAdminDefaultDoc()
+  @Response('plan.default')
+  @PlanAdminUpdateDefaultGuard()
+  @AuthJwtAdminAccessProtected()
+  @RequestParamGuard(PlanRequestDto)
+  @Patch('/update/:plan/default')
+  async makeDefault(@GetPlan() plan: PlanDoc): Promise<void> {
+    const defaultPlan: PlanDoc = await this.planService.findDefault()
+
+    if (defaultPlan && defaultPlan._id !== plan._id) {
+      await this.planService.removeDefault(defaultPlan)
+    }
+
+    await this.planService.makeDefault(plan)
+
+    return
   }
 }

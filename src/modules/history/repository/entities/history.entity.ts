@@ -1,0 +1,53 @@
+import { Document } from 'mongoose'
+import { Prop, SchemaFactory } from '@nestjs/mongoose'
+import { DatabaseMongoUUIDEntityAbstract } from 'src/common/database/abstracts/mongo/entities/database.mongo.uuid.entity.abstract'
+
+import { UserEntity } from 'src/modules/user/repository/entities/user.entity'
+import { InputEntity, InputSchema } from 'src/modules/inputs/repository/entities/input.entity'
+import { DatabaseEntity } from 'src/common/database/decorators/database.decorator'
+import { CategoryEntity } from 'src/modules/category/repository/entities/category.entity'
+
+import { IHistoryInputValues } from '../../interfaces/history.interface'
+
+export const HistoryDatabaseName = 'histories'
+
+@DatabaseEntity({ collection: HistoryDatabaseName })
+export class HistoryEntity extends DatabaseMongoUUIDEntityAbstract {
+  @Prop({
+    required: true,
+    default: [],
+    _id: false,
+    type: [
+      {
+        input: {
+          required: true,
+          type: String,
+          ref: InputEntity.name,
+        },
+        value: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
+  })
+  inputValues: IHistoryInputValues[]
+
+  @Prop({
+    index: true,
+    required: true,
+    ref: UserEntity.name,
+  })
+  user: string
+
+  @Prop({
+    index: true,
+    required: false,
+    ref: CategoryEntity.name,
+  })
+  category?: string
+}
+
+export const HistorySchema = SchemaFactory.createForClass(HistoryEntity)
+
+export type HistoryDoc = HistoryEntity & Document

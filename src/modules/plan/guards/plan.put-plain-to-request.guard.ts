@@ -5,7 +5,7 @@ import { PlanService } from '../services/plan.service'
 import { PlanDoc } from '../repository/entities/plan.entity'
 
 @Injectable()
-export class PlanPutToRequestGuard implements CanActivate {
+export class PlanPutPlainToRequestGuard implements CanActivate {
   constructor(private readonly planService: PlanService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -13,7 +13,7 @@ export class PlanPutToRequestGuard implements CanActivate {
     const { params } = request
     const { plan } = params
 
-    const check: PlanDoc = await this.planService.findOneById(plan)
+    const check: PlanDoc = await this.planService.findOneById(plan, { plainObject: true })
     request.__plan = check
 
     return true
