@@ -1,4 +1,4 @@
-import { Body, ConflictException, Controller, Get, Post, Put } from '@nestjs/common'
+import { Body, ConflictException, Controller, Delete, Get, Post, Put } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 
 import { InputService } from 'src/modules/inputs/services/input.service'
@@ -12,9 +12,11 @@ import { ResponseIdSerialization } from 'src/common/response/serializations/resp
 
 import {
   CategoryAdminCreateDoc,
+  CategoryAdminDeleteDoc,
   CategoryAdminGetDoc,
   CategoryAdminInputListDoc,
   CategoryAdminListDoc,
+  CategoryAdminPromptDoc,
   CategoryAdminUpdateDoc,
 } from '../docs/category.admin.doc'
 import { CategoryCreateDto } from '../dto/category.create.dto'
@@ -23,7 +25,12 @@ import { ENUM_CATEGORY_STATUS_CODE_ERROR } from '../constants/category.status-co
 import { CategoryRequestDto } from '../dto/category.request.dto'
 import { RequestCustomLang, RequestParamGuard } from 'src/common/request/decorators/request.decorator'
 import { CategoryUpdateDto } from '../dto/category.update.dto'
-import { CategoryAdminGetGuard, CategoryAdminUpdateGuard, GetCategory } from '../decorators/category.admin.decorator'
+import {
+  CategoryAdminDeleteGuard,
+  CategoryAdminGetGuard,
+  CategoryAdminUpdateGuard,
+  GetCategory,
+} from '../decorators/category.admin.decorator'
 import { CategoryDoc, CategoryEntity } from '../repository/entities/category.entity'
 import { CategoryListSerialization } from '../serializations/category.list.serialization'
 import { PaginationQuery, PaginationQueryFilterInBoolean } from 'src/common/pagination/decorators/pagination.decorator'
@@ -39,12 +46,15 @@ import { PaginationService } from 'src/common/pagination/services/pagination.ser
 import { CategoryGetSerialization } from '../serializations/category.get.serialization'
 import { CategoryInputSerialization } from '../serializations/category.inputs.serialization'
 import { InputEntity } from 'src/modules/inputs/repository/entities/input.entity'
+import { PromptService } from 'src/modules/prompts/services/prompt.service'
+import { PromptEntity } from 'src/modules/prompts/repository/entities/prompt.entity'
 
 @ApiTags('Modules.Admin.Category')
 @Controller({ version: '1', path: '/category' })
 export class CategoryAdminController {
   constructor(
     private readonly inputService: InputService,
+    private readonly promptService: PromptService,
     private readonly categoryService: CategoryService,
     private readonly paginationService: PaginationService
   ) {}
@@ -131,7 +141,25 @@ export class CategoryAdminController {
       category: category._id,
     })
 
-    return { data: { ...category, inputs } }
+    return { data: inputs }
+  }
+
+  @CategoryAdminPromptDoc()
+  @Response('category.get', {
+    serialization: CategoryInputSerialization,
+  })
+  @CategoryAdminGetGuard()
+  @PolicyAbilityProtected({
+    subject: ENUM_POLICY_SUBJECT.ROLE,
+    action: [ENUM_POLICY_ACTION.READ],
+  })
+  @AuthJwtAdminAccessProtected()
+  @RequestParamGuard(CategoryRequestDto)
+  @Get('prompt/:category')
+  async getPrompt(@GetCategory(true) category: CategoryEntity): Promise<IResponse> {
+    const prompt: PromptEntity = await this.promptService.findOne({ category: category._id }, { plainObject: true })
+
+    return { data: prompt }
   }
 
   @CategoryAdminCreateDoc()
@@ -192,5 +220,23 @@ export class CategoryAdminController {
     return {
       data: { _id: category._id },
     }
+  }
+
+  @CategoryAdminDeleteDoc()
+  @Response('category.delete')
+  @CategoryAdminDeleteGuard()
+  @PolicyAbilityProtected({
+    subject: ENUM_POLICY_SUBJECT.ROLE,
+    action: [ENUM_POLICY_ACTION.READ, ENUM_POLICY_ACTION.DELETE],
+  })
+  @AuthJwtAdminAccessProtected()
+  @RequestParamGuard(CategoryRequestDto)
+  @Delete('/delete/:category')
+  async delete(@GetCategory() category: CategoryDoc): Promise<void> {
+    //  TODO: Check inputs and prompts to delete
+
+    await this.categoryService.delete(category)
+
+    return
   }
 }

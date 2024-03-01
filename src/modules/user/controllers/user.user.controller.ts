@@ -1,11 +1,15 @@
-import { Controller, Delete } from '@nestjs/common'
+import { Body, Controller, Delete, Put } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
-import { AuthJwtUserAccessProtected } from 'src/common/auth/decorators/auth.jwt.decorator'
+
+import { UserService } from 'src/modules/user/services/user.service'
+import { UserDoc } from 'src/modules/user/repository/entities/user.entity'
 import { Response } from 'src/common/response/decorators/response.decorator'
 import { GetUser, UserProtected } from 'src/modules/user/decorators/user.decorator'
-import { UserUserDeleteSelfDoc } from 'src/modules/user/docs/user.user.doc'
-import { UserDoc } from 'src/modules/user/repository/entities/user.entity'
-import { UserService } from 'src/modules/user/services/user.service'
+import { AuthJwtUserAccessProtected } from 'src/common/auth/decorators/auth.jwt.decorator'
+import { UserUserDeleteSelfDoc, UserUserUpdateNameDoc } from 'src/modules/user/docs/user.user.doc'
+
+import { UserUpdateNameDto } from '../dtos/user.update-name.dto'
+import { IResponse } from 'src/common/response/interfaces/response.interface'
 
 @ApiTags('Module.User.User')
 @Controller({
@@ -14,6 +18,17 @@ import { UserService } from 'src/modules/user/services/user.service'
 })
 export class UserUserController {
   constructor(private readonly userService: UserService) {}
+
+  @UserUserUpdateNameDoc()
+  @Response('user.updateProfile')
+  @UserProtected()
+  @AuthJwtUserAccessProtected()
+  @Put('/update-name')
+  async updateProfile(@GetUser() user: UserDoc, @Body() body: UserUpdateNameDto): Promise<IResponse> {
+    const userUpdated = await this.userService.updateName(user, body)
+
+    return { data: userUpdated }
+  }
 
   @UserUserDeleteSelfDoc()
   @Response('user.deleteSelf')

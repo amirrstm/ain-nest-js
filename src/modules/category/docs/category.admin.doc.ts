@@ -15,6 +15,7 @@ import { CategoryCreateDto } from '../dto/category.create.dto'
 import { CategoryUpdateDto } from '../dto/category.update.dto'
 import { CategoryGetSerialization } from '../serializations/category.get.serialization'
 import { CategoryInputSerialization } from '../serializations/category.inputs.serialization'
+import { PromptGetSerialization } from 'src/modules/prompts/serializations/prompt.get.serialization'
 
 export function CategoryAdminListDoc(): MethodDecorator {
   return applyDecorators(
@@ -40,6 +41,19 @@ export function CategoryAdminInputListDoc(): MethodDecorator {
     DocGuard({ role: true, policy: true }),
     DocResponse<CategoryInputSerialization>('category.get', {
       serialization: CategoryInputSerialization,
+    })
+  )
+}
+
+export function CategoryAdminPromptDoc(): MethodDecorator {
+  return applyDecorators(
+    Doc({
+      summary: 'get prompt of the category',
+    }),
+    DocAuth({ jwtAccessToken: true }),
+    DocGuard({ role: true, policy: true }),
+    DocResponse<PromptGetSerialization>('category.get', {
+      serialization: PromptGetSerialization,
     })
   )
 }

@@ -65,6 +65,14 @@ export class InputGetSerialization extends ResponseIdSerialization {
   readonly multiline: boolean
 
   @ApiProperty({
+    required: true,
+    nullable: false,
+    example: false,
+    description: 'Required flag of Input',
+  })
+  readonly isRequired: boolean
+
+  @ApiProperty({
     description: 'Active flag of Input',
     example: true,
     required: true,

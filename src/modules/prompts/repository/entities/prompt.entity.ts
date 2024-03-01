@@ -14,6 +14,7 @@ export class PromptEntity extends DatabaseMongoUUIDEntityAbstract {
 
   @Prop({
     index: true,
+    unique: true,
     required: true,
     ref: CategoryEntity.name,
   })

@@ -52,6 +52,13 @@ export class InputUpdateDto {
   readonly multiline: boolean
 
   @ApiProperty({
+    example: true,
+    required: true,
+    description: 'Required flag of input',
+  })
+  readonly isRequired: boolean
+
+  @ApiProperty({
     required: true,
     description: 'Active flag of input',
     example: true,

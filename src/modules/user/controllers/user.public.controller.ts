@@ -3,7 +3,9 @@ import { Body, ConflictException, Controller, Post } from '@nestjs/common'
 
 import { AuthService } from 'src/common/auth/services/auth.service'
 import { RoleService } from 'src/modules/role/services/role.service'
+import { PlanService } from 'src/modules/plan/services/plan.service'
 import { Response } from 'src/common/response/decorators/response.decorator'
+import { UserPlanService } from 'src/modules/user-plan/services/user-plan.service'
 
 import { ENUM_USER_SIGN_UP_FROM } from 'src/modules/user/constants/user.enum.constant'
 import { ENUM_USER_STATUS_CODE_ERROR } from 'src/modules/user/constants/user.status-code.constant'
@@ -32,6 +34,8 @@ export class UserPublicController {
     private readonly userService: UserService,
     private readonly authService: AuthService,
     private readonly roleService: RoleService,
+    private readonly planService: PlanService,
+    private readonly userPlanService: UserPlanService,
     private readonly helperDateService: HelperDateService,
     private readonly helperNumberService: HelperNumberService
   ) {}
@@ -137,6 +141,12 @@ export class UserPublicController {
       role: role._id,
       signUpFrom: ENUM_USER_SIGN_UP_FROM.PUBLIC,
     })
+
+    const defaultPlan = await this.planService.findDefault()
+
+    if (defaultPlan && user) {
+      await this.userPlanService.create({ plan: defaultPlan._id, user: user._id })
+    }
 
     const generateCode = this.helperNumberService.random(6)
     const otp = await this.otpService.create({

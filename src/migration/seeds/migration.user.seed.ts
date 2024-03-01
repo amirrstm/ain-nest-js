@@ -21,11 +21,13 @@ export class MigrationUserSeed {
   })
   async seeds(): Promise<void> {
     const password = 'aaAA@123'
+    const email = 'superadmin@ainevis.com'
     const passwordHash = await this.authService.createPassword(password)
     const superAdminRole: RoleDoc = await this.roleService.findOneByName('superadmin')
 
     const user1: Promise<UserDoc> = this.userService.create(
       {
+        email,
         password,
         mobileNumber: '09912821030',
         signUpFrom: ENUM_USER_SIGN_UP_FROM.ADMIN,
