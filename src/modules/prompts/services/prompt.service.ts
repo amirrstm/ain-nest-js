@@ -19,6 +19,7 @@ import { IPromptService } from '../interfaces/prompt.service.interface'
 import { PromptRepository } from '../repository/repositories/prompt.repository'
 import { PromptDoc, PromptEntity } from '../repository/entities/prompt.entity'
 import { IPromptDoc } from '../interfaces/prompt.interface'
+import { APP_LANGUAGE } from 'src/app/constants/app.constant'
 
 @Injectable()
 export class PromptService implements IPromptService {
@@ -38,6 +39,32 @@ export class PromptService implements IPromptService {
 
   async findOne(find: Record<string, any>, options?: IDatabaseFindOneOptions): Promise<PromptDoc> {
     return this.promptRepository.findOne<PromptDoc>(find, options)
+  }
+
+  async findAllWithTranslation<T = PromptDoc>(
+    language?: string,
+    find?: Record<string, any>,
+    options?: IDatabaseRawFindAllOptions
+  ): Promise<T[]> {
+    const defaultLanguage = APP_LANGUAGE
+    const nonTranslatedFields = {
+      _id: 1,
+      isActive: 1,
+    }
+    return this.promptRepository.rawFindAll(
+      [
+        {
+          $match: find,
+        },
+        {
+          $project: {
+            ...nonTranslatedFields,
+            description: { $ifNull: [`$description.${language}`, `$description.${defaultLanguage}`] },
+          },
+        },
+      ],
+      options
+    )
   }
 
   async findOneByName(name: string, options?: IDatabaseFindOneOptions): Promise<PromptDoc> {
