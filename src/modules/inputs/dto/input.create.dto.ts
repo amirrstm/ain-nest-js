@@ -52,6 +52,13 @@ export class InputCreateDto {
   })
   readonly multiline: boolean
 
+  @ApiProperty({
+    example: true,
+    required: true,
+    description: 'Required flag of input',
+  })
+  readonly isRequired: boolean
+
   @IsEnum(ENUM_INPUT_TYPE)
   @IsString()
   @IsNotEmpty()

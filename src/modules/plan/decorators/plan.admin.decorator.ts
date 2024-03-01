@@ -6,12 +6,20 @@ import { PLAN_IS_ACTIVE_META_KEY } from '../constants/plan.constant'
 import { PlanPutToRequestGuard } from '../guards/plan.put-to-request.guard'
 import { PlanNotFoundGuard } from '../guards/plan.not-found.guard'
 import { PlanDoc } from '../repository/entities/plan.entity'
+import { PlanPutPlainToRequestGuard } from '../guards/plan.put-plain-to-request.guard'
 
 export function PlanAdminGetGuard(): MethodDecorator {
-  return applyDecorators(UseGuards(PlanPutToRequestGuard, PlanNotFoundGuard))
+  return applyDecorators(UseGuards(PlanPutPlainToRequestGuard, PlanNotFoundGuard))
 }
 
 export function PlanAdminUpdateGuard(): MethodDecorator {
+  return applyDecorators(
+    UseGuards(PlanPutToRequestGuard, PlanNotFoundGuard),
+    SetMetadata(PLAN_IS_ACTIVE_META_KEY, [true])
+  )
+}
+
+export function PlanAdminUpdateDefaultGuard(): MethodDecorator {
   return applyDecorators(
     UseGuards(PlanPutToRequestGuard, PlanNotFoundGuard),
     SetMetadata(PLAN_IS_ACTIVE_META_KEY, [true])

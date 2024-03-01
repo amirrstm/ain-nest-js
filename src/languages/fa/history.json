@@ -1,0 +1,13 @@
+{
+  "list": "List History Success.",
+  "get": "Get History Success.",
+  "create": "Create Succeed",
+  "delete": "Delete Succeed",
+  "error": {
+    "notFound": "History not found",
+    "inactive": "History is inactive",
+    "exist": "History exist",
+    "isActiveInvalid": "History is active invalid",
+    "typeForbidden": "History type not allowed"
+  }
+}

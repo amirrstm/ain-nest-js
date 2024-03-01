@@ -61,6 +61,7 @@ export class PlanPublicController {
       generation: 1,
       features: 1,
       price: 1,
+      isDefault: 1,
       offForAnnual: 1,
     }
     const rawCategories: PlanEntity[] = await this.planService.rawFindAll<PlanEntity>(

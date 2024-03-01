@@ -93,6 +93,14 @@ export class PlanCreateDto {
   readonly offForAnnual: boolean
 
   @ApiProperty({
+    example: true,
+    required: true,
+    description: 'Default plan',
+  })
+  @IsNotEmpty()
+  readonly isDefault: boolean
+
+  @ApiProperty({
     required: true,
     description: 'Model list of plan',
     isArray: true,

@@ -94,6 +94,22 @@ export function PlanAdminInactiveDoc(): MethodDecorator {
   )
 }
 
+export function PlanAdminDefaultDoc(): MethodDecorator {
+  return applyDecorators(
+    Doc({
+      summary: 'change default for plan',
+    }),
+    DocRequest({
+      params: PlanDocParamsId,
+    }),
+    DocAuth({
+      jwtAccessToken: true,
+    }),
+    DocGuard({ role: true, policy: true }),
+    DocResponse('plan.default')
+  )
+}
+
 export function PlanAdminUpdateDoc(): MethodDecorator {
   return applyDecorators(
     Doc({

@@ -77,6 +77,13 @@ export class PlanEntity extends DatabaseMongoUUIDEntityAbstract {
 
   @Prop({
     required: true,
+    default: false,
+    type: Boolean,
+  })
+  isDefault: boolean
+
+  @Prop({
+    required: true,
     default: true,
     index: true,
     type: Boolean,

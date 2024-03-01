@@ -122,9 +122,18 @@ export class InputAdminController {
   @Post('/create')
   async create(
     @Body()
-    { category, description, multiline, name, placeholder, title, type }: InputCreateDto
+    { category, description, multiline, isRequired, name, placeholder, title, type }: InputCreateDto
   ): Promise<IResponse> {
-    const create = await this.inputService.create({ category, description, multiline, name, placeholder, title, type })
+    const create = await this.inputService.create({
+      category,
+      description,
+      multiline,
+      isRequired,
+      name,
+      placeholder,
+      title,
+      type,
+    })
 
     return {
       data: { _id: create._id },

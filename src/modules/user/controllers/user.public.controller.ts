@@ -142,10 +142,10 @@ export class UserPublicController {
       signUpFrom: ENUM_USER_SIGN_UP_FROM.PUBLIC,
     })
 
-    const freePlan = await this.planService.findOne({ slug: 'free-plan' })
+    const defaultPlan = await this.planService.findDefault()
 
-    if (freePlan && user) {
-      await this.userPlanService.create({ plan: freePlan._id, user: user._id })
+    if (defaultPlan && user) {
+      await this.userPlanService.create({ plan: defaultPlan._id, user: user._id })
     }
 
     const generateCode = this.helperNumberService.random(6)
