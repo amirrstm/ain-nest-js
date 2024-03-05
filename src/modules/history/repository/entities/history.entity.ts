@@ -3,7 +3,7 @@ import { Prop, SchemaFactory } from '@nestjs/mongoose'
 import { DatabaseMongoUUIDEntityAbstract } from 'src/common/database/abstracts/mongo/entities/database.mongo.uuid.entity.abstract'
 
 import { UserEntity } from 'src/modules/user/repository/entities/user.entity'
-import { InputEntity, InputSchema } from 'src/modules/inputs/repository/entities/input.entity'
+import { InputEntity } from 'src/modules/inputs/repository/entities/input.entity'
 import { DatabaseEntity } from 'src/common/database/decorators/database.decorator'
 import { CategoryEntity } from 'src/modules/category/repository/entities/category.entity'
 
@@ -32,6 +32,18 @@ export class HistoryEntity extends DatabaseMongoUUIDEntityAbstract {
     ],
   })
   inputValues: IHistoryInputValues[]
+
+  @Prop({
+    type: String,
+    required: false,
+  })
+  content: string
+
+  @Prop({
+    type: String,
+    required: false,
+  })
+  rawContent: string
 
   @Prop({
     index: true,

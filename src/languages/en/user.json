@@ -21,6 +21,7 @@
   "signUpMobile": "Otp Code Sent",
   "loginGoogle": "Login with google succeed",
   "verifyMobile": "Verify mobile succeed",
+  "prompt": "Prompt success",
   "error": {
     "notFound": "User not found.",
     "emailExist": "Email user used",

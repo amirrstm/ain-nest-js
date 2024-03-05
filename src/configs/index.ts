@@ -9,8 +9,10 @@ import HelperConfig from './helper.config'
 import MessageConfig from './message.config'
 import RequestConfig from './request.config'
 import UserConfig from './user.config'
+import AIConfig from './open-ai.config'
 
 export default [
+  AIConfig,
   AppConfig,
   AuthConfig,
   DatabaseConfig,
