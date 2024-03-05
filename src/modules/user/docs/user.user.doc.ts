@@ -18,6 +18,20 @@ export function UserUserUpdateNameDoc(): MethodDecorator {
   )
 }
 
+export function UserUserPromptDoc(): MethodDecorator {
+  return applyDecorators(
+    Doc({
+      summary: 'prompt a question to the user',
+    }),
+
+    DocAuth({ jwtAccessToken: true }),
+    DocGuard({ role: true }),
+    DocResponse<UserProfileSerialization>('user.prompt', {
+      serialization: UserProfileSerialization,
+    })
+  )
+}
+
 export function UserUserDeleteSelfDoc(): MethodDecorator {
   return applyDecorators(
     Doc({

@@ -19,6 +19,7 @@ import { HistoryDoc, HistoryEntity } from '../repository/entities/history.entity
 import { CategoryEntity } from 'src/modules/category/repository/entities/category.entity'
 import { UserEntity } from 'src/modules/user/repository/entities/user.entity'
 import { InputEntity } from 'src/modules/inputs/repository/entities/input.entity'
+import { HistoryUpdateDto } from '../dto/history.update.dto'
 
 @Injectable()
 export class HistoryService implements IHistoryService {
@@ -54,6 +55,17 @@ export class HistoryService implements IHistoryService {
     create.inputValues = inputValues
 
     return this.historyRepository.create<HistoryEntity>(create, options)
+  }
+
+  async update(
+    repository: HistoryDoc,
+    { content, rawContent }: HistoryUpdateDto,
+    options?: IDatabaseSaveOptions
+  ): Promise<HistoryDoc> {
+    repository.content = content
+    repository.rawContent = rawContent
+
+    return this.historyRepository.save(repository, options)
   }
 
   async delete(repository: HistoryDoc, options?: IDatabaseSaveOptions): Promise<HistoryDoc> {
