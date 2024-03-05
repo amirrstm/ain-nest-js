@@ -69,7 +69,7 @@ export class UserPublicController {
 
     const password = await this.authService.createPassword(body.password)
 
-    const user: UserDoc = await this.userService.create(
+    await this.userService.create(
       {
         email,
         mobileNumber,

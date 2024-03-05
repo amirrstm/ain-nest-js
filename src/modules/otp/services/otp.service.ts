@@ -11,7 +11,6 @@ import {
 import { UserEntity } from 'src/modules/user/repository/entities/user.entity'
 
 import { HelperDateService } from 'src/common/helper/services/helper.date.service'
-import { IUserDoc } from 'src/modules/user/interfaces/user.interface'
 import { IOtpService } from '../interfaces/otp.service.interface'
 import { OtpRepository } from '../repository/repositories/otp.repository'
 import { OtpCreateDto } from '../dto/otp.create.dto'

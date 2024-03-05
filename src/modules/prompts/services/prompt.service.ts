@@ -2,7 +2,6 @@ import { PipelineStage } from 'mongoose'
 import { Injectable } from '@nestjs/common'
 import {
   IDatabaseCreateOptions,
-  IDatabaseExistOptions,
   IDatabaseFindAllOptions,
   IDatabaseFindOneOptions,
   IDatabaseGetTotalOptions,
