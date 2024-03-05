@@ -11,7 +11,6 @@ import {
   ApiProduces,
   ApiQuery,
   ApiResponse,
-  ApiSecurity,
   getSchemaPath,
 } from '@nestjs/swagger'
 import { APP_LANGUAGE } from 'src/app/constants/app.constant'

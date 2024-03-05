@@ -17,6 +17,7 @@ import { DATABASE_CONNECTION_NAME } from 'src/common/database/constants/database
 import { ENUM_APP_ENVIRONMENT } from 'src/app/constants/app.enum.constant'
 import { APP_LANGUAGE } from 'src/app/constants/app.constant'
 import { PolicyModule } from 'src/common/policy/policy.module'
+import { OpenAIModule } from './open-ai/open-ai.module'
 
 @Module({
   controllers: [],
@@ -58,6 +59,8 @@ import { PolicyModule } from 'src/common/policy/policy.module'
         DATABASE_DEBUG: Joi.boolean().default(false).required(),
         DATABASE_OPTIONS: Joi.string().allow(null, '').optional(),
 
+        OPEN_AI_SECRET_KEY: Joi.string().required(),
+
         AUTH_JWT_SUBJECT: Joi.string().required(),
         AUTH_JWT_AUDIENCE: Joi.string().required(),
         AUTH_JWT_ISSUER: Joi.string().required(),
@@ -91,6 +94,7 @@ import { PolicyModule } from 'src/common/policy/policy.module'
     ResponseModule,
     RequestModule,
     PolicyModule,
+    OpenAIModule,
     AuthModule.forRoot(),
   ],
 })

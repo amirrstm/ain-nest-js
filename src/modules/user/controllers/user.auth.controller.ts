@@ -1,7 +1,6 @@
 import {
   BadRequestException,
   Body,
-  ConflictException,
   Controller,
   ForbiddenException,
   Get,
@@ -586,6 +585,8 @@ export class UserAuthController {
     file: IFile
   ): Promise<void> {
     const pathPrefix: string = await this.userService.getUploadPath(user._id)
+
+    console.log(file, pathPrefix)
 
     return
   }

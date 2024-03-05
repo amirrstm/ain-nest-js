@@ -10,6 +10,7 @@ import {
 
 import { HistoryDoc } from '../repository/entities/history.entity'
 import { HistoryCreateDto } from '../dto/history.create.dto'
+import { HistoryUpdateDto } from '../dto/history.update.dto'
 
 export interface IHistoryService {
   findAll<T>(find?: Record<string, any>, options?: IDatabaseFindAllOptions): Promise<T[]>
@@ -19,4 +20,5 @@ export interface IHistoryService {
   getTotal(find?: Record<string, any>, options?: IDatabaseGetTotalOptions): Promise<number>
   create(data: HistoryCreateDto, options?: IDatabaseCreateOptions): Promise<HistoryDoc>
   delete(repository: HistoryDoc, options?: IDatabaseSaveOptions): Promise<HistoryDoc>
+  update(repository: HistoryDoc, data: HistoryUpdateDto, options?: IDatabaseSaveOptions): Promise<HistoryDoc>
 }

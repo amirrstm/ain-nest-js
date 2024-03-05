@@ -4,7 +4,6 @@ import {
   IDatabaseFindAllOptions,
   IDatabaseFindOneOptions,
   IDatabaseManyOptions,
-  IDatabaseCreateManyOptions,
   IDatabaseGetTotalOptions,
   IDatabaseSaveOptions,
   IDatabaseRawFindAllOptions,
@@ -13,7 +12,6 @@ import {
 import { UserPlanDoc } from '../repository/entities/user-plan.entity'
 import { UserPlanCreateDto } from '../dto/user-plan.create.dto'
 import { UserPlanUpdateDto } from '../dto/user-plan.update.dto'
-import { IUserPlanDoc } from './user-plan.interface'
 
 export interface IUserPlanService {
   findAll<T>(find?: Record<string, any>, options?: IDatabaseFindAllOptions): Promise<T[]>
