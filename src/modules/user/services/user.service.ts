@@ -22,7 +22,6 @@ import { UserPayloadSerialization } from 'src/modules/user/serializations/user.p
 import { plainToInstance } from 'class-transformer'
 import { RoleEntity } from 'src/modules/role/repository/entities/role.entity'
 import { UserImportDto } from 'src/modules/user/dtos/user.import.dto'
-import { UserUpdateUsernameDto } from 'src/modules/user/dtos/user.update-username.dto'
 import { UserUpdatePasswordAttemptDto } from 'src/modules/user/dtos/user.update-password-attempt.dto'
 
 @Injectable()

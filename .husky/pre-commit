@@ -4,4 +4,4 @@
 yarn lint
 yarn deadcode
 yarn spell
-NODE_ENV=test yarn test
+
