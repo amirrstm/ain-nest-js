@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 
 import { IOpenAIService } from '../interfaces/open-ai.service.interface'
-import OpenAI from 'openai'
+
 import { ChatCompletion } from 'openai/resources'
 import { IPromptMessage, IPromptOptions } from '../interfaces/open-ai.interface'
 
