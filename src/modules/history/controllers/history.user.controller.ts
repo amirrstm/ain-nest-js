@@ -22,7 +22,6 @@ import { HistoryService } from '../services/history.service'
 import { HistoryUserDashboardDoc } from '../docs/history.user.doc'
 import { HistoryEntity } from '../repository/entities/history.entity'
 import { HistoryListSerialization } from '../serializations/history.list.serialization'
-import { APP_LANGUAGE } from 'src/app/constants/app.constant'
 import { RequestCustomLang } from 'src/common/request/decorators/request.decorator'
 
 @ApiTags('Modules.User.History')

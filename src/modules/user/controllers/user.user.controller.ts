@@ -23,7 +23,6 @@ import { RequestCustomLang } from 'src/common/request/decorators/request.decorat
 import { APP_LANGUAGE } from 'src/app/constants/app.constant'
 import { IPromptMessage } from 'src/common/open-ai/interfaces/open-ai.interface'
 import { ENUM_AI_ROLE } from 'src/common/open-ai/constants/open-ai.enum.constant'
-import { HistoryDoc } from 'src/modules/history/repository/entities/history.entity'
 import { UserPlanService } from 'src/modules/user-plan/services/user-plan.service'
 import { ENUM_USER_STATUS_CODE_ERROR } from '../constants/user.status-code.constant'
 import { UserPlanDoc } from 'src/modules/user-plan/repository/entities/user-plan.entity'

@@ -70,7 +70,6 @@ import { OtpDoc } from 'src/modules/otp/repository/entities/otp.entity'
 import { HelperDateService } from 'src/common/helper/services/helper.date.service'
 import { ENUM_HELPER_DATE_DIFF } from 'src/common/helper/constants/helper.enum.constant'
 import { RequestCustomLang } from 'src/common/request/decorators/request.decorator'
-import { UserPlanDoc } from 'src/modules/user-plan/repository/entities/user-plan.entity'
 
 @ApiTags('Modules.User.Auth')
 @Controller({
