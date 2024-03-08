@@ -69,6 +69,8 @@ import { ENUM_OTP_TYPE } from 'src/modules/otp/constants/otp.enum.constant'
 import { OtpDoc } from 'src/modules/otp/repository/entities/otp.entity'
 import { HelperDateService } from 'src/common/helper/services/helper.date.service'
 import { ENUM_HELPER_DATE_DIFF } from 'src/common/helper/constants/helper.enum.constant'
+import { RequestCustomLang } from 'src/common/request/decorators/request.decorator'
+import { UserPlanDoc } from 'src/modules/user-plan/repository/entities/user-plan.entity'
 
 @ApiTags('Modules.User.Auth')
 @Controller({
@@ -540,19 +542,17 @@ export class UserAuthController {
   @UserProtected()
   @AuthJwtAccessProtected()
   @Get('/profile')
-  async profile(@GetUser() user: UserDoc): Promise<IResponse> {
+  async profile(@GetUser() user: UserDoc, @RequestCustomLang() customLang: string): Promise<IResponse> {
     const userWithRole: IUserDoc = await this.userService.joinWithRole(user)
-    const userPlan = await this.userPlanService.findOneByUserId(user._id, { join: true })
+    const plan = await this.userPlanService.findAllWithTranslation(customLang, { user: user._id })
 
     const data = {
       ...userWithRole.toObject(),
+      userPlan: plan[0],
     }
 
-    if (userPlan) {
-      data['userPlan'] = {
-        ...userPlan.toObject(),
-        user: undefined,
-      }
+    if (plan && plan.length > 0) {
+      data['userPlan'] = plan[0]
     }
 
     return { data }

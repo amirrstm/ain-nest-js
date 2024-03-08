@@ -90,15 +90,6 @@ export class UserUserController {
       })
     }
 
-    const history: HistoryDoc = await this.historyService.create({
-      user: user._id,
-      category: category._id,
-      inputValues: inputs.map(input => ({
-        input: input._id,
-        value: body.inputs[input.name],
-      })),
-    })
-
     let inputContent = ''
 
     inputs.forEach((input, idx) => {
@@ -121,9 +112,17 @@ export class UserUserController {
     const aiResponse = await this.aiService.getMessageFromPrompt(messages)
 
     await this.userPlanService.update(userPlan, { used: userPlan.used + 1 })
-    const updatedHistory = await this.historyService.update(history, { content: aiResponse.choices[0].message.content })
+    const createdHistory = await this.historyService.create({
+      user: user._id,
+      category: category._id,
+      inputValues: inputs.map(input => ({
+        input: input._id,
+        value: body.inputs[input.name],
+      })),
+      content: aiResponse.choices[0].message.content,
+    })
 
-    return { data: updatedHistory }
+    return { data: createdHistory }
   }
 
   @UserUserUpdateNameDoc()

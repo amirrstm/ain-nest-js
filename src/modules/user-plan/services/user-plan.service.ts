@@ -16,6 +16,7 @@ import { UserPlanUpdateDto } from '../dto/user-plan.update.dto'
 import { IUserPlanService } from '../interfaces/user-plan.service.interface'
 import { UserPlanRepository } from '../repository/repositories/user-plan.repository'
 import { UserPlanDoc, UserPlanEntity } from '../repository/entities/user-plan.entity'
+import { APP_LANGUAGE } from 'src/app/constants/app.constant'
 
 @Injectable()
 export class UserPlanService implements IUserPlanService {
@@ -34,6 +35,55 @@ export class UserPlanService implements IUserPlanService {
 
   async findOneById(_id: string, options?: IDatabaseFindOneOptions): Promise<UserPlanDoc> {
     return this.userPlanRepo.findOneById<UserPlanDoc>(_id, options)
+  }
+
+  async findAllWithTranslation<T = UserPlanDoc>(
+    language?: string,
+    find?: Record<string, any>,
+    options?: IDatabaseRawFindAllOptions
+  ): Promise<T[]> {
+    const defaultLanguage = APP_LANGUAGE
+    const nonTranslatedFields = {
+      _id: 1,
+      name: 1,
+      used: 1,
+      description: 1,
+      planExpired: 1,
+      'plan.name': 1,
+      'plan.slug': 1,
+      'plan.generation': 1,
+      'plan.description': 1,
+    }
+    return this.userPlanRepo.rawFindAll(
+      [
+        {
+          $match: find,
+        },
+        {
+          $lookup: {
+            from: 'plans',
+            localField: 'plan',
+            foreignField: '_id',
+            as: 'plan',
+          },
+        },
+        { $unwind: '$plan' },
+        {
+          $addFields: {
+            'plan.name': { $ifNull: [`$plan.name.${language}`, `$plan.name.${defaultLanguage}`] },
+            'plan.description': { $ifNull: [`$plan.description.${language}`, `$plan.description.${defaultLanguage}`] },
+          },
+        },
+        {
+          $project: {
+            ...nonTranslatedFields,
+            name: { $ifNull: [`$name.${language}`, `$name.${defaultLanguage}`] },
+            description: { $ifNull: [`$description.${language}`, `$description.${defaultLanguage}`] },
+          },
+        },
+      ],
+      options
+    )
   }
 
   async findOne(find: Record<string, any>, options?: IDatabaseFindOneOptions): Promise<UserPlanDoc> {
