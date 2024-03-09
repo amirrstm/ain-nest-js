@@ -10,6 +10,7 @@ import MessageConfig from './message.config'
 import RequestConfig from './request.config'
 import UserConfig from './user.config'
 import AIConfig from './open-ai.config'
+import SmsConfig from './sms.config'
 
 export default [
   AIConfig,
@@ -20,6 +21,7 @@ export default [
   UserConfig,
   RequestConfig,
   DocConfig,
+  SmsConfig,
   DebuggerConfig,
   MessageConfig,
   GoogleConfig,

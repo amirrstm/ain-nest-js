@@ -1,23 +1,26 @@
+import Joi from 'joi'
 import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
-import { HelperModule } from 'src/common/helper/helper.module'
-import { ErrorModule } from 'src/common/error/error.module'
-import { ResponseModule } from 'src/common/response/response.module'
-import { RequestModule } from 'src/common/request/request.module'
-import { AuthModule } from 'src/common/auth/auth.module'
-import { MessageModule } from 'src/common/message/message.module'
-import { PaginationModule } from 'src/common/pagination/pagination.module'
-import Joi from 'joi'
-import { ENUM_MESSAGE_LANGUAGE } from './message/constants/message.enum.constant'
-import configs from 'src/configs'
 import { MongooseModule } from '@nestjs/mongoose'
-import { DatabaseOptionsService } from 'src/common/database/services/database.options.service'
-import { DatabaseOptionsModule } from 'src/common/database/database.options.module'
-import { DATABASE_CONNECTION_NAME } from 'src/common/database/constants/database.constant'
-import { ENUM_APP_ENVIRONMENT } from 'src/app/constants/app.enum.constant'
-import { APP_LANGUAGE } from 'src/app/constants/app.constant'
-import { PolicyModule } from 'src/common/policy/policy.module'
+
+import configs from 'src/configs'
+import { SmsModule } from './sms/sms.module'
 import { OpenAIModule } from './open-ai/open-ai.module'
+import { AuthModule } from 'src/common/auth/auth.module'
+import { ErrorModule } from 'src/common/error/error.module'
+import { PolicyModule } from 'src/common/policy/policy.module'
+import { HelperModule } from 'src/common/helper/helper.module'
+import { RequestModule } from 'src/common/request/request.module'
+import { MessageModule } from 'src/common/message/message.module'
+import { ResponseModule } from 'src/common/response/response.module'
+import { PaginationModule } from 'src/common/pagination/pagination.module'
+import { DatabaseOptionsModule } from 'src/common/database/database.options.module'
+import { DatabaseOptionsService } from 'src/common/database/services/database.options.service'
+
+import { APP_LANGUAGE } from 'src/app/constants/app.constant'
+import { ENUM_APP_ENVIRONMENT } from 'src/app/constants/app.enum.constant'
+import { ENUM_MESSAGE_LANGUAGE } from './message/constants/message.enum.constant'
+import { DATABASE_CONNECTION_NAME } from 'src/common/database/constants/database.constant'
 
 @Module({
   controllers: [],
@@ -59,6 +62,7 @@ import { OpenAIModule } from './open-ai/open-ai.module'
         DATABASE_DEBUG: Joi.boolean().default(false).required(),
         DATABASE_OPTIONS: Joi.string().allow(null, '').optional(),
 
+        SMS_API_KEY: Joi.string().required(),
         OPEN_AI_SECRET_KEY: Joi.string().required(),
 
         AUTH_JWT_SUBJECT: Joi.string().required(),
@@ -87,6 +91,7 @@ import { OpenAIModule } from './open-ai/open-ai.module'
       inject: [DatabaseOptionsService],
       useFactory: (databaseOptionsService: DatabaseOptionsService) => databaseOptionsService.createOptions(),
     }),
+    SmsModule,
     MessageModule,
     HelperModule,
     PaginationModule,

@@ -1,6 +1,7 @@
 import { ApiTags } from '@nestjs/swagger'
 import { Body, ConflictException, Controller, Post } from '@nestjs/common'
 
+import { SmsService } from 'src/common/sms/services/sms.service'
 import { AuthService } from 'src/common/auth/services/auth.service'
 import { RoleService } from 'src/modules/role/services/role.service'
 import { PlanService } from 'src/modules/plan/services/plan.service'
@@ -30,6 +31,7 @@ import { ENUM_HELPER_DATE_DIFF } from 'src/common/helper/constants/helper.enum.c
 })
 export class UserPublicController {
   constructor(
+    private readonly smsService: SmsService,
     private readonly otpService: OtpService,
     private readonly userService: UserService,
     private readonly authService: AuthService,
@@ -113,8 +115,9 @@ export class UserPublicController {
           type: ENUM_OTP_TYPE.MOBILE,
         })
 
-        // Send Otp Code SMS
-        return { data: { code: otp.code, userId: existUser._id } }
+        await this.smsService.sendOtp({ mobile: mobileNumber, otp: otp.code })
+
+        return { data: { userId: existUser._id } }
       }
 
       const diffDateInMins = this.helperDateService.diff(new Date(), existCode.expiredAt, {
@@ -133,7 +136,9 @@ export class UserPublicController {
       const updateCode = await this.otpService.updateCode(existCode, { code: String(generateCode) })
 
       // Send Otp Code SMS
-      return { data: { code: updateCode.code, userId: existUser._id } }
+      await this.smsService.sendOtp({ mobile: mobileNumber, otp: updateCode.code })
+
+      return { data: { userId: existUser._id } }
     }
 
     const user: UserDoc = await this.userService.createWithMobile({

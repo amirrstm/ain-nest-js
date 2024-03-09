@@ -1,9 +1,10 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common'
+
+import { AuthService } from 'src/common/auth/services/auth.service'
+import { IRequestApp } from 'src/common/request/interfaces/request.interface'
+import { IHelperGooglePayload } from 'src/common/helper/interfaces/helper.interface'
 import { ENUM_AUTH_STATUS_CODE_ERROR } from 'src/common/auth/constants/auth.status-code.constant'
 import { AuthGooglePayloadSerialization } from 'src/common/auth/serializations/auth.google-payload.serialization'
-import { AuthService } from 'src/common/auth/services/auth.service'
-import { IHelperGooglePayload } from 'src/common/helper/interfaces/helper.interface'
-import { IRequestApp } from 'src/common/request/interfaces/request.interface'
 
 @Injectable()
 export class AuthGoogleOauth2Guard implements CanActivate {
