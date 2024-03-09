@@ -78,6 +78,7 @@ import { RoleDoc } from 'src/modules/role/repository/entities/role.entity'
 import { RoleService } from 'src/modules/role/services/role.service'
 import { ENUM_USER_SIGN_UP_FROM } from '../constants/user.enum.constant'
 import { ConfigService } from '@nestjs/config'
+import { PlanService } from 'src/modules/plan/services/plan.service'
 
 @ApiTags('Modules.User.Auth')
 @Controller({ version: '1', path: '/user' })
@@ -88,6 +89,7 @@ export class UserAuthController {
     private readonly userService: UserService,
     private readonly authService: AuthService,
     private readonly roleService: RoleService,
+    private readonly planService: PlanService,
     private readonly configService: ConfigService,
     private readonly userPlanService: UserPlanService,
     private readonly helperDateService: HelperDateService
@@ -350,6 +352,12 @@ export class UserAuthController {
         firstName: userPayload.firstName,
         signUpFrom: ENUM_USER_SIGN_UP_FROM.PUBLIC,
       })
+
+      const defaultPlan = await this.planService.findDefault()
+
+      if (defaultPlan && user) {
+        await this.userPlanService.create({ plan: defaultPlan._id, user: user._id })
+      }
     } else if (user.blocked) {
       throw new ForbiddenException({
         statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_BLOCKED_ERROR,
