@@ -10,9 +10,7 @@ import {
   NotFoundException,
   Patch,
   Post,
-  Req,
   UploadedFile,
-  UseGuards,
 } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import {
@@ -72,8 +70,6 @@ import { OtpDoc } from 'src/modules/otp/repository/entities/otp.entity'
 import { HelperDateService } from 'src/common/helper/services/helper.date.service'
 import { ENUM_HELPER_DATE_DIFF } from 'src/common/helper/constants/helper.enum.constant'
 import { RequestCustomLang } from 'src/common/request/decorators/request.decorator'
-
-import { AuthGuard } from '@nestjs/passport'
 
 @ApiTags('Modules.User.Auth')
 @Controller({
@@ -322,12 +318,6 @@ export class UserAuthController {
         refreshToken,
       },
     }
-  }
-
-  @Get('/google')
-  @UseGuards(AuthGuard('google'))
-  async googleAuth(@Req() req: any) {
-    return {}
   }
 
   @UserAuthLoginGoogleDoc()
