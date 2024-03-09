@@ -113,6 +113,25 @@ export class UserService implements IUserService {
     return this.userRepository.create<UserEntity>(create, options)
   }
 
+  async createWithEmail(
+    { email, role, signUpFrom, firstName, lastName }: UserCreateDto,
+    options?: IDatabaseCreateOptions
+  ): Promise<UserDoc> {
+    const create: UserEntity = new UserEntity()
+    create.role = role
+    create.email = email
+    create.blocked = false
+    create.isActive = true
+    create.passwordAttempt = 0
+    create.lastName = lastName
+    create.firstName = firstName
+    create.inactivePermanent = false
+    create.signUpFrom = signUpFrom
+    create.signUpDate = this.helperDateService.create()
+
+    return this.userRepository.create<UserEntity>(create, options)
+  }
+
   async existByEmail(email: string, options?: IDatabaseExistOptions): Promise<boolean> {
     return this.userRepository.exists(
       {

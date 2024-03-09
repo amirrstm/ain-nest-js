@@ -12,22 +12,27 @@ export class AuthGoogleOauth2Guard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<IRequestApp<AuthGooglePayloadSerialization>>()
-    const { authorization } = request.headers
-    const acArr = authorization.split('Bearer ')
-    if (acArr.length !== 2) {
+
+    const {
+      user: { accessToken, firstName, lastName, picture },
+    } = request?.user
+
+    if (!accessToken) {
       throw new UnauthorizedException({
         statusCode: ENUM_AUTH_STATUS_CODE_ERROR.AUTH_GOOGLE_SSO_ERROR,
         message: 'auth.error.googleSSO',
       })
     }
 
-    const accessToken: string = acArr[1]
-
     try {
       const payload: IHelperGooglePayload = await this.authService.googleGetTokenInfo(accessToken)
 
       request.user = {
         user: {
+          picture,
+          firstName,
+          lastName,
+          accessToken,
           email: payload.email,
         },
       }

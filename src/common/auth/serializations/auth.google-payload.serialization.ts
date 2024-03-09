@@ -7,6 +7,30 @@ export class AuthGooglePayloadDataSerialization {
     nullable: false,
   })
   email: string
+
+  @ApiProperty({
+    required: false,
+    nullable: true,
+  })
+  firstName: string
+
+  @ApiProperty({
+    required: false,
+    nullable: true,
+  })
+  lastName: string
+
+  @ApiProperty({
+    required: false,
+    nullable: true,
+  })
+  picture: string
+
+  @ApiProperty({
+    required: false,
+    nullable: true,
+  })
+  accessToken: string
 }
 
 export class AuthGooglePayloadSerialization {

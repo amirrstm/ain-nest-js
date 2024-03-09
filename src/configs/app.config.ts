@@ -8,6 +8,7 @@ export default registerAs(
   'app',
   (): Record<string, any> => ({
     maintenance: process.env.APP_MAINTENANCE === 'true' ?? false,
+    frontEndUrl: process.env.APP_FRONT_END_URL ?? 'http://localhost:3000',
 
     name: process.env.APP_NAME ?? 'ain',
     env: process.env.APP_ENV ?? ENUM_APP_ENVIRONMENT.DEVELOPMENT,

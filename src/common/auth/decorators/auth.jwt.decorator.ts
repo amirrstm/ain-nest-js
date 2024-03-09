@@ -9,6 +9,7 @@ import { ENUM_ROLE_TYPE } from 'src/modules/role/constants/role.enum.constant'
 
 export const AuthJwtPayload = createParamDecorator(<T>(data: string, ctx: ExecutionContext): T => {
   const { user } = ctx.switchToHttp().getRequest<IRequestApp & { user: T }>()
+
   return data ? user[data] : user
 })
 

@@ -8,11 +8,12 @@ import { SettingModule } from 'src/modules/setting/setting.module'
 import { UserPlanModule } from 'src/modules/user-plan/user-plan.module'
 
 import { UserAuthController } from 'src/modules/user/controllers/user.auth.controller'
+import { RoleModule } from 'src/modules/role/role.module'
 
 @Module({
   controllers: [UserAuthController],
   providers: [],
   exports: [],
-  imports: [UserModule, AuthModule, SettingModule, OtpModule, UserPlanModule, PlanModule],
+  imports: [UserModule, AuthModule, SettingModule, OtpModule, RoleModule, UserPlanModule, PlanModule],
 })
 export class RoutesAuthModule {}

@@ -1,4 +1,5 @@
 import { ApiTags } from '@nestjs/swagger'
+import { ConfigService } from '@nestjs/config'
 import { Body, ConflictException, Controller, Post } from '@nestjs/common'
 
 import { SmsService } from 'src/common/sms/services/sms.service'
@@ -37,6 +38,7 @@ export class UserPublicController {
     private readonly authService: AuthService,
     private readonly roleService: RoleService,
     private readonly planService: PlanService,
+    private readonly configService: ConfigService,
     private readonly userPlanService: UserPlanService,
     private readonly helperDateService: HelperDateService,
     private readonly helperNumberService: HelperNumberService
@@ -89,6 +91,8 @@ export class UserPublicController {
   @Response('user.signUpMobile')
   @Post('/generate-mobile-otp')
   async signUpMobile(@Body() { mobileNumber }: UserSignUpMobileDto): Promise<IResponse> {
+    const isDevMode = this.configService.get('app.env') === 'development'
+
     const promises: Promise<any>[] = [this.roleService.findOneByName('user')]
     const [role] = await Promise.all(promises)
 
@@ -103,8 +107,8 @@ export class UserPublicController {
 
     if (existUser) {
       const existCode = await this.otpService.findOneByUser<OtpDoc>({
-        type: ENUM_OTP_TYPE.MOBILE,
         user: existUser._id,
+        type: ENUM_OTP_TYPE.MOBILE,
       })
 
       if (!existCode) {
@@ -115,9 +119,11 @@ export class UserPublicController {
           type: ENUM_OTP_TYPE.MOBILE,
         })
 
-        await this.smsService.sendOtp({ mobile: mobileNumber, otp: otp.code })
+        if (!isDevMode) {
+          await this.smsService.sendOtp({ mobile: mobileNumber, otp: otp.code })
+        }
 
-        return { data: { userId: existUser._id } }
+        return { data: { userId: existUser._id, code: isDevMode ? otp.code : undefined } }
       }
 
       const diffDateInMins = this.helperDateService.diff(new Date(), existCode.expiredAt, {
@@ -135,10 +141,11 @@ export class UserPublicController {
       const generateCode = this.helperNumberService.random(6)
       const updateCode = await this.otpService.updateCode(existCode, { code: String(generateCode) })
 
-      // Send Otp Code SMS
-      await this.smsService.sendOtp({ mobile: mobileNumber, otp: updateCode.code })
+      if (!isDevMode) {
+        await this.smsService.sendOtp({ mobile: mobileNumber, otp: updateCode.code })
+      }
 
-      return { data: { userId: existUser._id } }
+      return { data: { userId: existUser._id, code: isDevMode ? updateCode.code : undefined } }
     }
 
     const user: UserDoc = await this.userService.createWithMobile({
@@ -160,7 +167,10 @@ export class UserPublicController {
       type: ENUM_OTP_TYPE.MOBILE,
     })
 
-    // Send Otp Code SMS
-    return { data: { code: otp.code, userId: user._id } }
+    if (!isDevMode) {
+      await this.smsService.sendOtp({ mobile: mobileNumber, otp: otp.code })
+    }
+
+    return { data: { userId: user._id, code: isDevMode ? otp.code : undefined } }
   }
 }

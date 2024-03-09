@@ -10,9 +10,13 @@ import {
   NotFoundException,
   Patch,
   Post,
+  Res,
   UploadedFile,
+  UseGuards,
 } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
+import { AuthGuard } from '@nestjs/passport'
+
 import {
   AuthJwtAccessProtected,
   AuthJwtPayload,
@@ -37,7 +41,7 @@ import {
   UserAuthUploadProfileDoc,
   UserAuthLVerifyMobileDoc,
 } from 'src/modules/user/docs/user.auth.doc'
-import { PlanService } from 'src/modules/plan/services/plan.service'
+
 import { UserPlanService } from 'src/modules/user-plan/services/user-plan.service'
 
 import { UserChangePasswordDto } from 'src/modules/user/dtos/user.change-password.dto'
@@ -70,19 +74,21 @@ import { OtpDoc } from 'src/modules/otp/repository/entities/otp.entity'
 import { HelperDateService } from 'src/common/helper/services/helper.date.service'
 import { ENUM_HELPER_DATE_DIFF } from 'src/common/helper/constants/helper.enum.constant'
 import { RequestCustomLang } from 'src/common/request/decorators/request.decorator'
+import { RoleDoc } from 'src/modules/role/repository/entities/role.entity'
+import { RoleService } from 'src/modules/role/services/role.service'
+import { ENUM_USER_SIGN_UP_FROM } from '../constants/user.enum.constant'
+import { ConfigService } from '@nestjs/config'
 
 @ApiTags('Modules.User.Auth')
-@Controller({
-  version: '1',
-  path: '/user',
-})
+@Controller({ version: '1', path: '/user' })
 export class UserAuthController {
   constructor(
     @DatabaseConnection() private readonly databaseConnection: Connection,
     private readonly otpService: OtpService,
     private readonly userService: UserService,
     private readonly authService: AuthService,
-    private readonly planService: PlanService,
+    private readonly roleService: RoleService,
+    private readonly configService: ConfigService,
     private readonly userPlanService: UserPlanService,
     private readonly helperDateService: HelperDateService
   ) {}
@@ -320,20 +326,29 @@ export class UserAuthController {
     }
   }
 
+  @UseGuards(AuthGuard('google'))
+  @Get('/google')
+  async googleLogin() {}
+
   @UserAuthLoginGoogleDoc()
   @Response('user.loginGoogle')
   @AuthGoogleOAuth2Protected()
   @Get('/login/google')
   async loginGoogle(
+    @Res() res: any,
     @AuthJwtPayload<AuthGooglePayloadSerialization>()
     { user: userPayload }: AuthGooglePayloadSerialization
-  ): Promise<IResponse> {
-    const user: UserDoc = await this.userService.findOneByEmail(userPayload.email)
+  ): Promise<void> {
+    const role: RoleDoc = await this.roleService.findOneByName('user')
+    let user: UserDoc = await this.userService.findOneByEmail(userPayload.email)
 
     if (!user) {
-      throw new NotFoundException({
-        statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_NOT_FOUND_ERROR,
-        message: 'user.error.notFound',
+      user = await this.userService.createWithEmail({
+        role: role._id,
+        email: userPayload.email,
+        lastName: userPayload.lastName,
+        firstName: userPayload.firstName,
+        signUpFrom: ENUM_USER_SIGN_UP_FROM.PUBLIC,
       })
     } else if (user.blocked) {
       throw new ForbiddenException({
@@ -367,9 +382,9 @@ export class UserAuthController {
     const payloadAccessToken: AuthAccessPayloadSerialization = await this.authService.createPayloadAccessToken(
       payload,
       {
-        loginWith: ENUM_AUTH_LOGIN_WITH.EMAIL,
-        loginFrom: ENUM_AUTH_LOGIN_FROM.PASSWORD,
         loginDate,
+        loginWith: ENUM_AUTH_LOGIN_WITH.EMAIL,
+        loginFrom: ENUM_AUTH_LOGIN_FROM.GOOGLE,
       }
     )
     const payloadRefreshToken: AuthRefreshPayloadSerialization = await this.authService.createPayloadRefreshToken(
@@ -390,15 +405,10 @@ export class UserAuthController {
     const accessToken: string = await this.authService.createAccessToken(payloadHashedAccessToken)
     const refreshToken: string = await this.authService.createRefreshToken(payloadHashedRefreshToken)
 
-    return {
-      data: {
-        tokenType,
-        roleType,
-        expiresIn,
-        accessToken,
-        refreshToken,
-      },
-    }
+    const frontEndUrl = this.configService.get('app.frontEndUrl')
+    res.redirect(`${frontEndUrl}/login?accessToken=${accessToken}&refreshToken=${refreshToken}&tokenType=${tokenType}`)
+
+    return
   }
 
   @UserAuthRefreshDoc()

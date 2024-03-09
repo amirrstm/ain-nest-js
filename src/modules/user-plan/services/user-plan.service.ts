@@ -47,6 +47,7 @@ export class UserPlanService implements IUserPlanService {
       _id: 1,
       name: 1,
       used: 1,
+      createdAt: 1,
       description: 1,
       planExpired: 1,
       'plan.name': 1,
