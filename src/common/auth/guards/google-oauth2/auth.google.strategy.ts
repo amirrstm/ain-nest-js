@@ -9,8 +9,8 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     super({
       scope: ['profile', 'email'],
       clientID: configService.get<string>('google.clientId'),
+      callbackURL: configService.get<string>('google.callbackUrl'),
       clientSecret: configService.get<string>('google.clientSecret'),
-      callbackURL: 'http://localhost:4000/api/v1/auth/user/login/google',
     })
   }
 
