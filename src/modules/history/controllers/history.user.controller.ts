@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common'
+import { Body, Controller, Get, NotFoundException, Put } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 
 import { GetUser, UserProtected } from 'src/modules/user/decorators/user.decorator'
@@ -19,10 +19,15 @@ import {
 } from '../constants/history.list.constant'
 
 import { HistoryService } from '../services/history.service'
-import { HistoryUserDashboardDoc } from '../docs/history.user.doc'
-import { HistoryEntity } from '../repository/entities/history.entity'
+import { HistoryUserDashboardDoc, HistoryUserFeedbackDoc } from '../docs/history.user.doc'
+import { HistoryDoc, HistoryEntity } from '../repository/entities/history.entity'
 import { HistoryListSerialization } from '../serializations/history.list.serialization'
 import { RequestCustomLang } from 'src/common/request/decorators/request.decorator'
+import { ResponseIdSerialization } from 'src/common/response/serializations/response.id.serialization'
+import { HistoryUserGetGuard } from '../decorators/history.user.decorator'
+import { GetHistory } from '../decorators/history.admin.decorator'
+import { ENUM_HISTORY_STATUS_CODE_ERROR } from '../constants/history.status-code.constant'
+import { HistoryFeedbackDto } from '../dto/history.feedback.dto'
 
 @ApiTags('Modules.User.History')
 @Controller({ version: '1', path: '/history' })
@@ -99,5 +104,28 @@ export class HistoryUserController {
       _pagination: { total, totalPage },
       data: histories,
     }
+  }
+
+  @HistoryUserFeedbackDoc()
+  @Response('history.feedback', { serialization: ResponseIdSerialization })
+  @UserProtected()
+  @AuthJwtUserAccessProtected()
+  @HistoryUserGetGuard()
+  @Put('/feedback/:history')
+  async feedback(
+    @GetUser() user: UserDoc,
+    @GetHistory() history: HistoryDoc,
+    @Body() { feedback }: HistoryFeedbackDto
+  ): Promise<IResponse> {
+    if (history.user !== user._id) {
+      throw new NotFoundException({
+        statusCode: ENUM_HISTORY_STATUS_CODE_ERROR.HISTORY_NOT_BELONG_TO_USER,
+        message: 'user.error.notFound',
+      })
+    }
+
+    const updatedHistory = await this.historyService.updateFeedback(history, { feedback })
+
+    return { data: updatedHistory._id }
   }
 }

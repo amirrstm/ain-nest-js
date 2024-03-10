@@ -7,7 +7,7 @@ import { InputEntity } from 'src/modules/inputs/repository/entities/input.entity
 import { DatabaseEntity } from 'src/common/database/decorators/database.decorator'
 import { CategoryEntity } from 'src/modules/category/repository/entities/category.entity'
 
-import { IHistoryInputValues } from '../../interfaces/history.interface'
+import { IHistoryFeedback, IHistoryInputValues } from '../../interfaces/history.interface'
 
 export const HistoryDatabaseName = 'histories'
 
@@ -58,6 +58,22 @@ export class HistoryEntity extends DatabaseMongoUUIDEntityAbstract {
     ref: CategoryEntity.name,
   })
   category?: string
+
+  @Prop({
+    _id: false,
+    required: false,
+    type: {
+      liked: {
+        type: Boolean,
+        required: true,
+      },
+      text: {
+        type: String,
+        required: false,
+      },
+    },
+  })
+  feedback: IHistoryFeedback
 }
 
 export const HistorySchema = SchemaFactory.createForClass(HistoryEntity)

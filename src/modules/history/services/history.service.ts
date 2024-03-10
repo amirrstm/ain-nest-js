@@ -21,6 +21,7 @@ import { UserEntity } from 'src/modules/user/repository/entities/user.entity'
 import { InputEntity } from 'src/modules/inputs/repository/entities/input.entity'
 import { HistoryUpdateDto } from '../dto/history.update.dto'
 import { APP_LANGUAGE } from 'src/app/constants/app.constant'
+import { HistoryFeedbackDto } from '../dto/history.feedback.dto'
 
 @Injectable()
 export class HistoryService implements IHistoryService {
@@ -216,6 +217,16 @@ export class HistoryService implements IHistoryService {
   ): Promise<HistoryDoc> {
     repository.content = content
     repository.rawContent = rawContent
+
+    return this.historyRepository.save(repository, options)
+  }
+
+  async updateFeedback(
+    repository: HistoryDoc,
+    { feedback }: HistoryFeedbackDto,
+    options?: IDatabaseSaveOptions
+  ): Promise<HistoryDoc> {
+    repository.feedback = feedback
 
     return this.historyRepository.save(repository, options)
   }

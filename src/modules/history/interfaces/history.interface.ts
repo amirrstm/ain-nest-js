@@ -17,3 +17,8 @@ export interface IHistoryInputValues {
   input: string
   value: string
 }
+
+export interface IHistoryFeedback {
+  text?: string
+  liked: boolean
+}
