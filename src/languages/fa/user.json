@@ -34,6 +34,7 @@
     "isActiveInvalid": "وضعیت فعالیت کاربر نامعتبر است",
     "usernameExist": "نام کاربری موجود است",
     "newPasswordMustDifference": "رمز عبور جدید باید متفاوت باشد",
-    "alreadyCodeGenerated": "لطفا مدتی بعد مجددا تلاش کنید"
+    "alreadyCodeGenerated": "لطفا مدتی بعد مجددا تلاش کنید",
+    "planGeneration": "مقدار مجاز استفاده از تولید محتوا به اتمام رسیده است"
   }
 }

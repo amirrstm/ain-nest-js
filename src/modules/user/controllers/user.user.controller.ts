@@ -26,6 +26,7 @@ import { ENUM_AI_ROLE } from 'src/common/open-ai/constants/open-ai.enum.constant
 import { UserPlanService } from 'src/modules/user-plan/services/user-plan.service'
 import { ENUM_USER_STATUS_CODE_ERROR } from '../constants/user.status-code.constant'
 import { UserPlanDoc } from 'src/modules/user-plan/repository/entities/user-plan.entity'
+import { PlanService } from 'src/modules/plan/services/plan.service'
 
 @ApiTags('Module.User.User')
 @Controller({
@@ -34,6 +35,7 @@ import { UserPlanDoc } from 'src/modules/user-plan/repository/entities/user-plan
 })
 export class UserUserController {
   constructor(
+    private readonly planService: PlanService,
     private readonly userService: UserService,
     private readonly aiService: OpenAIService,
     private readonly inputService: InputService,
@@ -61,6 +63,14 @@ export class UserUserController {
       throw new ConflictException({
         statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_NOT_FOUND_ERROR,
         message: 'user.error.notFound',
+      })
+    }
+
+    const desiredPlan = await this.planService.findOneById(userPlan.plan)
+    if (userPlan.used === desiredPlan.generation) {
+      throw new ConflictException({
+        statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_PLAN_GENERATION_ERROR,
+        message: 'user.error.planGeneration',
       })
     }
 

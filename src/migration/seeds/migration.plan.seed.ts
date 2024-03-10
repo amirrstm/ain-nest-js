@@ -17,7 +17,7 @@ export class MigrationPlanSeed {
       description: { en: 'This is Knowledge Plan', fa: 'این پلن دانش است' },
       price: 0,
       models: [],
-      generation: 50,
+      generation: 20,
       isDefault: true,
       offForAnnual: true,
       slug: 'knowledge-plan',

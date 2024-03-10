@@ -10,11 +10,21 @@ import { UserPlanModule } from 'src/modules/user-plan/user-plan.module'
 
 import { UserUserController } from 'src/modules/user/controllers/user.user.controller'
 import { HistoryUserController } from 'src/modules/history/controllers/history.user.controller'
+import { PlanModule } from 'src/modules/plan/plan.module'
 
 @Module({
   controllers: [UserUserController, HistoryUserController],
   providers: [],
   exports: [],
-  imports: [UserModule, RoleModule, CategoryModule, PromptModule, InputModule, HistoryModule, UserPlanModule],
+  imports: [
+    UserModule,
+    RoleModule,
+    CategoryModule,
+    PromptModule,
+    InputModule,
+    HistoryModule,
+    PlanModule,
+    UserPlanModule,
+  ],
 })
 export class RoutesUserModule {}
