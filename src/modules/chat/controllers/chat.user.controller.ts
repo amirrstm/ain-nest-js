@@ -1,11 +1,15 @@
-import { Body, Controller, Delete, Get, Post } from '@nestjs/common'
+import { Body, ConflictException, Controller, Delete, Get, Post } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 
+import { PlanService } from 'src/modules/plan/services/plan.service'
 import { GetUser, UserProtected } from 'src/modules/user/decorators/user.decorator'
 import { Response } from 'src/common/response/decorators/response.decorator'
 import { IResponse } from 'src/common/response/interfaces/response.interface'
 import { UserDoc } from 'src/modules/user/repository/entities/user.entity'
+import { UserPlanService } from 'src/modules/user-plan/services/user-plan.service'
 import { AuthJwtUserAccessProtected } from 'src/common/auth/decorators/auth.jwt.decorator'
+import { UserPlanDoc } from 'src/modules/user-plan/repository/entities/user-plan.entity'
+import { ENUM_USER_STATUS_CODE_ERROR } from 'src/modules/user/constants/user.status-code.constant'
 
 import { ENUM_AI_ROLE } from 'src/common/sms/constants/sms.enum.constant'
 import { OpenAIService } from 'src/common/open-ai/services/open-ai.service'
@@ -22,7 +26,9 @@ import { ChatGetSerialization } from '../serializations/chat.get.serialization'
 export class ChatUserController {
   constructor(
     private readonly aiService: OpenAIService,
-    private readonly chatService: ChatService
+    private readonly chatService: ChatService,
+    private readonly planService: PlanService,
+    private readonly userPlanService: UserPlanService
   ) {}
 
   @ChatUserGetDoc()
@@ -43,6 +49,23 @@ export class ChatUserController {
   @Post('/message')
   async message(@GetUser() user: UserDoc, @Body() body: ChatMessagesDto): Promise<IResponse> {
     const chat = await this.chatService.findOne({ user: user._id })
+
+    const userPlan: UserPlanDoc = await this.userPlanService.findOne({ user: user._id })
+
+    if (!userPlan) {
+      throw new ConflictException({
+        statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_NOT_FOUND_ERROR,
+        message: 'user.error.notFound',
+      })
+    }
+
+    const desiredPlan = await this.planService.findOneById(userPlan.plan)
+    if (userPlan.used === desiredPlan.generation) {
+      throw new ConflictException({
+        statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_PLAN_GENERATION_ERROR,
+        message: 'user.error.planGeneration',
+      })
+    }
 
     if (chat) {
       const messages: IPromptMessage[] = []
@@ -77,7 +100,8 @@ export class ChatUserController {
       content: body.content,
     })
 
-    const aiResponse = await this.aiService.getMessageFromPrompt(messages, { max_tokens: 1000, temperature: 0.6 })
+    const aiResponse = await this.aiService.getMessageFromPrompt(messages, { max_tokens: 1500, temperature: 0.6 })
+    await this.userPlanService.update(userPlan, { used: userPlan.used + 1 })
 
     await this.chatService.update(newChat, {
       message: { role: ENUM_CHAT_ROLE.ASSISTANT, content: aiResponse.choices[0].message.content },
