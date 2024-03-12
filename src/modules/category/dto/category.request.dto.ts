@@ -7,3 +7,9 @@ export class CategoryRequestDto {
   @Type(() => String)
   category: string
 }
+
+export class CategoryPublicRequestDto {
+  @IsNotEmpty()
+  @Type(() => String)
+  category: string
+}
