@@ -9,13 +9,15 @@ import { PromptModule } from 'src/modules/prompts/prompt.module'
 import { HistoryModule } from 'src/modules/history/history.module'
 import { CategoryModule } from 'src/modules/category/category.module'
 import { UserPlanModule } from 'src/modules/user-plan/user-plan.module'
+import { CategoryRequestModule } from 'src/modules/category-request/category-request.module'
 
 import { ChatUserController } from 'src/modules/chat/controllers/chat.user.controller'
 import { UserUserController } from 'src/modules/user/controllers/user.user.controller'
 import { HistoryUserController } from 'src/modules/history/controllers/history.user.controller'
+import { CategoryRequestUserController } from 'src/modules/category-request/controllers/category-request.user.controller'
 
 @Module({
-  controllers: [UserUserController, HistoryUserController, ChatUserController],
+  controllers: [UserUserController, HistoryUserController, ChatUserController, CategoryRequestUserController],
   providers: [],
   exports: [],
   imports: [
@@ -28,6 +30,7 @@ import { HistoryUserController } from 'src/modules/history/controllers/history.u
     PlanModule,
     UserPlanModule,
     ChatModule,
+    CategoryRequestModule,
   ],
 })
 export class RoutesUserModule {}
