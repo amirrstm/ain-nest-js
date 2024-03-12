@@ -6,7 +6,6 @@ import {
   IDatabaseGetTotalOptions,
   IDatabaseManyOptions,
   IDatabaseSaveOptions,
-  IDatabaseRawFindAllOptions,
 } from 'src/common/database/interfaces/database.interface'
 import { UserEntity } from 'src/modules/user/repository/entities/user.entity'
 

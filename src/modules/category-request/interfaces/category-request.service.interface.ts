@@ -1,11 +1,9 @@
-import { PipelineStage } from 'mongoose'
 import {
   IDatabaseCreateOptions,
   IDatabaseFindAllOptions,
   IDatabaseFindOneOptions,
   IDatabaseGetTotalOptions,
   IDatabaseSaveOptions,
-  IDatabaseRawFindAllOptions,
 } from 'src/common/database/interfaces/database.interface'
 
 import { CategoryRequestDoc } from '../repository/entities/category-request.entity'
