@@ -21,10 +21,9 @@ import {
   CATEGORY_DEFAULT_ORDER_DIRECTION,
   CATEGORY_DEFAULT_PER_PAGE,
 } from '../constants/category.list.constant'
-import { CategoryGetSerialization } from '../serializations/category.get.serialization'
-import { CategoryPublicRequestDto, CategoryRequestDto } from '../dto/category.request.dto'
-import { GetCategory } from '../decorators/category.admin.decorator'
 import { CategoryDoc } from '../repository/entities/category.entity'
+import { CategoryPublicRequestDto } from '../dto/category.request.dto'
+import { CategoryGetSerialization } from '../serializations/category.get.serialization'
 import { CategoryPublicGetGuard, GetCategoryBySlug } from '../decorators/category.public.decorator'
 import { ENUM_CATEGORY_STATUS_CODE_ERROR } from '../constants/category.status-code.constant'
 
