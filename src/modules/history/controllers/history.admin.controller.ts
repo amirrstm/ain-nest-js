@@ -70,6 +70,10 @@ export class HistoryAdminController {
           path: 'category',
           select: ['_id', 'name'],
         },
+        {
+          path: 'inputValues.input',
+          select: ['_id', 'title'],
+        },
       ],
     })
 
