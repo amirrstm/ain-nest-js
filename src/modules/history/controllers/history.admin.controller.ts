@@ -66,6 +66,10 @@ export class HistoryAdminController {
           path: 'user',
           select: ['_id', 'mobileNumber', 'email'],
         },
+        {
+          path: 'category',
+          select: ['_id', 'name'],
+        },
       ],
     })
 
