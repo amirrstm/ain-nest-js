@@ -134,6 +134,68 @@ export class UserUserController {
     return { data: createdHistory }
   }
 
+  @UserUserPromptDoc()
+  @Response('user.prompt')
+  @UserProtected()
+  @AuthJwtUserAccessProtected()
+  @Put('/prompt-ai')
+  async questionPromptAI(
+    @GetUser() user: UserDoc,
+    @Body() body: UserPromptDto,
+    @RequestCustomLang()
+    customLang: string
+  ): Promise<IResponse> {
+    const lang = customLang || APP_LANGUAGE
+
+    const category = await this.categoryService.findOneById(body.category)
+    if (!category) {
+      throw new ConflictException({
+        statusCode: ENUM_CATEGORY_STATUS_CODE_ERROR.CATEGORY_NOT_FOUND_ERROR,
+        message: 'category.error.notFound',
+      })
+    }
+
+    const prompt = await this.promptService.findOne({ category: category._id }, { plainObject: true })
+    if (!prompt) {
+      throw new ConflictException({
+        statusCode: ENUM_PROMPT_STATUS_CODE_ERROR.PROMPT_NOT_FOUND_ERROR,
+        message: 'prompt.error.notFound',
+      })
+    }
+
+    const inputs = await this.inputService.findAllWithTranslation(lang, { category: category._id })
+
+    if (!inputs || inputs.length === 0) {
+      throw new ConflictException({
+        statusCode: ENUM_PROMPT_STATUS_CODE_ERROR.PROMPT_NOT_FOUND_ERROR,
+        message: 'input.error.notFound',
+      })
+    }
+
+    let inputContent = ''
+
+    inputs.forEach((input, idx) => {
+      if (body.inputs[input.name]) {
+        inputContent += `${input.title}: ${body.inputs[input.name]} ${idx > 0 ? '\n' : ''}`
+      }
+    })
+
+    const messages: IPromptMessage[] = [
+      {
+        role: ENUM_AI_ROLE.SYSTEM,
+        content: prompt.description[lang],
+      },
+      {
+        role: ENUM_AI_ROLE.USER,
+        content: inputContent,
+      },
+    ]
+
+    const aiResponse = await this.aiService.getMessageFromPrompt(messages)
+
+    return { data: aiResponse }
+  }
+
   @UserUserUpdateNameDoc()
   @Response('user.updateProfile')
   @UserProtected()

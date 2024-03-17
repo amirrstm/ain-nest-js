@@ -22,7 +22,7 @@ export default registerAs(
         maxFileSize: bytes('100kb'), // 100kb
       },
     },
-    timeout: ms('30s'), // 30s based on ms module
+    timeout: ms('100s'), // 30s based on ms module
     userAgent: {
       os: ['Mobile', 'Mac OS', 'Windows', 'UNIX', 'Linux', 'iOS', 'Android'],
       browser: ['IE', 'Safari', 'Edge', 'Opera', 'Chrome', 'Firefox', 'Samsung Browser', 'UCBrowser'],
