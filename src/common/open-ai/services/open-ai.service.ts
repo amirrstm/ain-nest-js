@@ -20,7 +20,7 @@ export class OpenAIService implements IOpenAIService {
     })
   }
 
-  async getMessageFromAIPrompt(messages: IPromptMessage[], options?: IPromptOptions): Promise<ChatCompletion> {
+  async getMessageFromPrompt(messages: IPromptMessage[], options?: IPromptOptions): Promise<ChatCompletion> {
     if (messages.length === 0) {
       return
     }
@@ -36,29 +36,5 @@ export class OpenAIService implements IOpenAIService {
       max_tokens: 2000,
       ...options,
     })
-  }
-
-  async getMessageFromPrompt(messages: IPromptMessage[], options?: IPromptOptions): Promise<ChatCompletion> {
-    if (messages.length === 0) {
-      return
-    }
-
-    try {
-      const completion: AxiosResponse<ChatCompletion> = await axios.post('http://ai.ainevis.com/v1/ai/prompt', {
-        model: 'gpt-3.5-turbo-0125',
-        // model: 'gpt-4-0125-preview',
-        messages: messages.map(message => ({
-          role: message.role,
-          content: message.content,
-        })),
-        temperature: 0.5,
-        max_tokens: 2000,
-        ...options,
-      })
-
-      return completion.data
-    } catch (e) {
-      console.log(e)
-    }
   }
 }
