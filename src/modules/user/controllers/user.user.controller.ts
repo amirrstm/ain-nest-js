@@ -191,7 +191,7 @@ export class UserUserController {
       },
     ]
 
-    const aiResponse = await this.aiService.getMessageFromPrompt(messages)
+    const aiResponse = await this.aiService.getMessageFromAIPrompt(messages)
 
     return { data: aiResponse }
   }
