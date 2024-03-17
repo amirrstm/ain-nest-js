@@ -1,3 +1,4 @@
+import OpenAI from 'openai'
 import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 
@@ -5,9 +6,6 @@ import { IOpenAIService } from '../interfaces/open-ai.service.interface'
 
 import { ChatCompletion } from 'openai/resources'
 import { IPromptMessage, IPromptOptions } from '../interfaces/open-ai.interface'
-
-import axios, { AxiosResponse } from 'axios'
-import OpenAI from 'openai'
 
 @Injectable()
 export class OpenAIService implements IOpenAIService {
