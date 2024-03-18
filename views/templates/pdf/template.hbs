@@ -1,0 +1,225 @@
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <title>App</title>
+    <link href='https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css' rel='stylesheet' />
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css' rel='stylesheet' />
+
+    <style>
+      .text-primary { color: #0097cf; } body { margin: 0; } .progress-bar { background-color: #e5e7eb; border-radius:
+      0.25rem; position: relative; overflow: hidden; } .progress-bar .progress-tracker { background-color: #0097cf;
+      height: 100%; transition: width 0.3s ease-in-out; }
+    </style>
+
+  </head>
+  <body dir='rtl' style="font-family: 'YekanBakh';">
+    <div class='grid grid-cols-12 gap-12 px-12'>
+      <div class='col-span-8'>
+        <div>
+          <h1 class='font-bold text-xl'>امیر رستمی</h1>
+          <h2 class='font-bold text-xl text-primary mt-1'>برنامه نویس فرانت اند</h2>
+        </div>
+
+        {{! Bio }}
+        <div class='mt-4'>
+          <p class='text-xs text-gray-400 leading-[1.8]'>
+            توسعه‌دهندهٔ فرانت-اند با تجربهٔ بیش از ۶ سال، با تمرکز بر کاربر، که در همکاری با تیم‌های تجربه‌کاربری و
+            طراحی برای برنامه‌ریزی نوشتار فنی و اجرای مشخصات عملکردی وب‌سایت‌ها و برنامه‌ها ماهر است. تجربهٔ ساخت
+            وب‌سایت‌های چندسکویی با استفاده از طراحی واکنش‌گرا را دارد. ۲۵+ پروژهٔ برنامه وب را با موفقیت برای یک تنوع
+            کسب و کار مشتریان اجرا کرده است.
+          </p>
+        </div>
+
+        {{! Education}}
+        <div class='mt-6'>
+          <h3 class='font-bold text-lg text-primary'>سوابق تحصیلی</h3>
+
+          <div class='pr-2'>
+            <div class='mt-3 flex items-center gap-1'>
+              <h4 class='font-bold text-sm'>برنامه نویس فرانت اند</h4>
+              <p class='text-xs w-3 border-t border-t-gray-200'></p>
+              <div class='flex items-center'>
+                <p class='text-xs text-primary'>برنامه نویسان برتر</p>،&nbsp;
+                <p class='text-xs text-gray-800'>آذربایجان شرقی، تبریز</p>
+              </div>
+            </div>
+            <p class='text-xs text-gray-500 mt-1'>
+              از ۲ اسفند ۱۳۹۹ تا کنون
+            </p>
+            <ul class='text-xs text-gray-800 list-disc mt-2 mx-6'>
+              <li>توسعهٔ برنامهٔ وب نومیش با استفاده از NextJS و React</li>
+              <li>افزایش عملکرد برنامه به میزان 20% از جمله کار با تصاویر و اندازهٔ پک‌ها، بازسازی عمیق در کد و مدیریت
+                بهتر وضعیت.</li>
+            </ul>
+          </div>
+        </div>
+
+        {{! Work Experience }}
+        <div class='mt-6'>
+          <h3 class='font-bold text-lg text-primary'>سوابق شغلی</h3>
+
+          {{#each items}}
+            <div class='pr-2'>
+              <div class='mt-3 flex items-center gap-1'>
+                <h4 class='font-bold text-sm'>برنامه نویس فرانت اند</h4>
+                <p class='text-xs w-3 border-t border-t-gray-200'></p>
+                <div class='flex items-center'>
+                  <p class='text-xs text-primary'>برنامه نویسان برتر</p>،&nbsp;
+                  <p class='text-xs text-gray-800'>آذربایجان شرقی، تبریز</p>
+                </div>
+              </div>
+              <p class='text-xs text-gray-500 mt-1'>
+                از ۲ اسفند ۱۳۹۹ تا کنون
+              </p>
+              <ul class='text-xs text-gray-800 list-disc mt-2 mx-6'>
+                <li>توسعهٔ برنامهٔ وب نومیش با استفاده از NextJS و React</li>
+                <li>افزایش عملکرد برنامه به میزان 20% از جمله کار با تصاویر و اندازهٔ پک‌ها، بازسازی عمیق در کد و مدیریت
+                  بهتر وضعیت.</li>
+                <li>بهبود SEO برنامه با استفاده از مؤلفه‌های سرور React و مدیریت ارتباط بین سرور و مشتری به نحوی بهتر و
+                  بهینه که به بهبود 30% عملکرد منجر شد.</li>
+                <li>پیاده‌سازی برنامهٔ خدمات محور که بیش از 40 خدمت API را برای دسترسی به همهٔ نقاط برنامه فراهم می‌کند.</li>
+                <li>تولید ۲ پخش‌کنندهٔ ویدیو برای تعامل مناسب با کاربر و تجربهٔ کاربری خوب برای انتخاب یک فریم ویدیو.</li>
+              </ul>
+            </div>
+          {{/each}}
+        </div>
+
+        {{! Projects }}
+        <div class='mt-6'>
+          <h3 class='font-bold text-lg text-primary'>پروژه‌ها</h3>
+
+          {{#each items}}
+            <div class='pr-2'>
+              <div class='mt-3 flex items-center gap-1'>
+                <h4 class='font-bold text-sm'>برنامه نویس فرانت اند</h4>
+                <p class='text-xs w-3 border-t border-t-gray-200'></p>
+                <div class='flex items-center'>
+                  <p class='text-xs text-primary'>برنامه نویسان برتر</p>،&nbsp;
+                  <p class='text-xs text-gray-800'>آذربایجان شرقی، تبریز</p>
+                </div>
+              </div>
+              <p class='text-xs text-gray-500 mt-1'>
+                از ۲ اسفند ۱۳۹۹ تا کنون
+              </p>
+              <ul class='text-xs text-gray-800 list-disc mt-2 mx-6'>
+                <li>توسعهٔ برنامهٔ وب نومیش با استفاده از NextJS و React</li>
+                <li>افزایش عملکرد برنامه به میزان 20% از جمله کار با تصاویر و اندازهٔ پک‌ها، بازسازی عمیق در کد و مدیریت
+                  بهتر وضعیت.</li>
+                <li>بهبود SEO برنامه با استفاده از مؤلفه‌های سرور React و مدیریت ارتباط بین سرور و مشتری به نحوی بهتر و
+                  بهینه که به بهبود 30% عملکرد منجر شد.</li>
+                <li>پیاده‌سازی برنامهٔ خدمات محور که بیش از 40 خدمت API را برای دسترسی به همهٔ نقاط برنامه فراهم می‌کند.</li>
+                <li>تولید ۲ پخش‌کنندهٔ ویدیو برای تعامل مناسب با کاربر و تجربهٔ کاربری خوب برای انتخاب یک فریم ویدیو.</li>
+              </ul>
+            </div>
+          {{/each}}
+        </div>
+      </div>
+
+      <div class='col-span-4'>
+        {{! Contact Details }}
+        <div class='space-y-2'>
+          <div class='flex items-center gap-2 text-sm'>
+            <i class='fa-regular fa-envelope'></i>
+            <span dir='ltr'> amr.rostam@gmail.com</span>
+          </div>
+
+          <div class='flex items-center gap-2 text-sm'>
+            <i class='fa-solid fa-phone'></i>
+            <span dir='ltr'> 0912 345 6789</span>
+          </div>
+
+          <div class='flex items-center gap-2 text-sm'>
+            <i class='fa-solid fa-globe'></i>
+            <span dir='ltr'> www.amirrostami.com</span>
+          </div>
+
+          <div class='flex items-center gap-2 text-sm'>
+            <i class='fa-solid fa-calendar-days'></i>
+            <span dir='ltr'> ۱۳۷۸/۰۱/۲۰</span>
+          </div>
+
+        </div>
+
+        {{! Skills }}
+        <div class='mt-6'>
+          <h3 class='font-bold text-lg text-primary'>مهارت‌ها</h3>
+
+          <div class='mt-3 pr-2'>
+            <h4 class='font-bold text-sm'>HTML, CSS, CSS3, jQuery</h4>
+            <p class='text-xs text-gray-500 mt-1'>
+
+              توانایی کار با HTML و CSS و CSS3 و jQuery بصورت حرفه ای
+            </p>
+          </div>
+
+          <div class='mt-3 pr-2'>
+            <h4 class='font-bold text-sm'>React, NextJS, VueJS</h4>
+            <p class='text-xs text-gray-500 mt-1'>
+
+              توانایی کار با React و NextJS و VueJS بصورت حرفه ای
+            </p>
+          </div>
+
+        </div>
+
+        {{! Language }}
+        <div class='mt-6'>
+          <h3 class='font-bold text-lg text-primary'>زبان‌ها</h3>
+
+          <div class='mt-3 pr-2'>
+            <h4 class='font-bold text-sm'>انگلیسی</h4>
+
+            <div class='w-full h-2 bg-gray-300 rounded-md mt-2'>
+              <div class='progress-bar h-2'>
+                <div class='progress-tracker h-2' style='width: 50%;'></div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class='mt-3 pr-2'>
+            <h4 class='font-bold text-sm'>فرانسوی</h4>
+
+            <div class='w-full h-2 bg-gray-300 rounded-md mt-2'>
+              <div class='progress-bar h-2'>
+                <div class='progress-tracker h-2' style='width: 90%;'></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        {{! Social }}
+        <div class='mt-8'>
+          <h3 class='font-bold text-lg text-primary'>
+            شبکه‌های اجتماعی
+          </h3>
+          <div class='space-y-2 mt-3 pr-2'>
+            <div class='flex items-center gap-2 text-sm'>
+              <i class='fa-brands fa-linkedin-in'></i>
+              <span dir='ltr'>amir.rstm</span>
+            </div>
+
+            <div class='flex items-center gap-2 text-sm'>
+              <i class='fa-solid fa-phone'></i>
+              <span dir='ltr'> 0912 345 6789</span>
+            </div>
+
+            <div class='flex items-center gap-2 text-sm'>
+              <i class='fa-solid fa-globe'></i>
+              <span dir='ltr'> www.amirrostami.com</span>
+            </div>
+
+            <div class='flex items-center gap-2 text-sm'>
+              <i class='fa-solid fa-calendar-days'></i>
+              <span dir='ltr'> ۱۳۷۸/۰۱/۲۰</span>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </body>
+</html>

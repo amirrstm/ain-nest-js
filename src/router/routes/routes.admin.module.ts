@@ -6,6 +6,7 @@ import { UserModule } from 'src/modules/user/user.module'
 import { PlanModule } from 'src/modules/plan/plan.module'
 import { EmailModule } from 'src/modules/email/email.module'
 import { InputModule } from 'src/modules/inputs/input.module'
+import { ResumeModule } from 'src/modules/resume/resume.module'
 import { PromptModule } from 'src/modules/prompts/prompt.module'
 import { SettingModule } from 'src/modules/setting/setting.module'
 import { HistoryModule } from 'src/modules/history/history.module'
@@ -16,6 +17,7 @@ import { RoleAdminController } from 'src/modules/role/controllers/role.admin.con
 import { UserAdminController } from 'src/modules/user/controllers/user.admin.controller'
 import { PlanAdminController } from 'src/modules/plan/controllers/plan.admin.controller'
 import { InputAdminController } from 'src/modules/inputs/controllers/input.admin.controller'
+import { ResumeAdminController } from 'src/modules/resume/controllers/resume.admin.controller'
 import { PromptAdminController } from 'src/modules/prompts/controllers/prompt.admin.controller'
 import { SettingAdminController } from 'src/modules/setting/controllers/setting.admin.controller'
 import { HistoryAdminController } from 'src/modules/history/controllers/history.admin.controller'
@@ -32,6 +34,7 @@ import { CategoryRequestAdminController } from 'src/modules/category-request/con
     InputAdminController,
     PlanAdminController,
     HistoryAdminController,
+    ResumeAdminController,
     CategoryRequestAdminController,
   ],
   providers: [],
@@ -46,6 +49,7 @@ import { CategoryRequestAdminController } from 'src/modules/category-request/con
     PromptModule,
     InputModule,
     PlanModule,
+    ResumeModule,
     HistoryModule,
     CategoryRequestModule,
   ],

@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config'
 import { MongooseModule } from '@nestjs/mongoose'
 
 import configs from 'src/configs'
+import { PdfModule } from './pdf/pdf.module'
 import { SmsModule } from './sms/sms.module'
 import { OpenAIModule } from './open-ai/open-ai.module'
 import { AuthModule } from 'src/common/auth/auth.module'
@@ -92,6 +93,7 @@ import { DATABASE_CONNECTION_NAME } from 'src/common/database/constants/database
       useFactory: (databaseOptionsService: DatabaseOptionsService) => databaseOptionsService.createOptions(),
     }),
     SmsModule,
+    PdfModule,
     MessageModule,
     HelperModule,
     PaginationModule,

@@ -1,0 +1,16 @@
+{
+  "list": "Resume List Success.",
+  "get": "Get Resume Success.",
+  "create": "Create Succeed",
+  "update": "Update Succeed",
+  "delete": "Delete Succeed",
+  "active": "Active Succeed",
+  "inactive": "Inactive Succeed",
+
+  "error": {
+    "exist": "Resume exist",
+    "notFound": "Resume not found",
+    "inactive": "Resume is inactive",
+    "isActiveInvalid": "Resume is active invalid"
+  }
+}

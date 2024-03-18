@@ -1,9 +1,11 @@
-import { NestApplication, NestFactory } from '@nestjs/core'
-import { Logger, VersioningType } from '@nestjs/common'
-import { AppModule } from 'src/app/app.module'
+import { join } from 'path'
 import { ConfigService } from '@nestjs/config'
 import { useContainer } from 'class-validator'
+import { Logger, VersioningType } from '@nestjs/common'
+import { NestApplication, NestFactory } from '@nestjs/core'
+
 import swaggerInit from './swagger'
+import { AppModule } from 'src/app/app.module'
 
 async function bootstrap() {
   const app: NestApplication = await NestFactory.create(AppModule)
@@ -38,6 +40,11 @@ async function bootstrap() {
       prefix: versioningPrefix,
     })
   }
+
+  // Assets
+  app.useStaticAssets(join(__dirname, '..', '..', 'public'))
+  app.setBaseViewsDir(join(__dirname, '..', '..', 'views'))
+  app.setViewEngine('hbs')
 
   // Swagger
   await swaggerInit(app)
