@@ -72,6 +72,11 @@ export class ErrorHttpFilter implements ExceptionFilter {
       version: __version,
       repoVersion: __repoVersion,
     }
+
+    if (statusHttp === HttpStatus.INTERNAL_SERVER_ERROR) {
+      console.log(exception)
+    }
+
     if (exception instanceof HttpException) {
       // Restructure
       const responseException = exception.getResponse()

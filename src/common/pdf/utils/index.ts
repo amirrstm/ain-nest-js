@@ -16,6 +16,8 @@ export const createPdf = async (htmlContent: any, output: string, options?: pupp
     })
   }, PDF_FONT_FAMILY)
 
+  await page.waitForFunction('document.fonts.ready')
+
   await page.setContent(htmlContent)
   const pdfOptions: puppeteer.PDFOptions = { format: 'A4', path: output, ...options }
 

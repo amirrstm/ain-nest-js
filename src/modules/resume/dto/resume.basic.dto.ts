@@ -62,7 +62,7 @@ export class ResumeBasicDTO {
 
   @ApiProperty({
     required: false,
-    example: faker.image.imageUrl(),
+    example: faker.image.url(),
     description: 'Image URL of the resume',
   })
   @IsOptional()
