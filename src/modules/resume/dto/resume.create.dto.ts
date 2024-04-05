@@ -11,4 +11,10 @@ export class ResumeCreateDto {
   @IsNotEmpty()
   @IsUUID('4')
   readonly user: string
+
+  @ApiProperty({
+    required: false,
+    example: faker.system.filePath(),
+  })
+  readonly filePath?: string
 }

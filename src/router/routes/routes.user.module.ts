@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common'
 import { RoleModule } from 'src/modules/role/role.module'
 import { UserModule } from 'src/modules/user/user.module'
 
+import { AwsModule } from 'src/common/aws/aws.module'
 import { PlanModule } from 'src/modules/plan/plan.module'
 import { ChatModule } from 'src/modules/chat/chat.module'
 import { InputModule } from 'src/modules/inputs/input.module'
@@ -29,6 +30,7 @@ import { CategoryRequestUserController } from 'src/modules/category-request/cont
   providers: [],
   exports: [],
   imports: [
+    AwsModule,
     UserModule,
     RoleModule,
     CategoryModule,

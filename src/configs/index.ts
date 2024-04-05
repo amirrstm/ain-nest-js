@@ -11,8 +11,10 @@ import RequestConfig from './request.config'
 import UserConfig from './user.config'
 import AIConfig from './open-ai.config'
 import SmsConfig from './sms.config'
+import AwsConfig from './aws.config'
 
 export default [
+  AwsConfig,
   AIConfig,
   AppConfig,
   AuthConfig,

@@ -1,4 +1,6 @@
 import { Injectable } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
+import { plainToInstance } from 'class-transformer'
 import { IUserService } from 'src/modules/user/interfaces/user.service.interface'
 import {
   IDatabaseCreateOptions,
@@ -10,18 +12,17 @@ import {
   IDatabaseCreateManyOptions,
   IDatabaseSaveOptions,
 } from 'src/common/database/interfaces/database.interface'
+import { IAuthPassword } from 'src/common/auth/interfaces/auth.interface'
+import { RoleEntity } from 'src/modules/role/repository/entities/role.entity'
+import { HelperDateService } from 'src/common/helper/services/helper.date.service'
+
+import { UserCreateDto } from 'src/modules/user/dtos/user.create.dto'
+import { IUserDoc } from 'src/modules/user/interfaces/user.interface'
+import { UserImportDto } from 'src/modules/user/dtos/user.import.dto'
+import { UserUpdateNameDto } from 'src/modules/user/dtos/user.update-name.dto'
 import { UserDoc, UserEntity } from 'src/modules/user/repository/entities/user.entity'
 import { UserRepository } from 'src/modules/user/repository/repositories/user.repository'
-import { HelperDateService } from 'src/common/helper/services/helper.date.service'
-import { ConfigService } from '@nestjs/config'
-import { UserCreateDto } from 'src/modules/user/dtos/user.create.dto'
-import { IAuthPassword } from 'src/common/auth/interfaces/auth.interface'
-import { UserUpdateNameDto } from 'src/modules/user/dtos/user.update-name.dto'
-import { IUserDoc } from 'src/modules/user/interfaces/user.interface'
 import { UserPayloadSerialization } from 'src/modules/user/serializations/user.payload.serialization'
-import { plainToInstance } from 'class-transformer'
-import { RoleEntity } from 'src/modules/role/repository/entities/role.entity'
-import { UserImportDto } from 'src/modules/user/dtos/user.import.dto'
 import { UserUpdatePasswordAttemptDto } from 'src/modules/user/dtos/user.update-password-attempt.dto'
 
 @Injectable()

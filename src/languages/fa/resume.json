@@ -12,5 +12,15 @@
     "notFound": "Resume not found",
     "inactive": "Resume is inactive",
     "isActiveInvalid": "Resume is active invalid"
+  },
+
+  "text": {
+    "education": "سوابق تحصیلی",
+    "workExperience": "سوابق شغلی",
+    "skills": "مهارت ها",
+    "languages": "زبان ها",
+    "certificates": "گواهینامه ها",
+    "courses": "دوره ها",
+    "projects": "پروژه ها"
   }
 }

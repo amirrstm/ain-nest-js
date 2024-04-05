@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker'
 import { Type } from 'class-transformer'
 import { ApiProperty } from '@nestjs/swagger'
-import { IsOptional, IsString, IsDateString, IsArray, ValidateNested } from 'class-validator'
+import { IsOptional, IsString, IsDateString, IsArray, ValidateNested, IsBoolean } from 'class-validator'
 
 class Location {
   @ApiProperty({
@@ -77,6 +77,15 @@ export class ResumeWorkDTO {
   @IsOptional()
   @IsDateString()
   endDate?: Date
+
+  @ApiProperty({
+    required: false,
+    example: true,
+    description: 'Indicates if the individual is still working',
+  })
+  @IsOptional()
+  @IsBoolean()
+  stillWorking?: boolean
 
   @ApiProperty({
     required: false,

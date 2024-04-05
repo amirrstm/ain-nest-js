@@ -2,7 +2,14 @@ import { applyDecorators } from '@nestjs/common'
 
 import { ENUM_DOC_REQUEST_BODY_TYPE } from 'src/common/doc/constants/doc.enum.constant'
 import { ResponseIdSerialization } from 'src/common/response/serializations/response.id.serialization'
-import { Doc, DocAuth, DocGuard, DocRequest, DocResponse } from 'src/common/doc/decorators/doc.decorator'
+import {
+  Doc,
+  DocAuth,
+  DocGuard,
+  DocRequest,
+  DocRequestFile,
+  DocResponse,
+} from 'src/common/doc/decorators/doc.decorator'
 
 import { ResumeGetSerialization } from '../serializations/resume.get.serialization'
 
@@ -25,6 +32,7 @@ import {
   ResumeTeachingDTO,
   ResumeVolunteerDTO,
 } from '../dto'
+import { FileSingleDto } from 'src/common/file/dtos/file.single.dto'
 
 export function ResumeUserCreateDoc(): MethodDecorator {
   return applyDecorators(
@@ -38,6 +46,18 @@ export function ResumeUserCreateDoc(): MethodDecorator {
     DocGuard({ role: true }),
     DocAuth({ jwtAccessToken: true }),
     DocResponse<ResponseIdSerialization>('resume.create', { serialization: ResponseIdSerialization })
+  )
+}
+
+export function ResumeUserImageDoc(): MethodDecorator {
+  return applyDecorators(
+    Doc({
+      summary: 'Update Resume Image',
+    }),
+    DocGuard({ role: true }),
+    DocAuth({ jwtAccessToken: true }),
+    DocRequestFile({ body: FileSingleDto }),
+    DocResponse('resume.update')
   )
 }
 

@@ -7,11 +7,8 @@ import { AppHelloDoc } from 'src/app/docs/app.doc'
 import { Response } from 'src/common/response/decorators/response.decorator'
 import { RequestUserAgent } from 'src/common/request/decorators/request.decorator'
 
-import { IResponse } from 'src/common/response/interfaces/response.interface'
 import { HelperDateService } from 'src/common/helper/services/helper.date.service'
 import { AppHelloSerialization } from 'src/app/serializations/app.hello.serialization'
-
-import { PdfService } from 'src/common/pdf/services/pdf.service'
 
 @ApiTags('App Test')
 @Controller({ version: VERSION_NEUTRAL, path: '/' })
@@ -19,7 +16,6 @@ export class AppController {
   private readonly serviceName: string
 
   constructor(
-    private readonly pdfService: PdfService,
     private readonly configService: ConfigService,
     private readonly helperDateService: HelperDateService
   ) {
@@ -29,13 +25,8 @@ export class AppController {
   @AppHelloDoc()
   @Response('app.hello', { serialization: AppHelloSerialization })
   @Get('/hello')
-  async hello(@RequestUserAgent() userAgent: IResult): Promise<IResponse> {
+  async hello(@RequestUserAgent() userAgent: IResult): Promise<any> {
     const newDate = this.helperDateService.create()
-
-    await this.pdfService.generatePdf('template', 'output', {
-      message: 'ساساساس',
-      items: ['item1', 'item2', 'item2'],
-    })
 
     return {
       _metadata: {

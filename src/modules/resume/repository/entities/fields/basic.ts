@@ -31,6 +31,10 @@ export const IResumeBasicField = {
     type: String,
     required: false,
   },
+  birthDate: {
+    type: Date,
+    required: false,
+  },
   location: {
     type: {
       city: {

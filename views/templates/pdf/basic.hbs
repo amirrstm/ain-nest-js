@@ -1,0 +1,537 @@
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <title>App</title>
+
+    <link rel='preconnect' href='https://fonts.googleapis.com' />
+    <link rel='preconnect' href='https://fonts.gstatic.com' crossorigin='anonymous' />
+    <link href='https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap' rel='stylesheet' />
+
+    <link href='https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css' rel='stylesheet' />
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css' rel='stylesheet' />
+
+    <style>
+      .text-primary { color: #0097cf; } body { margin: 0; } .progress-bar { background-color: #e5e7eb; border-radius:
+      0.25rem; position: relative; overflow: hidden; } .progress-bar .progress-tracker { background-color: #0097cf;
+      height: 100%; }
+
+      {{! Fonts }}
+      @font-face { font-family: 'YekanBakh'; src: url('/fonts/YekanBakh/YekanBakh-Light.woff2') format('woff2');
+      font-weight: 300; font-style: normal; } @font-face { font-family: 'YekanBakh'; src:
+      url('/fonts/YekanBakh/YekanBakh-Regular.woff2') format('woff2'); font-weight: normal; font-style: normal; }
+      @font-face { font-family: 'YekanBakh'; src: url('/fonts/YekanBakh/YekanBakh-SemiBold.woff2') format('woff2');
+      font-weight: 600; font-style: normal; } @font-face { font-family: 'YekanBakh'; src:
+      url('/fonts/YekanBakh/YekanBakh-Bold.woff2') format('woff2'); font-weight: bold; font-style: normal; } @font-face
+      { font-family: 'YekanBakh'; src: url('/fonts/YekanBakh/YekanBakh-ExtraBold.woff2') format('woff2'); font-weight:
+      800; font-style: normal; }
+
+    </style>
+
+  </head>
+  <body dir='rtl' style="font-family: 'YekanBakh';">
+    <div class='grid grid-cols-12 gap-12 px-8'>
+      <div class='col-span-8'>
+        <div>
+          <h1 class='font-bold text-xl'>
+            {{basic.firstName}}
+            {{#if basic.lastName}}
+              {{basic.lastName}}
+            {{/if}}
+
+          </h1>
+          <h2 class='font-bold text-xl text-primary mt-1'>
+            {{basic.label}}
+          </h2>
+        </div>
+
+        {{! Bio }}
+        <div class='mt-4'>
+          <p class='text-xs text-gray-400 leading-[1.8]'>
+            {{basic.summary}}
+          </p>
+        </div>
+
+        {{! Education}}
+        {{#if education}}
+          <div class='mt-6'>
+            <h3 class='font-bold text-lg text-primary'>سوابق تحصیلی</h3>
+
+            {{#each education}}
+              <div class='pr-2'>
+                <div class='mt-3 flex items-center gap-1'>
+                  <h4 class='font-bold text-sm'>{{fieldOfStudy}}</h4>
+                  <p class='text-xs w-3 border-t border-t-gray-200'></p>
+                  <div class='flex items-center'>
+                    <p class='text-xs text-primary'>{{institution}}</p>،&nbsp;
+                    <p class='text-xs text-gray-800'>{{location.state}}،&nbsp;{{location.city}}</p>
+                  </div>
+                </div>
+                <p class='text-xs text-gray-500 mt-1'>
+                  <span>از</span>
+                  <span dir='ltr'>{{startDate}}</span>
+
+                  {{#if stillStudying}}
+                    <span>تا کنون</span>
+                  {{else}}
+                    <span>تا</span>
+                    <span dir='ltr'>{{endDate}}</span>
+                  {{/if}}
+
+                </p>
+                <ul class='text-xs text-gray-800 list-disc mt-2 mx-6'>
+                  {{#each highlights}}<li>{{this}}</li>{{/each}}
+                </ul>
+              </div>
+            {{/each}}
+          </div>
+        {{/if}}
+
+        {{! Work Experience }}
+        {{#if work}}
+          <div class='mt-6'>
+            <h3 class='font-bold text-lg text-primary'>سوابق شغلی</h3>
+
+            {{#each work}}
+              <div class='pr-2'>
+                <div class='mt-3 flex items-center gap-1'>
+                  <h4 class='font-bold text-sm'>{{position}}</h4>
+                  <p class='text-xs w-3 border-t border-t-gray-200'></p>
+                  <div class='flex items-center'>
+                    <p class='text-xs text-primary'>{{name}}</p>،&nbsp;
+                    <p class='text-xs text-gray-800'>{{location.state}}،&nbsp;{{location.city}}</p>
+                  </div>
+                </div>
+                <p class='text-xs text-gray-500 mt-1'>
+                  <span>از</span>
+                  <span dir='ltr'>{{startDate}}</span>
+
+                  {{#if stillWorking}}
+                    <span>تا کنون</span>
+                  {{else}}
+                    <span>تا</span>
+                    <span dir='ltr'>{{endDate}}</span>
+                  {{/if}}
+
+                </p>
+                <ul class='text-xs text-gray-800 list-disc mt-2 mx-6'>
+                  {{#each highlights}}<li>{{this}}</li>{{/each}}
+                </ul>
+              </div>
+            {{/each}}
+          </div>
+        {{/if}}
+
+        {{! Projects }}
+        {{#if projects}}
+          <div class='mt-6'>
+            <h3 class='font-bold text-lg text-primary'>پروژه‌ها</h3>
+
+            {{#each projects}}
+              <div class='pr-2'>
+                <div class='mt-3 flex items-center gap-1'>
+                  <h4 class='font-bold text-sm'>{{name}}</h4>
+                  <p class='text-xs w-3 border-t border-t-gray-200'></p>
+
+                  <p class='text-xs text-primary'>{{organization}}</p>
+
+                </div>
+
+                {{#if url}}
+                  <div class='flex text-xs gap-1 my-1'>
+                    <p class='text-gray-500'>آدرس پروژه:</p>
+                    <a href={{url}} class='text-xs text-primary'>{{url}}</a></div>
+                {{/if}}
+
+                <p class='text-xs text-gray-600'>
+                  {{description}}
+                </p>
+                <p class='text-xs text-gray-500 mt-1'>
+                  <span>از</span>
+                  <span dir='ltr'>{{startDate}}</span>
+
+                  {{#if stillWorking}}
+                    <span>تا کنون</span>
+                  {{else}}
+                    <span>تا</span>
+                    <span dir='ltr'>{{endDate}}</span>
+                  {{/if}}
+
+                </p>
+                <ul class='text-xs text-gray-800 list-disc mt-2 mx-6'>
+                  {{#each highlights}}<li>{{this}}</li>{{/each}}
+                </ul>
+              </div>
+            {{/each}}
+          </div>
+        {{/if}}
+
+        {{! Certificates }}
+        {{#if certificates}}
+          <div class='mt-6'>
+            <h3 class='font-bold text-lg text-primary'>دوره‌ها و گواهینامه‌ها</h3>
+
+            {{#each certificates}}
+              <div class='pr-2'>
+                <div class='mt-3 flex items-center gap-1'>
+                  <h4 class='font-bold text-sm'>{{name}}</h4>
+                </div>
+                <p class='text-xs text-gray-600 mt-1'>
+                  <span>موسسه: </span>
+                  <span>{{issuer}}</span>
+                </p>
+
+                {{#if url}}
+                  <div class='flex text-xs gap-1 my-1'>
+                    <p class='text-gray-500'>لینک:</p>
+                    <a href={{url}} class='text-xs text-primary'>{{url}}</a></div>
+                {{/if}}
+                <p class='text-xs text-gray-500 mt-1'>
+                  <span dir='ltr'>{{date}}</span>
+                </p>
+              </div>
+            {{/each}}
+          </div>
+        {{/if}}
+
+        {{! Publications }}
+        {{#if publications}}
+          <div class='mt-6'>
+            <h3 class='font-bold text-lg text-primary'>تحقیقات و مقالات</h3>
+
+            {{#each publications}}
+              <div class='pr-2'>
+                <div class='mt-3 flex items-center gap-1'>
+                  <h4 class='font-bold text-sm'>{{name}}</h4>
+                  <p class='text-xs w-3 border-t border-t-gray-200'></p>
+                  <p class='text-xs text-primary'>{{publisher}}</p>
+                </div>
+
+                {{#if summary}}
+                  <p class='text-xs text-gray-600 mt-1'>
+                    <span>{{summary}}</span>
+                  </p>
+                {{/if}}
+
+                {{#if url}}
+                  <div class='flex text-xs gap-1 my-1'>
+                    <p class='text-gray-500'>لینک:</p>
+                    <a href={{url}} class='text-xs text-primary'>{{url}}</a></div>
+                {{/if}}
+
+                <p class='text-xs text-gray-500 mt-1'>
+                  <span dir='ltr'>{{releaseDate}}</span>
+                </p>
+              </div>
+            {{/each}}
+          </div>
+        {{/if}}
+
+        {{! Awards }}
+        {{#if awards}}
+          <div class='mt-6'>
+            <h3 class='font-bold text-lg text-primary'>
+              جوایز و افتخارات
+            </h3>
+
+            {{#each awards}}
+              <div class='pr-2'>
+                <div class='mt-3 flex items-center gap-1'>
+                  <h4 class='font-bold text-sm'>{{title}}</h4>
+                  <p class='text-xs w-3 border-t border-t-gray-200'></p>
+                  <p class='text-xs text-primary'>{{awarder}}</p>
+                </div>
+
+                {{#if summary}}
+                  <p class='text-xs text-gray-600 mt-1'>
+                    <span>{{summary}}</span>
+                  </p>
+                {{/if}}
+
+                <p class='text-xs text-gray-500 mt-1'>
+                  <span dir='ltr'>{{date}}</span>
+                </p>
+              </div>
+            {{/each}}
+          </div>
+        {{/if}}
+
+        {{! Speeches }}
+        {{#if speeches}}
+          <div class='mt-6'>
+            <h3 class='font-bold text-lg text-primary'>ارائه‌ها و سخنرانی‌ها</h3>
+
+            {{#each speeches}}
+              <div class='pr-2'>
+                <div class='mt-3 flex items-center gap-1'>
+                  <h4 class='font-bold text-sm'>{{name}}</h4>
+                </div>
+
+                {{#if summary}}
+                  <p class='text-xs text-gray-600 mt-1'>
+                    <span>{{summary}}</span>
+                  </p>
+                {{/if}}
+
+                {{#if url}}
+                  <div class='flex text-xs gap-1 my-1'>
+                    <p class='text-gray-500'>لینک:</p>
+                    <a href={{url}} class='text-xs text-primary'>{{url}}</a></div>
+                {{/if}}
+
+                <p class='text-xs text-gray-500 mt-1'>
+                  <span dir='ltr'>{{date}}</span>
+                </p>
+              </div>
+            {{/each}}
+          </div>
+        {{/if}}
+
+        {{! Teaching }}
+        {{#if teaching}}
+          <div class='mt-6'>
+            <h3 class='font-bold text-lg text-primary'>سوابق تدریس</h3>
+
+            {{#each teaching}}
+              <div class='pr-2'>
+                <div class='mt-3 flex items-center gap-1'>
+                  <h4 class='font-bold text-sm'>{{title}}</h4>
+                  <p class='text-xs w-3 border-t border-t-gray-200'></p>
+                  <p class='text-xs text-primary'>{{institution}}</p>
+                </div>
+
+                {{#if location}}
+                  <p class='text-xs text-gray-800 mt-1'>
+                    <span>{{location.country}}، {{location.city}}، {{location.state}}</span>
+                  </p>
+                {{/if}}
+
+                {{#if summary}}
+                  <p class='text-xs text-gray-600 mt-1'>
+                    <span>{{summary}}</span>
+                  </p>
+                {{/if}}
+
+                <p class='text-xs text-gray-500 mt-1'>
+                  <span dir='ltr'>{{date}}</span>
+                </p>
+              </div>
+            {{/each}}
+          </div>
+        {{/if}}
+
+        {{! Invention }}
+        {{#if inventions}}
+          <div class='mt-6'>
+            <h3 class='font-bold text-lg text-primary'>اختراعات</h3>
+
+            {{#each inventions}}
+              <div class='pr-2'>
+                <div class='mt-3 flex items-center gap-1'>
+                  <h4 class='font-bold text-sm'>{{name}}</h4>
+                </div>
+
+                <p class='text-xs text-gray-600 mt-1'>
+                  <span>{{summary}}</span>
+                </p>
+
+                {{#if url}}
+                  <div class='flex text-xs gap-1 my-1'>
+                    <p class='text-gray-500'>لینک:</p>
+                    <a href={{url}} class='text-xs text-primary'>{{url}}</a></div>
+                {{/if}}
+
+                <p class='text-xs text-gray-500 mt-1'>
+                  <span dir='ltr'>{{date}}</span>
+                </p>
+              </div>
+            {{/each}}
+          </div>
+        {{/if}}
+
+        {{! Volunteer }}
+        {{#if volunteer}}
+          <div class='mt-6'>
+            <h3 class='font-bold text-lg text-primary'>فعالیت‌های داوطلبانه</h3>
+
+            {{#each volunteer}}
+              <div class='pr-2'>
+                <div class='mt-3 flex items-center gap-1'>
+                  <h4 class='font-bold text-sm'>{{position}}</h4>
+                  <p class='text-xs w-3 border-t border-t-gray-200'></p>
+                  <p class='text-xs text-primary'>{{organization}}</p>
+                </div>
+                <p class='text-xs text-gray-600 mt-1'>
+                  {{summary}}
+                </p>
+                <p class='text-xs text-gray-500 mt-1'>
+                  <span>از</span>
+                  <span dir='ltr'>{{startDate}}</span>
+
+                  {{#if stillWorking}}
+                    <span>تا کنون</span>
+                  {{else}}
+                    <span>تا</span>
+                    <span dir='ltr'>{{endDate}}</span>
+                  {{/if}}
+                </p>
+
+                <ul class='text-xs text-gray-800 list-disc mt-2 mx-6'>
+                  {{#each highlights}}<li>{{this}}</li>{{/each}}
+                </ul>
+              </div>
+            {{/each}}
+          </div>
+        {{/if}}
+
+      </div>
+
+      <div class='col-span-4'>
+        {{! Contact Details }}
+        <div class='space-y-2'>
+          {{#if basic.email}}
+            <div class='flex items-center gap-2 text-sm'>
+              <i class='fa-solid fa-envelope'></i>
+              <span dir='ltr'>{{basic.email}}</span>
+            </div>
+          {{/if}}
+
+          {{#if basic.phone}}
+            <div class='flex items center gap-2 text-sm'>
+              <i class='fa-solid fa-phone'></i>
+              <span dir='ltr'>{{basic.phone}}</span>
+            </div>
+          {{/if}}
+
+          {{#if basic.url}}
+            <div class='flex items center gap-2 text-sm'>
+              <i class='fa-solid fa-globe'></i>
+              <span dir='ltr'>{{basic.url}}</span>
+            </div>
+          {{/if}}
+
+          {{#if basic.birthDate}}
+            <div class='flex items center gap-2 text-sm'>
+              <i class='fa-solid fa-calendar-days'></i>
+              <span>{{basic.birthDate}}</span>
+            </div>
+          {{/if}}
+
+          {{#if basic.location}}
+            <div class='flex items center gap-2 text-sm'>
+              <i class='fa-solid fa-map-marker-alt'></i>
+              <span>{{basic.location.city}}, {{basic.location.state}}</span>
+            </div>
+          {{/if}}
+
+        </div>
+
+        {{! Skills }}
+        {{#if skills}}
+          <div class='mt-6'>
+            <h3 class='font-bold text-lg text-primary'>مهارت‌ها</h3>
+
+            {{#each skills}}
+              <div class='mt-3 pr-2'>
+                <h4 class='font-bold text-sm'>{{name}}</h4>
+                <p class='text-xs text-gray-500 mt-1'>
+                  {{description}}
+                </p>
+
+                {{#if hasLevel}}
+                  <div class='w-full h-2 bg-gray-300 rounded-md mt-2'>
+                    <div class='progress-bar h-2'>
+                      <div class='progress-tracker h-2' style='width: {{level}}%;'></div>
+                    </div>
+                  </div>
+                {{/if}}
+              </div>
+            {{/each}}
+          </div>
+        {{/if}}
+
+        {{! Language }}
+        {{#if languages}}
+          <div class='mt-6'>
+            <h3 class='font-bold text-lg text-primary'>زبان‌ها</h3>
+
+            {{#each languages}}
+              <div class='mt-3 pr-2'>
+                <h4 class='font-bold text-sm'>{{language}}</h4>
+
+                {{#if hasLevel}}
+                  <div class='w-full h-2 bg-gray-300 rounded-md mt-2'>
+                    <div class='progress-bar h-2'>
+                      <div class='progress-tracker h-2' style='width: {{level}}%;'></div>
+                    </div>
+                  </div>
+                {{/if}}
+              </div>
+            {{/each}}
+          </div>
+        {{/if}}
+
+        {{! Social }}
+        {{#if profiles}}
+          <div class='mt-8'>
+            <h3 class='font-bold text-lg text-primary'>
+              شبکه‌های اجتماعی
+            </h3>
+            <div class='space-y-2 mt-3 pr-2'>
+              {{#each profiles}}
+                <div class='flex items-center gap-2 text-sm'>
+                  <i class='fa-brands fa-{{network}}'></i>
+                  <span dir='ltr'>{{username}}</span>
+                </div>
+              {{/each}}
+            </div>
+          </div>
+        {{/if}}
+
+        {{! References }}
+        {{#if references}}
+          <div class='mt-8'>
+            <h3 class='font-bold text-lg text-primary'>
+              معرف‌ها
+            </h3>
+            <div class='space-y-2 mt-3 pr-2'>
+              {{#each references}}
+                <div class='flex gap-2 text-sm'>
+                  <i class='fa-solid fa-user'></i>
+                  <div>
+                    <p>{{name}}</p>
+                    <p class='text-xs text-gray-500'>{{reference}}</p>
+                  </div>
+                </div>
+
+              {{/each}}
+            </div>
+          </div>
+        {{/if}}
+
+        {{! Interests }}
+        {{#if interests}}
+          <div class='mt-8'>
+            <h3 class='font-bold text-lg text-primary'>
+              علایق
+            </h3>
+            <div class='space-y-2 mt-3 pr-2'>
+              {{#each interests}}
+                <p class='text-sm'>{{name}}</p>
+                <p class='text-xs text-gray-500'>
+                  {{#each keywords}}
+                    <span>{{this}}</span>
+
+                    {{#if @last}}{{else}}
+                      <span>-&nbsp;</span>
+                    {{/if}}
+                  {{/each}}
+                </p>
+              {{/each}}
+            </div>
+          </div>
+        {{/if}}
+      </div>
+    </div>
+
+  </body>
+</html>

@@ -80,6 +80,11 @@ import { DATABASE_CONNECTION_NAME } from 'src/common/database/constants/database
         AUTH_JWT_PAYLOAD_ACCESS_TOKEN_ENCRYPT_IV: Joi.string().allow(null, '').min(16).max(50).optional(),
         AUTH_JWT_PAYLOAD_REFRESH_TOKEN_ENCRYPT_KEY: Joi.string().allow(null, '').min(20).max(50).optional(),
         AUTH_JWT_PAYLOAD_REFRESH_TOKEN_ENCRYPT_IV: Joi.string().allow(null, '').min(16).max(50).optional(),
+
+        AWS_S3_CREDENTIAL_KEY: Joi.string().allow(null, '').optional(),
+        AWS_S3_CREDENTIAL_SECRET: Joi.string().allow(null, '').optional(),
+        AWS_S3_REGION: Joi.string().allow(null, '').optional(),
+        AWS_S3_BUCKET: Joi.string().allow(null, '').optional(),
       }),
       validationOptions: {
         allowUnknown: true,

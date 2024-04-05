@@ -1,6 +1,7 @@
 import { applyDecorators } from '@nestjs/common'
-import { Doc, DocAuth, DocGuard, DocResponse } from 'src/common/doc/decorators/doc.decorator'
+import { FileSingleDto } from 'src/common/file/dtos/file.single.dto'
 import { UserProfileSerialization } from '../serializations/user.profile.serialization'
+import { Doc, DocAuth, DocGuard, DocRequestFile, DocResponse } from 'src/common/doc/decorators/doc.decorator'
 
 export function UserUserUpdateNameDoc(): MethodDecorator {
   return applyDecorators(
@@ -29,6 +30,17 @@ export function UserUserPromptDoc(): MethodDecorator {
     DocResponse<UserProfileSerialization>('user.prompt', {
       serialization: UserProfileSerialization,
     })
+  )
+}
+
+export function UserUploadProfileDoc(): MethodDecorator {
+  return applyDecorators(
+    Doc({
+      summary: 'update profile photo',
+    }),
+    DocAuth({ jwtAccessToken: true }),
+    DocRequestFile({ body: FileSingleDto }),
+    DocResponse('user.upload')
   )
 }
 

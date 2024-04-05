@@ -7,6 +7,7 @@ export interface IResumeBasic {
   firstName?: string
   lastName?: string
   summary?: string
+  birthDate?: Date | string
   location?: {
     city?: string
     state?: string
@@ -23,8 +24,8 @@ export interface IResumeProfile {
 export interface IResumeWork {
   name?: string
   url?: string
-  endDate?: Date
-  startDate?: Date
+  endDate?: Date | string
+  startDate?: Date | string
   summary?: string
   position?: string
   highlights?: string[]
@@ -40,8 +41,8 @@ export interface IResumeEducation {
   area?: string
   studyType?: string
   fieldOfStudy?: string
-  startDate?: Date
-  endDate?: Date
+  startDate?: Date | string
+  endDate?: Date | string
   score?: string
   stillStudying?: boolean
   location?: {
@@ -55,8 +56,8 @@ export interface IResumeVolunteer {
   organization?: string
   position?: string
   url?: string
-  startDate?: Date
-  endDate?: Date
+  startDate?: Date | string
+  endDate?: Date | string
   summary?: string
   highlights?: string[]
 }
@@ -77,14 +78,14 @@ export interface IResumeLanguage {
 
 export interface IResumeCertificate {
   name?: string
-  date?: Date
+  date?: Date | string
   issuer?: string
   url?: string
 }
 
 export interface IResumeAward {
   title?: string
-  date?: Date
+  date?: Date | string
   awarder?: string
   summary?: string
 }
@@ -92,15 +93,15 @@ export interface IResumeAward {
 export interface IResumePublication {
   name?: string
   publisher?: string
-  releaseDate?: Date
+  releaseDate?: Date | string
   url?: string
   summary?: string
 }
 
 export interface IResumeProject {
   name?: string
-  startDate?: Date
-  endDate?: Date
+  startDate?: Date | string
+  endDate?: Date | string
   organization?: string
   description?: string
   highlights?: string[]
@@ -119,7 +120,7 @@ export interface IResumeReference {
 
 export interface IResumeSpeech {
   name?: string
-  date?: Date
+  date?: Date | string
   url?: string
   summary?: string
 }
@@ -127,7 +128,7 @@ export interface IResumeSpeech {
 export interface IResumeTeaching {
   title?: string
   institution?: string
-  date?: Date
+  date?: Date | string
   summary?: string
   location?: {
     city?: string
@@ -138,7 +139,7 @@ export interface IResumeTeaching {
 
 export interface IResumeInvention {
   name?: string
-  date?: Date
+  date?: Date | string
   summary?: string
   url?: string
 }

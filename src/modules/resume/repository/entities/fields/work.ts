@@ -19,6 +19,10 @@ export const IResumeWorkField = {
     type: Date,
     required: false,
   },
+  stillWorking: {
+    type: Boolean,
+    required: false,
+  },
   summary: {
     type: String,
     required: false,

@@ -41,6 +41,7 @@ import {
   IResumeTeaching,
   IResumeVolunteer,
 } from '../../interfaces/resume.fields'
+import { AwsS3Serialization } from 'src/common/aws/serializations/aws.serialization'
 
 export const ResumeDatabaseName = 'resumes'
 
@@ -52,6 +53,44 @@ export class ResumeEntity extends DatabaseMongoUUIDEntityAbstract {
     ref: UserEntity.name,
   })
   user: string
+
+  @Prop({
+    type: String,
+    required: false,
+  })
+  title: string
+
+  @Prop({
+    required: false,
+    _id: false,
+    type: {
+      path: String,
+      mime: String,
+      size: Number,
+      baseUrl: String,
+      filename: String,
+      completedUrl: String,
+      pathWithFilename: String,
+      duration: { type: Number, required: false },
+    },
+  })
+  file?: AwsS3Serialization
+
+  @Prop({
+    required: false,
+    _id: false,
+    type: {
+      path: String,
+      mime: String,
+      size: Number,
+      baseUrl: String,
+      filename: String,
+      completedUrl: String,
+      pathWithFilename: String,
+      duration: { type: Number, required: false },
+    },
+  })
+  image?: AwsS3Serialization
 
   @Prop({
     required: false,

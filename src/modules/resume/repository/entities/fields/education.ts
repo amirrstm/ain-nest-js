@@ -31,6 +31,10 @@ export const IResumeEducationField = {
     type: Boolean,
     required: false,
   },
+  highlights: {
+    type: [String],
+    required: false,
+  },
   location: {
     type: {
       city: {

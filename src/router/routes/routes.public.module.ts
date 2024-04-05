@@ -10,6 +10,7 @@ import { RoleModule } from 'src/modules/role/role.module'
 import { PlanModule } from 'src/modules/plan/plan.module'
 import { EmailModule } from 'src/modules/email/email.module'
 import { InputModule } from 'src/modules/inputs/input.module'
+import { ResumeModule } from 'src/modules/resume/resume.module'
 import { PromptModule } from 'src/modules/prompts/prompt.module'
 import { SettingModule } from 'src/modules/setting/setting.module'
 import { CategoryModule } from 'src/modules/category/category.module'
@@ -20,6 +21,7 @@ import { UserPublicController } from 'src/modules/user/controllers/user.public.c
 import { PlanPublicController } from 'src/modules/plan/controllers/plan.public.controller'
 import { SettingPublicController } from 'src/modules/setting/controllers/setting.public.controller'
 import { CategoryPublicController } from 'src/modules/category/controllers/category.public.controller'
+import { ResumePublicController } from 'src/modules/resume/controllers/resume.public.controller'
 
 @Module({
   controllers: [
@@ -28,6 +30,7 @@ import { CategoryPublicController } from 'src/modules/category/controllers/categ
     UserPublicController,
     CategoryPublicController,
     PlanPublicController,
+    ResumePublicController,
   ],
   providers: [],
   exports: [],
@@ -45,6 +48,7 @@ import { CategoryPublicController } from 'src/modules/category/controllers/categ
     UserPlanModule,
     PromptModule,
     InputModule,
+    ResumeModule,
   ],
 })
 export class RoutesPublicModule {}

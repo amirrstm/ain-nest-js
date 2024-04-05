@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker'
 import { Type } from 'class-transformer'
 import { ApiProperty } from '@nestjs/swagger'
-import { IsOptional, IsString, ValidateNested } from 'class-validator'
+import { IsDateString, IsOptional, IsString, ValidateNested } from 'class-validator'
 
 class Location {
   @ApiProperty({
@@ -113,6 +113,15 @@ export class ResumeBasicDTO {
   @IsOptional()
   @IsString()
   summary?: string
+
+  @ApiProperty({
+    required: false,
+    example: faker.date.past().toISOString(),
+    description: 'Birth date of the resume owner',
+  })
+  @IsOptional()
+  @IsDateString()
+  birthDate?: Date
 
   @ApiProperty({
     required: false,

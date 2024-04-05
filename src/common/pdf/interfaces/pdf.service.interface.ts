@@ -1,3 +1,3 @@
 export interface IPdfService {
-  generatePdf(templateName: string, output: string, data?: any): Promise<void>
+  generatePdf(templateName: string, output: string, data?: any): Promise<Buffer>
 }

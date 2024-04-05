@@ -88,6 +88,10 @@ export class HelperDateService implements IHelperDateService {
       .format(options?.format ?? ENUM_HELPER_DATE_FORMAT.DATE)
   }
 
+  formatPersian(date: Date, options?: Intl.DateTimeFormatOptions): string {
+    return date.toLocaleDateString('fa-IR', { year: 'numeric', month: 'long', ...options })
+  }
+
   formatIsoDuration(inMinutes: number): string {
     return moment.duration(inMinutes, 'minutes').toISOString()
   }

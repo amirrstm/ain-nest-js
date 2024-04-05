@@ -30,10 +30,15 @@ import {
   ResumeTeachingDTO,
   ResumeVolunteerDTO,
 } from '../dto'
+import { HelperDateService } from 'src/common/helper/services/helper.date.service'
+import { AwsS3Serialization } from 'src/common/aws/serializations/aws.serialization'
 
 @Injectable()
 export class ResumeService implements IResumeService {
-  constructor(private readonly resumeRepository: ResumeRepository) {}
+  constructor(
+    private readonly resumeRepository: ResumeRepository,
+    private readonly helperDateService: HelperDateService
+  ) {}
 
   async findAll<T = ResumeDoc>(find?: Record<string, any>, options?: IDatabaseFindAllOptions): Promise<T[]> {
     return this.resumeRepository.findAll<T>(find, options)
@@ -56,6 +61,26 @@ export class ResumeService implements IResumeService {
     create.user = user
 
     return this.resumeRepository.create<ResumeEntity>(create, options)
+  }
+
+  async updateFile(
+    repository: ResumeDoc,
+    file: AwsS3Serialization,
+    options?: IDatabaseSaveOptions
+  ): Promise<ResumeDoc> {
+    repository.file = file
+
+    return this.resumeRepository.save(repository, options)
+  }
+
+  async updateImage(
+    repository: ResumeDoc,
+    image: AwsS3Serialization,
+    options?: IDatabaseSaveOptions
+  ): Promise<ResumeDoc> {
+    repository.image = image
+
+    return this.resumeRepository.save(repository, options)
   }
 
   async updateWork(repository: ResumeDoc, work: ResumeWorkDTO[], options?: IDatabaseSaveOptions): Promise<ResumeDoc> {
@@ -224,5 +249,113 @@ export class ResumeService implements IResumeService {
 
   async delete(repository: ResumeDoc, options?: IDatabaseSaveOptions): Promise<ResumeDoc> {
     return this.resumeRepository.delete(repository, options)
+  }
+
+  toPersianDate(repository: ResumeDoc): ResumeDoc {
+    const resume: ResumeDoc = repository.toJSON()
+
+    const work = resume.work.map(work => {
+      work.startDate = this.helperDateService.formatPersian(work.startDate as Date)
+      work.endDate = this.helperDateService.formatPersian(work.endDate as Date)
+
+      return work
+    })
+
+    const education = resume.education.map(education => {
+      education.startDate = this.helperDateService.formatPersian(education.startDate as Date)
+      education.endDate = this.helperDateService.formatPersian(education.endDate as Date)
+
+      return education
+    })
+
+    const projects = resume.projects.map(project => {
+      project.startDate = this.helperDateService.formatPersian(project.startDate as Date)
+      project.endDate = this.helperDateService.formatPersian(project.endDate as Date)
+
+      return project
+    })
+
+    const certificates = resume.certificates.map(certificate => {
+      certificate.date = this.helperDateService.formatPersian(certificate.date as Date)
+
+      return certificate
+    })
+
+    const awards = resume.awards.map(award => {
+      award.date = this.helperDateService.formatPersian(award.date as Date)
+
+      return award
+    })
+
+    const publications = resume.publications.map(publication => {
+      publication.releaseDate = this.helperDateService.formatPersian(publication.releaseDate as Date)
+
+      return publication
+    })
+
+    const teaching = resume.teaching.map(teaching => {
+      teaching.date = this.helperDateService.formatPersian(teaching.date as Date)
+
+      return teaching
+    })
+
+    const volunteer = resume.volunteer.map(volunteer => {
+      volunteer.startDate = this.helperDateService.formatPersian(volunteer.startDate as Date)
+      volunteer.endDate = this.helperDateService.formatPersian(volunteer.endDate as Date)
+
+      return volunteer
+    })
+
+    const speeches = resume.speeches.map(speech => {
+      speech.date = this.helperDateService.formatPersian(speech.date as Date)
+
+      return speech
+    })
+
+    const inventions = resume.inventions.map(invention => {
+      invention.date = this.helperDateService.formatPersian(invention.date as Date)
+
+      return invention
+    })
+
+    const basic = {
+      ...resume.basic,
+      birthDate: this.helperDateService.formatPersian(resume.basic.birthDate as Date, { day: 'numeric' }),
+    }
+
+    const skills = resume.skills.map(skill => {
+      skill.level = skill.level * 20
+      return skill
+    })
+
+    const languages = resume.languages.map(language => {
+      language.level = language.level * 20
+      return language
+    })
+
+    return {
+      ...resume,
+      work,
+      education,
+      projects,
+      basic,
+      skills,
+      languages,
+      certificates,
+      volunteer,
+      awards,
+      speeches,
+      publications,
+      teaching,
+      inventions,
+    } as ResumeDoc
+  }
+
+  async getFileUploadPath(user: string): Promise<string> {
+    return `/resume/pdf/${user}`
+  }
+
+  async getImageUploadPath(user: string): Promise<string> {
+    return `/resume/avatar/${user}`
   }
 }

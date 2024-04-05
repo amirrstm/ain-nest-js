@@ -2,31 +2,32 @@ import { Body, ConflictException, Controller, Delete, Put } from '@nestjs/common
 import { ApiTags } from '@nestjs/swagger'
 
 import { UserService } from 'src/modules/user/services/user.service'
+import { PlanService } from 'src/modules/plan/services/plan.service'
 import { InputService } from 'src/modules/inputs/services/input.service'
 import { PromptService } from 'src/modules/prompts/services/prompt.service'
 import { HistoryService } from 'src/modules/history/services/history.service'
 import { CategoryService } from 'src/modules/category/services/category.service'
 
+import { APP_LANGUAGE } from 'src/app/constants/app.constant'
 import { UserDoc } from 'src/modules/user/repository/entities/user.entity'
+import { OpenAIService } from 'src/common/open-ai/services/open-ai.service'
 import { Response } from 'src/common/response/decorators/response.decorator'
 import { GetUser, UserProtected } from 'src/modules/user/decorators/user.decorator'
+import { UserPlanDoc } from 'src/modules/user-plan/repository/entities/user-plan.entity'
 import { AuthJwtUserAccessProtected } from 'src/common/auth/decorators/auth.jwt.decorator'
 import { UserUserDeleteSelfDoc, UserUserPromptDoc, UserUserUpdateNameDoc } from 'src/modules/user/docs/user.user.doc'
 
+import { UserPromptDto } from '../dtos/user.prompt.dto'
 import { UserUpdateNameDto } from '../dtos/user.update-name.dto'
 import { IResponse } from 'src/common/response/interfaces/response.interface'
-import { OpenAIService } from 'src/common/open-ai/services/open-ai.service'
-import { UserPromptDto } from '../dtos/user.prompt.dto'
-import { ENUM_CATEGORY_STATUS_CODE_ERROR } from 'src/modules/category/constants/category.status-code.constant'
-import { ENUM_PROMPT_STATUS_CODE_ERROR } from 'src/modules/prompts/constants/prompt.status-code.constant'
-import { RequestCustomLang } from 'src/common/request/decorators/request.decorator'
-import { APP_LANGUAGE } from 'src/app/constants/app.constant'
+
 import { IPromptMessage } from 'src/common/open-ai/interfaces/open-ai.interface'
 import { ENUM_AI_ROLE } from 'src/common/open-ai/constants/open-ai.enum.constant'
 import { UserPlanService } from 'src/modules/user-plan/services/user-plan.service'
+import { RequestCustomLang } from 'src/common/request/decorators/request.decorator'
 import { ENUM_USER_STATUS_CODE_ERROR } from '../constants/user.status-code.constant'
-import { UserPlanDoc } from 'src/modules/user-plan/repository/entities/user-plan.entity'
-import { PlanService } from 'src/modules/plan/services/plan.service'
+import { ENUM_PROMPT_STATUS_CODE_ERROR } from 'src/modules/prompts/constants/prompt.status-code.constant'
+import { ENUM_CATEGORY_STATUS_CODE_ERROR } from 'src/modules/category/constants/category.status-code.constant'
 
 @ApiTags('Module.User.User')
 @Controller({

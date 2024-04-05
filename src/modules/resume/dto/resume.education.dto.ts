@@ -1,4 +1,4 @@
-import { IsOptional, IsString, IsDateString, IsBoolean, ValidateNested } from 'class-validator'
+import { IsOptional, IsString, IsDateString, IsBoolean, ValidateNested, IsArray } from 'class-validator'
 import { Type } from 'class-transformer'
 import { ApiProperty } from '@nestjs/swagger'
 import { faker } from '@faker-js/faker'
@@ -104,6 +104,16 @@ export class ResumeEducationDTO {
   @IsOptional()
   @IsBoolean()
   stillStudying?: boolean
+
+  @ApiProperty({
+    required: false,
+    example: [faker.lorem.sentence()],
+    description: 'List of highlights in the work experience',
+  })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  highlights?: string[]
 
   @ApiProperty({
     required: false,

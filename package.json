@@ -47,6 +47,7 @@
     "rollback": "yarn rollback:user && yarn rollback:role"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.540.0",
     "@casl/ability": "^6.5.0",
     "@faker-js/faker": "^8.4.0",
     "@joi/date": "^2.1.0",
