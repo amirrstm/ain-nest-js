@@ -3,8 +3,8 @@ import { Injectable } from '@nestjs/common'
 
 import { ProvinceService } from 'src/modules/data/services/province.service'
 
-import Cities from '../../../data/json/cities.json'
-import Provinces from '../../../data/json/provinces.json'
+import Cities from '../data/cities.json'
+import Provinces from '../data/provinces.json'
 
 @Injectable()
 export class MigrationProvinceSeed {
