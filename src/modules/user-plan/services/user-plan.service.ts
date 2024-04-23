@@ -37,6 +37,10 @@ export class UserPlanService implements IUserPlanService {
     return this.userPlanRepo.findOneById<UserPlanDoc>(_id, options)
   }
 
+  async findAllExpired(options?: IDatabaseFindAllOptions): Promise<UserPlanDoc[]> {
+    return this.userPlanRepo.findAll<UserPlanDoc>({ planExpired: { $lte: new Date() } }, options)
+  }
+
   async findAllWithTranslation<T = UserPlanDoc>(
     language?: string,
     find?: Record<string, any>,
@@ -120,6 +124,13 @@ export class UserPlanService implements IUserPlanService {
     options?: IDatabaseSaveOptions
   ): Promise<UserPlanDoc> {
     repository.used = used
+
+    return this.userPlanRepo.save(repository, options)
+  }
+
+  async updateExpire(repository: UserPlanDoc, options?: IDatabaseSaveOptions): Promise<UserPlanDoc> {
+    repository.used = 0
+    repository.planExpired = this.helperDateService.forwardInDays(30)
 
     return this.userPlanRepo.save(repository, options)
   }
