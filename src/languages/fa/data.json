@@ -1,0 +1,27 @@
+{
+  "province": {
+    "list": "List Province Success.",
+    "get": "Get Province Success.",
+    "create": "Create Succeed",
+    "update": "Update Succeed",
+    "delete": "Delete Succeed",
+
+    "error": {
+      "exist": "Province exist",
+      "notFound": "Province not found"
+    }
+  },
+
+  "occupation": {
+    "list": "List Occupation Success.",
+    "get": "Get Occupation Success.",
+    "create": "Create Succeed",
+    "update": "Update Succeed",
+    "delete": "Delete Succeed",
+
+    "error": {
+      "exist": "Occupation exist",
+      "notFound": "Occupation not found"
+    }
+  }
+}

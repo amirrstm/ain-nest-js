@@ -8,6 +8,7 @@ import { OtpModule } from 'src/modules/otp/otp.module'
 import { UserModule } from 'src/modules/user/user.module'
 import { RoleModule } from 'src/modules/role/role.module'
 import { PlanModule } from 'src/modules/plan/plan.module'
+import { DataModule } from 'src/modules/data/data.module'
 import { EmailModule } from 'src/modules/email/email.module'
 import { InputModule } from 'src/modules/inputs/input.module'
 import { ResumeModule } from 'src/modules/resume/resume.module'
@@ -19,9 +20,11 @@ import { UserPlanModule } from 'src/modules/user-plan/user-plan.module'
 import { HealthPublicController } from 'src/health/controllers/health.public.controller'
 import { UserPublicController } from 'src/modules/user/controllers/user.public.controller'
 import { PlanPublicController } from 'src/modules/plan/controllers/plan.public.controller'
+import { ResumePublicController } from 'src/modules/resume/controllers/resume.public.controller'
+import { ProvincePublicController } from 'src/modules/data/controllers/province.public.controller'
 import { SettingPublicController } from 'src/modules/setting/controllers/setting.public.controller'
 import { CategoryPublicController } from 'src/modules/category/controllers/category.public.controller'
-import { ResumePublicController } from 'src/modules/resume/controllers/resume.public.controller'
+import { OccupationPublicController } from 'src/modules/data/controllers/occupation.public.controller'
 
 @Module({
   controllers: [
@@ -31,6 +34,8 @@ import { ResumePublicController } from 'src/modules/resume/controllers/resume.pu
     CategoryPublicController,
     PlanPublicController,
     ResumePublicController,
+    ProvincePublicController,
+    OccupationPublicController,
   ],
   providers: [],
   exports: [],
@@ -49,6 +54,7 @@ import { ResumePublicController } from 'src/modules/resume/controllers/resume.pu
     PromptModule,
     InputModule,
     ResumeModule,
+    DataModule,
   ],
 })
 export class RoutesPublicModule {}
