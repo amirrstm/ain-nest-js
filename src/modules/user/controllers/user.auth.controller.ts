@@ -79,6 +79,7 @@ import { RoleService } from 'src/modules/role/services/role.service'
 import { ENUM_USER_SIGN_UP_FROM } from '../constants/user.enum.constant'
 import { ConfigService } from '@nestjs/config'
 import { PlanService } from 'src/modules/plan/services/plan.service'
+import { AuthLinkedinOAuth2Protected } from 'src/common/auth/decorators/auth.linkedin.decorator'
 
 @ApiTags('Modules.User.Auth')
 @Controller({ version: '1', path: '/user' })
@@ -332,6 +333,19 @@ export class UserAuthController {
   @Get('/google')
   async googleLogin() {}
 
+  @UseGuards(AuthGuard('linkedin'))
+  @Get('/linkedin')
+  async linkedinLogin() {}
+
+  @AuthLinkedinOAuth2Protected()
+  @Get('/login/linkedin')
+  async loginLinkedin(
+    @AuthJwtPayload<AuthGooglePayloadSerialization>()
+    { user: userPayload }: AuthGooglePayloadSerialization
+  ) {
+    return { data: userPayload }
+  }
+
   @UserAuthLoginGoogleDoc()
   @Response('user.loginGoogle')
   @AuthGoogleOAuth2Protected()
@@ -383,10 +397,9 @@ export class UserAuthController {
       })
     }
 
-    const payload: UserPayloadSerialization = await this.userService.payloadSerialization(userWithRole)
-    const tokenType: string = await this.authService.getTokenType()
     const loginDate: Date = await this.authService.getLoginDate()
-    const expiresIn: number = await this.authService.getAccessTokenExpirationTime()
+    const tokenType: string = await this.authService.getTokenType()
+    const payload: UserPayloadSerialization = await this.userService.payloadSerialization(userWithRole)
     const payloadAccessToken: AuthAccessPayloadSerialization = await this.authService.createPayloadAccessToken(
       payload,
       {
@@ -414,7 +427,9 @@ export class UserAuthController {
     const refreshToken: string = await this.authService.createRefreshToken(payloadHashedRefreshToken)
 
     const frontEndUrl = this.configService.get('app.frontEndUrl')
-    res.redirect(`${frontEndUrl}/login?accessToken=${accessToken}&refreshToken=${refreshToken}&tokenType=${tokenType}`)
+    res.redirect(
+      `${frontEndUrl}/login?accessToken=${accessToken}&refreshToken=${refreshToken}&tokenType=${tokenType}&roleType=${roleType}`
+    )
 
     return
   }

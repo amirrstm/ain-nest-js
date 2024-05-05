@@ -9,6 +9,7 @@ import {
   DocRequest,
   DocRequestFile,
   DocResponse,
+  DocResponsePaging,
 } from 'src/common/doc/decorators/doc.decorator'
 
 import { ResumeGetSerialization } from '../serializations/resume.get.serialization'
@@ -33,6 +34,17 @@ import {
   ResumeVolunteerDTO,
 } from '../dto'
 import { FileSingleDto } from 'src/common/file/dtos/file.single.dto'
+import { ResumeDocParamsId } from '../constants/resume.doc.constant'
+
+export function ResumeUserListDoc(): MethodDecorator {
+  return applyDecorators(
+    Doc({
+      summary: 'Get All Of Resumes',
+    }),
+    DocAuth({ jwtAccessToken: true }),
+    DocResponsePaging<ResumeGetSerialization>('resume.get', { serialization: ResumeGetSerialization })
+  )
+}
 
 export function ResumeUserCreateDoc(): MethodDecorator {
   return applyDecorators(
@@ -46,6 +58,18 @@ export function ResumeUserCreateDoc(): MethodDecorator {
     DocGuard({ role: true }),
     DocAuth({ jwtAccessToken: true }),
     DocResponse<ResponseIdSerialization>('resume.create', { serialization: ResponseIdSerialization })
+  )
+}
+
+export function ResumeUserGetDoc(): MethodDecorator {
+  return applyDecorators(
+    Doc({
+      summary: 'get detail a resume',
+    }),
+    DocRequest({ params: ResumeDocParamsId }),
+    DocResponse<ResponseIdSerialization>('resume.get', {
+      serialization: ResumeGetSerialization,
+    })
   )
 }
 

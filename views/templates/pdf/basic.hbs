@@ -59,11 +59,11 @@
             {{#each education}}
               <div class='pr-2'>
                 <div class='mt-3 flex items-center gap-1'>
-                  <h4 class='font-bold text-sm'>{{fieldOfStudy}}</h4>
+                  <h4 class='font-bold text-sm'>{{studyType}}&nbsp;{{area}}</h4>
                   <p class='text-xs w-3 border-t border-t-gray-200'></p>
                   <div class='flex items-center'>
                     <p class='text-xs text-primary'>{{institution}}</p>،&nbsp;
-                    <p class='text-xs text-gray-800'>{{location.state}}،&nbsp;{{location.city}}</p>
+                    <p class='text-xs text-gray-800'>{{location.country}}،&nbsp;{{location.city}}</p>
                   </div>
                 </div>
                 <p class='text-xs text-gray-500 mt-1'>
@@ -113,8 +113,8 @@
                   {{/if}}
 
                 </p>
-                <ul class='text-xs text-gray-800 list-disc mt-2 mx-6'>
-                  {{#each highlights}}<li>{{this}}</li>{{/each}}
+                <ul class='text-gray-800 list-disc mt-2 mx-6'>
+                  {{#each highlights}}<li style='font-size: 12px;'>{{this}}</li>{{/each}}
                 </ul>
               </div>
             {{/each}}
@@ -398,7 +398,7 @@
           {{#if basic.phone}}
             <div class='flex items center gap-2 text-sm'>
               <i class='fa-solid fa-phone'></i>
-              <span dir='ltr'>{{basic.phone}}</span>
+              <span dir='ltr'>{{basic.phone.countryCode}}{{basic.phone.text}}</span>
             </div>
           {{/if}}
 
@@ -416,10 +416,16 @@
             </div>
           {{/if}}
 
-          {{#if basic.location}}
+          {{#if basic.location.country}}
             <div class='flex items center gap-2 text-sm'>
               <i class='fa-solid fa-map-marker-alt'></i>
-              <span>{{basic.location.city}}, {{basic.location.state}}</span>
+              <span>
+                <span>{{basic.location.country}}</span>
+                {{#if basic.location.city}}
+                  <span>,</span>
+                  <span>{{basic.location.city}}</span>
+                {{/if}}
+              </span>
             </div>
           {{/if}}
 

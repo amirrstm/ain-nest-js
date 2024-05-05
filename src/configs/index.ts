@@ -12,6 +12,7 @@ import UserConfig from './user.config'
 import AIConfig from './open-ai.config'
 import SmsConfig from './sms.config'
 import AwsConfig from './aws.config'
+import LinkedinConfig from './linkedin.config'
 
 export default [
   AwsConfig,
@@ -28,4 +29,5 @@ export default [
   MessageConfig,
   GoogleConfig,
   EmailConfig,
+  LinkedinConfig,
 ]

@@ -38,7 +38,7 @@ export class OccupationPublicController {
       OCCUPATION_DEFAULT_AVAILABLE_SEARCH,
       OCCUPATION_DEFAULT_AVAILABLE_ORDER_BY
     )
-    { _search, _limit, _offset, _order }: PaginationListDto,
+    { _search, _limit }: PaginationListDto,
     @Query()
     query: Record<string, any>
   ): Promise<IResponsePaging> {

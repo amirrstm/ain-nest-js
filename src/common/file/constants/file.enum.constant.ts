@@ -10,6 +10,8 @@ export enum ENUM_FILE_MIME {
   MP3 = 'audio/mp3',
   M4A = 'audio/x-m4a',
   MP4 = 'video/mp4',
+  WAV = 'audio/wav',
+  WEBM = 'audio/webm',
 }
 
 export enum ENUM_FILE_TYPE {

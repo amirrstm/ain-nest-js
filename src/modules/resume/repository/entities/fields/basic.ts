@@ -7,16 +7,22 @@ export const IResumeBasicField = {
     type: String,
     required: false,
   },
-  image: {
-    type: String,
-    required: false,
-  },
   email: {
     type: String,
     required: false,
   },
   phone: {
-    type: String,
+    type: {
+      text: {
+        type: String,
+        required: false,
+      },
+      countryCode: {
+        type: String,
+        required: false,
+      },
+    },
+    _id: false,
     required: false,
   },
   firstName: {
@@ -35,7 +41,20 @@ export const IResumeBasicField = {
     type: Date,
     required: false,
   },
+  gender: {
+    type: String,
+    required: false,
+  },
+  marriage: {
+    type: String,
+    required: false,
+  },
+  military: {
+    type: String,
+    required: false,
+  },
   location: {
+    _id: false,
     type: {
       city: {
         type: String,

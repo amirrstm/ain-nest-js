@@ -41,6 +41,26 @@ class Location {
   address?: string
 }
 
+class Phone {
+  @ApiProperty({
+    required: false,
+    example: faker.phone.number(),
+    description: 'Country code',
+  })
+  @IsOptional()
+  @IsString()
+  countryCode?: string
+
+  @ApiProperty({
+    required: false,
+    example: faker.phone.number(),
+    description: 'Phone number',
+  })
+  @IsOptional()
+  @IsString()
+  text?: string
+}
+
 export class ResumeBasicDTO {
   @ApiProperty({
     required: false,
@@ -62,15 +82,6 @@ export class ResumeBasicDTO {
 
   @ApiProperty({
     required: false,
-    example: faker.image.url(),
-    description: 'Image URL of the resume',
-  })
-  @IsOptional()
-  @IsString()
-  image?: string
-
-  @ApiProperty({
-    required: false,
     example: faker.internet.email(),
     description: 'Email of the resume',
   })
@@ -80,12 +91,12 @@ export class ResumeBasicDTO {
 
   @ApiProperty({
     required: false,
-    example: faker.phone.number(),
-    description: 'Phone number of the resume',
+    description: 'Phone Number of the resume owner',
   })
   @IsOptional()
-  @IsString()
-  phone?: string
+  @ValidateNested()
+  @Type(() => Phone)
+  phone?: { countryCode?: string; text?: string }
 
   @ApiProperty({
     required: false,
@@ -122,6 +133,33 @@ export class ResumeBasicDTO {
   @IsOptional()
   @IsDateString()
   birthDate?: Date
+
+  @ApiProperty({
+    required: false,
+    example: faker.lorem.paragraph(),
+    description: 'Gender of the resume',
+  })
+  @IsOptional()
+  @IsString()
+  gender?: string
+
+  @ApiProperty({
+    required: false,
+    example: faker.lorem.paragraph(),
+    description: 'Marriage status of the resume owner',
+  })
+  @IsOptional()
+  @IsString()
+  marriage?: string
+
+  @ApiProperty({
+    required: false,
+    example: faker.lorem.paragraph(),
+    description: 'Military status of the resume owner',
+  })
+  @IsOptional()
+  @IsString()
+  military?: string
 
   @ApiProperty({
     required: false,

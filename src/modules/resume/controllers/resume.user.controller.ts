@@ -1,18 +1,18 @@
-import { Body, Controller, Post, Put, UploadedFile } from '@nestjs/common'
+import { Body, Controller, Get, Post, Put, UploadedFile } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 
 import { PdfService } from 'src/common/pdf/services/pdf.service'
 import { AwsService } from 'src/common/aws/services/aws.service'
 import { UserDoc } from 'src/modules/user/repository/entities/user.entity'
-import { Response } from 'src/common/response/decorators/response.decorator'
-import { IResponse } from 'src/common/response/interfaces/response.interface'
+import { Response, ResponsePaging } from 'src/common/response/decorators/response.decorator'
+import { IResponse, IResponsePaging } from 'src/common/response/interfaces/response.interface'
 import { GetUser, UserProtected } from 'src/modules/user/decorators/user.decorator'
 import { RequestParamGuard } from 'src/common/request/decorators/request.decorator'
 import { AuthJwtUserAccessProtected } from 'src/common/auth/decorators/auth.jwt.decorator'
 
 import { ResumeService } from '../services/resume.service'
 import { ResumeRequestDto } from '../dto/resume.request.dto'
-import { ResumeDoc } from '../repository/entities/resume.entity'
+import { ResumeDoc, ResumeEntity } from '../repository/entities/resume.entity'
 import { GetResume } from '../decorators/resume.admin.decorator'
 import { ResumeUserGetGuard } from '../decorators/resume.user.decorator'
 import { ResumeGetSerialization } from '../serializations/resume.get.serialization'
@@ -36,6 +36,8 @@ import {
   ResumeUserTeachingDoc,
   ResumeUserVolunteerDoc,
   ResumeUserImageDoc,
+  ResumeUserGetDoc,
+  ResumeUserListDoc,
 } from '../docs/resume.user.doc'
 import {
   ResumeWorkDTO,
@@ -64,6 +66,19 @@ import { ENUM_FILE_MIME } from 'src/common/file/constants/file.enum.constant'
 import { IAwsS3RandomFilename } from 'src/common/aws/interfaces/aws.interface'
 import { AwsS3Serialization } from 'src/common/aws/serializations/aws.serialization'
 import { RESUME_TEMPLATES } from '../constants/resume.constant'
+import { PaginationQuery } from 'src/common/pagination/decorators/pagination.decorator'
+import {
+  RESUME_DEFAULT_AVAILABLE_ORDER_BY,
+  RESUME_DEFAULT_AVAILABLE_SEARCH,
+  RESUME_DEFAULT_ORDER_BY,
+  RESUME_DEFAULT_ORDER_DIRECTION,
+  RESUME_DEFAULT_PER_PAGE,
+} from '../constants/resume.list.constant'
+import { PaginationListDto } from 'src/common/pagination/dtos/pagination.list.dto'
+import { ResumeListSerialization } from '../serializations/resume.list.serialization'
+import { PaginationService } from 'src/common/pagination/services/pagination.service'
+import { OpenAIService } from 'src/common/open-ai/services/open-ai.service'
+import { ENUM_AI_ROLE } from 'src/common/open-ai/constants/open-ai.enum.constant'
 
 @ApiTags('Modules.User.Resume')
 @Controller({ version: '1', path: '/resume' })
@@ -71,15 +86,50 @@ export class ResumeUserController {
   constructor(
     private readonly pdfService: PdfService,
     private readonly awsS3Service: AwsService,
-    private readonly resumeService: ResumeService
+    private readonly aiService: OpenAIService,
+    private readonly resumeService: ResumeService,
+    private readonly paginationService: PaginationService
   ) {}
+
+  @ResumeUserListDoc()
+  @ResponsePaging('resume.list', { serialization: ResumeListSerialization })
+  @UserProtected()
+  @AuthJwtUserAccessProtected()
+  @Get('/list')
+  async list(
+    @PaginationQuery(
+      RESUME_DEFAULT_PER_PAGE,
+      RESUME_DEFAULT_ORDER_BY,
+      RESUME_DEFAULT_ORDER_DIRECTION,
+      RESUME_DEFAULT_AVAILABLE_SEARCH,
+      RESUME_DEFAULT_AVAILABLE_ORDER_BY
+    )
+    { _search, _limit, _offset, _order }: PaginationListDto,
+    @GetUser() user: UserDoc
+  ): Promise<IResponsePaging> {
+    const find: Record<string, any> = { ..._search, user: user._id }
+
+    const resumes: ResumeEntity[] = await this.resumeService.findAll<ResumeEntity>(find, {
+      paging: {
+        limit: _limit,
+        offset: _offset,
+      },
+      order: _order,
+      plainObject: true,
+    })
+
+    const total: number = await this.resumeService.getTotal(find)
+    const totalPage: number = this.paginationService.totalPage(total, _limit)
+
+    return { _pagination: { total, totalPage }, data: resumes }
+  }
 
   @ResumeUserCreateDoc()
   @Response('resume.create')
   @UserProtected()
   @AuthJwtUserAccessProtected()
   @Post('/')
-  async message(@GetUser() user: UserDoc): Promise<IResponse> {
+  async create(@GetUser() user: UserDoc): Promise<IResponse> {
     const create = await this.resumeService.create({ user: user._id })
     const template = RESUME_TEMPLATES[0]
 
@@ -96,6 +146,18 @@ export class ResumeUserController {
     const updated = await this.resumeService.updateFile(create, aws)
 
     return { data: updated._id }
+  }
+
+  @ResumeUserGetDoc()
+  @Response('resume.get')
+  @UserProtected()
+  @AuthJwtUserAccessProtected()
+  @ResumeUserGetGuard()
+  @Get('/:resume')
+  async getOne(@GetUser() user: UserDoc, @GetResume() resume: ResumeDoc): Promise<IResponse> {
+    const foundResume = await this.resumeService.findOne({ user: user._id, _id: resume._id })
+
+    return { data: foundResume }
   }
 
   @Response('resume.update')
@@ -386,5 +448,35 @@ export class ResumeUserController {
   ): Promise<IResponse> {
     const update = await this.resumeService.updateVolunteer(resume, body.volunteers)
     return { data: update.toJSON() }
+  }
+
+  @Response('resume.update')
+  @ResumeUserGetGuard()
+  @UserProtected()
+  @AuthJwtUserAccessProtected()
+  @FileUploadSingle()
+  @Put('/:resume/voice')
+  async uploadVoice(
+    @GetResume() resume: ResumeDoc,
+    @UploadedFile(
+      new FileRequiredPipe(),
+      new FileTypePipe([ENUM_FILE_MIME.WAV, ENUM_FILE_MIME.MP3, ENUM_FILE_MIME.WEBM])
+    )
+    file: IFile
+  ): Promise<IResponse> {
+    const voiceJson = await this.aiService.transcribeAudio(file.buffer)
+    const bio = await this.aiService.getMessageFromPrompt([
+      {
+        role: ENUM_AI_ROLE.SYSTEM,
+        content:
+          'I want you to respond only in Persian.Please provide a 200 word and great about me. I will provide some basic information about me and you have to generate a professional about me for my resume. All Output shall be in Persian',
+      },
+      {
+        role: ENUM_AI_ROLE.USER,
+        content: voiceJson,
+      },
+    ])
+
+    return { data: bio }
   }
 }

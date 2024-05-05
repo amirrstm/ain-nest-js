@@ -1,9 +1,8 @@
 import { ApiTags } from '@nestjs/swagger'
-import { Controller, Get, Param, Render } from '@nestjs/common'
+import { Controller, Get, Param, Render, Response } from '@nestjs/common'
 
 import { ResumeService } from '../services/resume.service'
 import { HelperDateService } from 'src/common/helper/services/helper.date.service'
-import { ResumeDoc } from '../repository/entities/resume.entity'
 
 @ApiTags('Modules.Public.Resume')
 @Controller({ version: '1', path: '/resume' })
@@ -15,8 +14,13 @@ export class ResumePublicController {
 
   @Get('/:resumeId')
   @Render('templates/pdf/basic')
-  async overview(@Param() params: Record<string, string>): Promise<any> {
+  async overview(@Param() params: Record<string, string>, @Response() res: any): Promise<any> {
     const resume = await this.resumeService.findOneById(params.resumeId, { join: true })
+
+    res.setHeader(
+      'Content-Security-Policy',
+      'frame-ancestors https://*.ainevis.com http://*.ainevis.com http://localhost:3000'
+    )
 
     return { ...this.resumeService.toPersianDate(resume) }
   }

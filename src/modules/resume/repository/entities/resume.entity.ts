@@ -61,8 +61,8 @@ export class ResumeEntity extends DatabaseMongoUUIDEntityAbstract {
   title: string
 
   @Prop({
-    required: false,
     _id: false,
+    required: false,
     type: {
       path: String,
       mime: String,
@@ -93,12 +93,14 @@ export class ResumeEntity extends DatabaseMongoUUIDEntityAbstract {
   image?: AwsS3Serialization
 
   @Prop({
+    _id: false,
     required: false,
     type: IResumeBasicField,
   })
   basic: IResumeBasic
 
   @Prop({
+    _id: false,
     default: [],
     required: false,
     type: [IResumeWorkField],

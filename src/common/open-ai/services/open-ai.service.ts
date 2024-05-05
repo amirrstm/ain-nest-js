@@ -35,4 +35,22 @@ export class OpenAIService implements IOpenAIService {
       ...options,
     })
   }
+
+  async transcribeAudio(audioBuffer: Buffer, language = 'en'): Promise<string> {
+    const blob = new Blob([audioBuffer], { type: 'audio/wav' })
+    const file = new File([blob], 'input.wav', { type: 'audio/wav' })
+
+    try {
+      const whisperResponse = await this.openAI.audio.transcriptions.create({
+        file,
+        language,
+        model: 'whisper-1',
+        response_format: 'json',
+      })
+
+      return whisperResponse.text
+    } catch (e) {
+      console.error(e)
+    }
+  }
 }

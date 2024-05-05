@@ -255,72 +255,102 @@ export class ResumeService implements IResumeService {
     const resume: ResumeDoc = repository.toJSON()
 
     const work = resume.work.map(work => {
-      work.startDate = this.helperDateService.formatPersian(work.startDate as Date)
-      work.endDate = this.helperDateService.formatPersian(work.endDate as Date)
+      if (work.startDate) {
+        work.startDate = this.helperDateService.formatPersian(work?.startDate as Date)
+      }
+      if (work.endDate) {
+        work.endDate = this.helperDateService.formatPersian(work?.endDate as Date)
+      }
 
       return work
     })
 
     const education = resume.education.map(education => {
-      education.startDate = this.helperDateService.formatPersian(education.startDate as Date)
-      education.endDate = this.helperDateService.formatPersian(education.endDate as Date)
+      if (education.startDate) {
+        education.startDate = this.helperDateService.formatPersian(education?.startDate as Date)
+      }
+
+      if (education.endDate) {
+        education.endDate = this.helperDateService.formatPersian(education?.endDate as Date)
+      }
 
       return education
     })
 
     const projects = resume.projects.map(project => {
-      project.startDate = this.helperDateService.formatPersian(project.startDate as Date)
-      project.endDate = this.helperDateService.formatPersian(project.endDate as Date)
+      if (project.startDate) {
+        project.startDate = this.helperDateService.formatPersian(project?.startDate as Date)
+      }
+      if (project.endDate) {
+        project.endDate = this.helperDateService.formatPersian(project?.endDate as Date)
+      }
 
       return project
     })
 
     const certificates = resume.certificates.map(certificate => {
-      certificate.date = this.helperDateService.formatPersian(certificate.date as Date)
+      if (certificate.date) {
+        certificate.date = this.helperDateService.formatPersian(certificate?.date as Date)
+      }
 
       return certificate
     })
 
     const awards = resume.awards.map(award => {
-      award.date = this.helperDateService.formatPersian(award.date as Date)
+      if (award.date) {
+        award.date = this.helperDateService.formatPersian(award?.date as Date)
+      }
 
       return award
     })
 
     const publications = resume.publications.map(publication => {
-      publication.releaseDate = this.helperDateService.formatPersian(publication.releaseDate as Date)
+      if (publication.releaseDate) {
+        publication.releaseDate = this.helperDateService.formatPersian(publication?.releaseDate as Date)
+      }
 
       return publication
     })
 
     const teaching = resume.teaching.map(teaching => {
-      teaching.date = this.helperDateService.formatPersian(teaching.date as Date)
+      if (teaching.date) {
+        teaching.date = this.helperDateService.formatPersian(teaching?.date as Date)
+      }
 
       return teaching
     })
 
     const volunteer = resume.volunteer.map(volunteer => {
-      volunteer.startDate = this.helperDateService.formatPersian(volunteer.startDate as Date)
-      volunteer.endDate = this.helperDateService.formatPersian(volunteer.endDate as Date)
+      if (volunteer.startDate) {
+        volunteer.startDate = this.helperDateService.formatPersian(volunteer?.startDate as Date)
+      }
+
+      if (volunteer.endDate) {
+        volunteer.endDate = this.helperDateService.formatPersian(volunteer?.endDate as Date)
+      }
 
       return volunteer
     })
 
     const speeches = resume.speeches.map(speech => {
-      speech.date = this.helperDateService.formatPersian(speech.date as Date)
+      if (speech.date) {
+        speech.date = this.helperDateService.formatPersian(speech?.date as Date)
+      }
 
       return speech
     })
 
     const inventions = resume.inventions.map(invention => {
-      invention.date = this.helperDateService.formatPersian(invention.date as Date)
+      if (invention.date) {
+        invention.date = this.helperDateService.formatPersian(invention?.date as Date)
+      }
 
       return invention
     })
 
-    const basic = {
-      ...resume.basic,
-      birthDate: this.helperDateService.formatPersian(resume.basic.birthDate as Date, { day: 'numeric' }),
+    const basic = { ...resume.basic }
+    if (basic.birthDate) {
+      basic.birthDate = this.helperDateService.formatPersian(resume.basic?.birthDate as Date, { day: 'numeric' })
     }
 
     const skills = resume.skills.map(skill => {

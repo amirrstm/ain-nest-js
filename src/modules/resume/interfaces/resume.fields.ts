@@ -1,13 +1,12 @@
 export interface IResumeBasic {
   url?: string
   label?: string
-  image?: string
   email?: string
-  phone?: string
-  firstName?: string
-  lastName?: string
   summary?: string
+  lastName?: string
+  firstName?: string
   birthDate?: Date | string
+  phone?: { countryCode?: string; text?: string }
   location?: {
     city?: string
     state?: string
@@ -29,6 +28,7 @@ export interface IResumeWork {
   summary?: string
   position?: string
   highlights?: string[]
+  stillWorking?: boolean
   location?: {
     city?: string
     state?: string
