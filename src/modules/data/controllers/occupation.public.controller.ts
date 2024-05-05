@@ -16,7 +16,6 @@ import {
 } from '../constants/occupation.list.constant'
 import { OccupationService } from '../services/occupation.service'
 import { OccupationPublicListDoc } from '../docs/occupation.public.doc'
-import { OccupationEntity } from '../repository/entities/occupation.entity'
 import { OccupationGetSerialization } from '../serializations/occupation.get.serialization'
 
 @ApiTags('Modules.Public.Data')
