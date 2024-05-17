@@ -324,3 +324,12 @@ export function ResumeUserProfileDoc(): MethodDecorator {
     DocResponse<ResumeGetSerialization>('resume.update', { serialization: ResumeGetSerialization })
   )
 }
+
+export function ResumeUserDeleteDoc(): MethodDecorator {
+  return applyDecorators(
+    Doc({ summary: 'delete a resume' }),
+    DocRequest({ params: ResumeDocParamsId }),
+    DocAuth({ jwtAccessToken: true }),
+    DocResponse('resume.delete')
+  )
+}

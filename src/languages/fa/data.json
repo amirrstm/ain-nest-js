@@ -23,5 +23,57 @@
       "exist": "Occupation exist",
       "notFound": "Occupation not found"
     }
+  },
+
+  "studyField": {
+    "list": "List Study Field Success.",
+    "get": "Get Study Field Success.",
+    "create": "Create Succeed",
+    "update": "Update Succeed",
+    "delete": "Delete Succeed",
+
+    "error": {
+      "exist": "Study Field exist",
+      "notFound": "Study Field not found"
+    }
+  },
+
+  "university": {
+    "list": "List Study Field Success.",
+    "get": "Get Study Field Success.",
+    "create": "Create Succeed",
+    "update": "Update Succeed",
+    "delete": "Delete Succeed",
+
+    "error": {
+      "exist": "Study Field exist",
+      "notFound": "Study Field not found"
+    }
+  },
+
+  "companies": {
+    "list": "List Study Field Success.",
+    "get": "Get Study Field Success.",
+    "create": "Create Succeed",
+    "update": "Update Succeed",
+    "delete": "Delete Succeed",
+
+    "error": {
+      "exist": "Study Field exist",
+      "notFound": "Study Field not found"
+    }
+  },
+
+  "skill": {
+    "list": "List Study Field Success.",
+    "get": "Get Study Field Success.",
+    "create": "Create Succeed",
+    "update": "Update Succeed",
+    "delete": "Delete Succeed",
+
+    "error": {
+      "exist": "Study Field exist",
+      "notFound": "Study Field not found"
+    }
   }
 }

@@ -56,9 +56,22 @@ export class ResumeService implements IResumeService {
     return this.resumeRepository.getTotal(find, options)
   }
 
-  async create({ user }: ResumeCreateDto, options?: IDatabaseCreateOptions): Promise<ResumeDoc> {
+  async create({ user, title }: ResumeCreateDto, options?: IDatabaseCreateOptions): Promise<ResumeDoc> {
     const create: ResumeEntity = new ResumeEntity()
     create.user = user
+    create.title = title
+
+    return this.resumeRepository.create<ResumeEntity>(create, options)
+  }
+
+  async createWithData(data: Record<string, any>, options?: IDatabaseCreateOptions): Promise<ResumeDoc> {
+    const create: ResumeEntity = new ResumeEntity()
+    create.work = data.work
+    create.user = data.user
+    create.title = data.title
+    create.basic = data.basic
+    create.skills = data.skills
+    create.education = data.education
 
     return this.resumeRepository.create<ResumeEntity>(create, options)
   }
@@ -79,6 +92,18 @@ export class ResumeService implements IResumeService {
     options?: IDatabaseSaveOptions
   ): Promise<ResumeDoc> {
     repository.image = image
+
+    return this.resumeRepository.save(repository, options)
+  }
+
+  async removeImage(repository: ResumeDoc, options?: IDatabaseSaveOptions): Promise<ResumeDoc> {
+    repository.image = undefined
+
+    return this.resumeRepository.save(repository, options)
+  }
+
+  async updateTitle(repository: ResumeDoc, title: string, options?: IDatabaseSaveOptions): Promise<ResumeDoc> {
+    repository.title = title
 
     return this.resumeRepository.save(repository, options)
   }

@@ -1,0 +1,14 @@
+export const RESUME_VOICE_BIO_PROMPT =
+  'I want you to respond only in Persian.Please provide a 100 words and great about me. I will provide some basic information about me and you have to generate a professional about me for my resume. try to use some metrics and numbers to be impressive. Also My role is %(role)s. All Output shall be in Persian'
+
+export const RESUME_BIO_GENERATE_PROMPT =
+  'I want you to respond only in Persian.generate 3 version of about me text and each including 100 words.separate parts with just \n. your task is to generate a professional and fluent about me for my resume. try to use some metrics and numbers to be impressive. Also My role is %(role)s. All Output shall be in Persian'
+
+const JSON_OUTPUT =
+  '{"skills":[],"educations":[{"studyType":"","area":"","institution":""}],"work_experiences":[{"name":"","position":"","highlights":[]}],"about_me":""},"job_title":""}'
+
+export const RESUME_GENERATE_PROMPT =
+  'I want you to respond only in Persian.generate fluent persian professional resume include information about their professional experience, educations, skills' +
+  'The resume should be tailored for a specific job role or industry of my choice. you should give me work experiences name and 3 highlights about each work' +
+  '(highlights should be unique and attractive, you should use metrics and number in highlights ) and a great and impressive about me section. All Output shall be in Persian. json should contain these info :' +
+  JSON_OUTPUT

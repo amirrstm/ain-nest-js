@@ -20,11 +20,15 @@ import { UserPlanModule } from 'src/modules/user-plan/user-plan.module'
 import { HealthPublicController } from 'src/health/controllers/health.public.controller'
 import { UserPublicController } from 'src/modules/user/controllers/user.public.controller'
 import { PlanPublicController } from 'src/modules/plan/controllers/plan.public.controller'
+import { SkillPublicController } from 'src/modules/data/controllers/skill.public.controller'
+import { CompanyPublicController } from 'src/modules/data/controllers/company.public.controller'
 import { ResumePublicController } from 'src/modules/resume/controllers/resume.public.controller'
 import { ProvincePublicController } from 'src/modules/data/controllers/province.public.controller'
 import { SettingPublicController } from 'src/modules/setting/controllers/setting.public.controller'
 import { CategoryPublicController } from 'src/modules/category/controllers/category.public.controller'
 import { OccupationPublicController } from 'src/modules/data/controllers/occupation.public.controller'
+import { UniversityPublicController } from 'src/modules/data/controllers/university.public.controller'
+import { StudyFieldPublicController } from 'src/modules/data/controllers/study-field.public.controller'
 
 @Module({
   controllers: [
@@ -33,9 +37,13 @@ import { OccupationPublicController } from 'src/modules/data/controllers/occupat
     UserPublicController,
     CategoryPublicController,
     PlanPublicController,
+    SkillPublicController,
     ResumePublicController,
+    CompanyPublicController,
     ProvincePublicController,
     OccupationPublicController,
+    StudyFieldPublicController,
+    UniversityPublicController,
   ],
   providers: [],
   exports: [],

@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config'
 
 import { IOpenAIService } from '../interfaces/open-ai.service.interface'
 
-import { ChatCompletion } from 'openai/resources'
+import { ChatCompletion, ImagesResponse } from 'openai/resources'
 import { IPromptMessage, IPromptOptions } from '../interfaces/open-ai.interface'
 
 @Injectable()
@@ -25,13 +25,41 @@ export class OpenAIService implements IOpenAIService {
 
     return await this.openAI.chat.completions.create({
       model: 'gpt-3.5-turbo-0125',
-      // model: 'gpt-4-0125-preview',
       messages: messages.map(message => ({
         role: message.role,
         content: message.content,
       })),
       temperature: 0.5,
       max_tokens: 2000,
+      ...options,
+    })
+  }
+
+  async generateImage(prompt: string, options?: IPromptOptions): Promise<ImagesResponse> {
+    return await this.openAI.images.generate({
+      n: 1,
+      prompt,
+      size: '1024x1024',
+      model: 'dall-e-3',
+      quality: 'standard',
+      ...options,
+    })
+  }
+
+  async getMessageFromGpt4(messages: IPromptMessage[], options?: IPromptOptions): Promise<ChatCompletion> {
+    if (messages.length === 0) {
+      return
+    }
+
+    return await this.openAI.chat.completions.create({
+      model: 'gpt-4o',
+      messages: messages.map(message => ({
+        role: message.role,
+        content: message.content,
+      })),
+      temperature: 0.5,
+      max_tokens: 3000,
+      response_format: { type: 'json_object' },
       ...options,
     })
   }

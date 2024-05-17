@@ -1,4 +1,4 @@
-import { Body, ConflictException, Controller, Delete, Put } from '@nestjs/common'
+import { Body, ConflictException, Controller, Delete, Post, Put } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 
 import { UserService } from 'src/modules/user/services/user.service'
@@ -28,6 +28,7 @@ import { RequestCustomLang } from 'src/common/request/decorators/request.decorat
 import { ENUM_USER_STATUS_CODE_ERROR } from '../constants/user.status-code.constant'
 import { ENUM_PROMPT_STATUS_CODE_ERROR } from 'src/modules/prompts/constants/prompt.status-code.constant'
 import { ENUM_CATEGORY_STATUS_CODE_ERROR } from 'src/modules/category/constants/category.status-code.constant'
+import { UserImagePromptDto } from '../dtos/user.prompt.image.dto'
 
 @ApiTags('Module.User.User')
 @Controller({
@@ -133,6 +134,17 @@ export class UserUserController {
     })
 
     return { data: createdHistory }
+  }
+
+  @UserUserPromptDoc()
+  @Response('user.prompt')
+  @UserProtected()
+  @AuthJwtUserAccessProtected()
+  @Post('/image-prompt')
+  async imagePrompt(@GetUser() user: UserDoc, @Body() body: UserImagePromptDto): Promise<IResponse> {
+    const data = await this.aiService.generateImage(body.prompt)
+
+    return { data: data }
   }
 
   @UserUserUpdateNameDoc()

@@ -13,6 +13,13 @@ export class ResumeCreateDto {
   readonly user: string
 
   @ApiProperty({
+    required: true,
+    example: faker.lorem.text(),
+  })
+  @IsNotEmpty()
+  readonly title: string
+
+  @ApiProperty({
     required: false,
     example: faker.system.filePath(),
   })

@@ -1,4 +1,5 @@
-import { Body, Controller, Get, Post, Put, UploadedFile } from '@nestjs/common'
+import { sprintf } from 'sprintf-js'
+import { Body, Controller, Delete, Get, Post, Put, UploadedFile } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 
 import { PdfService } from 'src/common/pdf/services/pdf.service'
@@ -38,6 +39,7 @@ import {
   ResumeUserImageDoc,
   ResumeUserGetDoc,
   ResumeUserListDoc,
+  ResumeUserDeleteDoc,
 } from '../docs/resume.user.doc'
 import {
   ResumeWorkDTO,
@@ -79,6 +81,11 @@ import { ResumeListSerialization } from '../serializations/resume.list.serializa
 import { PaginationService } from 'src/common/pagination/services/pagination.service'
 import { OpenAIService } from 'src/common/open-ai/services/open-ai.service'
 import { ENUM_AI_ROLE } from 'src/common/open-ai/constants/open-ai.enum.constant'
+import {
+  RESUME_BIO_GENERATE_PROMPT,
+  RESUME_GENERATE_PROMPT,
+  RESUME_VOICE_BIO_PROMPT,
+} from '../constants/resume.ai.constant'
 
 @ApiTags('Modules.User.Resume')
 @Controller({ version: '1', path: '/resume' })
@@ -116,6 +123,13 @@ export class ResumeUserController {
       },
       order: _order,
       plainObject: true,
+      select: {
+        file: 1,
+        title: 1,
+        isActive: 1,
+        createdAt: 1,
+        updatedAt: 1,
+      },
     })
 
     const total: number = await this.resumeService.getTotal(find)
@@ -130,7 +144,7 @@ export class ResumeUserController {
   @AuthJwtUserAccessProtected()
   @Post('/')
   async create(@GetUser() user: UserDoc): Promise<IResponse> {
-    const create = await this.resumeService.create({ user: user._id })
+    const create = await this.resumeService.create({ user: user._id, title: 'بدون عنوان' })
     const template = RESUME_TEMPLATES[0]
 
     const pdfFile = await this.pdfService.generatePdf(template.path, create.toJSON())
@@ -181,7 +195,18 @@ export class ResumeUserController {
     const aws = await this.awsS3Service.putItemInBucket(file, randomFilename)
     const updated = await this.resumeService.updateFile(resume, aws)
 
-    return { data: updated._id }
+    return { data: { _id: updated._id, url: aws.completedUrl } }
+  }
+
+  @Response('resume.update')
+  @ResumeUserGetGuard()
+  @UserProtected()
+  @AuthJwtUserAccessProtected()
+  @Put('/:resume/title')
+  async updateTitle(@GetResume() resume: ResumeDoc, @Body() body: { title: string }): Promise<IResponse> {
+    const update = await this.resumeService.updateTitle(resume, body.title)
+
+    return { data: update._id }
   }
 
   @ResumeUserImageDoc()
@@ -205,7 +230,19 @@ export class ResumeUserController {
     const aws: AwsS3Serialization = await this.awsS3Service.putItemInBucket(file, randomFilename)
     const update = await this.resumeService.updateImage(resume, aws)
 
-    return { data: update.toJSON() }
+    return { data: update.image }
+  }
+
+  @ResumeUserImageDoc()
+  @Response('resume.update')
+  @ResumeUserGetGuard()
+  @UserProtected()
+  @AuthJwtUserAccessProtected()
+  @Delete('/:resume/upload-image')
+  async deleteImage(@GetResume() resume: ResumeDoc): Promise<IResponse> {
+    const update = await this.resumeService.removeImage(resume)
+
+    return { data: update.image }
   }
 
   @ResumeUserWorkDoc()
@@ -450,13 +487,33 @@ export class ResumeUserController {
     return { data: update.toJSON() }
   }
 
+  @ResumeUserDeleteDoc()
+  @Response('category.delete')
+  @ResumeUserGetGuard()
+  @AuthJwtUserAccessProtected()
+  @RequestParamGuard(ResumeRequestDto)
+  @Delete('/:resume')
+  async delete(@GetResume() resume: ResumeDoc): Promise<void> {
+    if (resume.file) {
+      await this.awsS3Service.deleteFolder(resume.file.path)
+    }
+
+    if (resume.image) {
+      await this.awsS3Service.deleteFolder(resume.image.path)
+    }
+
+    await this.resumeService.delete(resume)
+
+    return
+  }
+
   @Response('resume.update')
   @ResumeUserGetGuard()
   @UserProtected()
   @AuthJwtUserAccessProtected()
   @FileUploadSingle()
-  @Put('/:resume/voice')
-  async uploadVoice(
+  @Put('/:resume/bio-voice')
+  async uploadBioVoice(
     @GetResume() resume: ResumeDoc,
     @UploadedFile(
       new FileRequiredPipe(),
@@ -464,19 +521,83 @@ export class ResumeUserController {
     )
     file: IFile
   ): Promise<IResponse> {
-    const voiceJson = await this.aiService.transcribeAudio(file.buffer)
+    const systemPrompt = sprintf(RESUME_VOICE_BIO_PROMPT, { role: resume.basic.label })
+
+    const voiceContent = await this.aiService.transcribeAudio(file.buffer)
     const bio = await this.aiService.getMessageFromPrompt([
       {
         role: ENUM_AI_ROLE.SYSTEM,
-        content:
-          'I want you to respond only in Persian.Please provide a 200 word and great about me. I will provide some basic information about me and you have to generate a professional about me for my resume. All Output shall be in Persian',
+        content: systemPrompt,
       },
       {
         role: ENUM_AI_ROLE.USER,
-        content: voiceJson,
+        content: voiceContent,
       },
     ])
 
-    return { data: bio }
+    return { data: { text: bio.choices[0].message.content } }
+  }
+
+  @Response('resume.update')
+  @UserProtected()
+  @AuthJwtUserAccessProtected()
+  @FileUploadSingle()
+  @Post('/voice')
+  async createResumeFromVoice(
+    @GetUser() user: UserDoc,
+    @UploadedFile(
+      new FileRequiredPipe(),
+      new FileTypePipe([ENUM_FILE_MIME.WAV, ENUM_FILE_MIME.MP3, ENUM_FILE_MIME.WEBM])
+    )
+    file: IFile
+  ): Promise<IResponse> {
+    const systemPrompt = RESUME_GENERATE_PROMPT
+
+    const voiceContent = await this.aiService.transcribeAudio(file.buffer)
+    const bio = await this.aiService.getMessageFromGpt4([
+      {
+        role: ENUM_AI_ROLE.SYSTEM,
+        content: systemPrompt,
+      },
+      {
+        role: ENUM_AI_ROLE.USER,
+        content: voiceContent,
+      },
+    ])
+    const aiData = JSON.parse(bio.choices[0].message.content)
+    const create = await this.resumeService.createWithData({
+      user: user._id,
+      education: aiData.educations,
+      work: aiData.work_experiences,
+      title: 'ساخته شده توسط صدا',
+      basic: {
+        email: user.email,
+        lastName: user.lastName,
+        firstName: user.firstName,
+        label: aiData.job_title,
+        summary: aiData.about_me,
+      },
+      skills: (aiData.skills || []).map((skill: string) => ({ name: skill, hasLevel: true, level: 5 })),
+    })
+
+    return { data: create._id }
+  }
+
+  @Response('resume.update')
+  @ResumeUserGetGuard()
+  @UserProtected()
+  @AuthJwtUserAccessProtected()
+  @Get('/:resume/bio-ai')
+  async getBioFromAI(@GetResume() resume: ResumeDoc): Promise<IResponse> {
+    const systemPrompt = sprintf(RESUME_BIO_GENERATE_PROMPT, { role: resume.basic.label })
+
+    const bio = await this.aiService.getMessageFromPrompt([
+      {
+        role: ENUM_AI_ROLE.SYSTEM,
+        content: systemPrompt,
+      },
+    ])
+
+    return { data: { text: bio.choices[0].message.content } }
   }
 }
