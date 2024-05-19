@@ -1,5 +1,5 @@
 import { sprintf } from 'sprintf-js'
-import { Body, Controller, Delete, Get, Post, Put, UploadedFile } from '@nestjs/common'
+import { Body, Controller, Delete, Get, NotFoundException, Post, Put, UploadedFile } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 
 import { PdfService } from 'src/common/pdf/services/pdf.service'
@@ -9,6 +9,7 @@ import { Response, ResponsePaging } from 'src/common/response/decorators/respons
 import { IResponse, IResponsePaging } from 'src/common/response/interfaces/response.interface'
 import { GetUser, UserProtected } from 'src/modules/user/decorators/user.decorator'
 import { RequestParamGuard } from 'src/common/request/decorators/request.decorator'
+import { TemplateService } from 'src/modules/template/services/template.service'
 import { AuthJwtUserAccessProtected } from 'src/common/auth/decorators/auth.jwt.decorator'
 
 import { ResumeService } from '../services/resume.service'
@@ -40,6 +41,7 @@ import {
   ResumeUserGetDoc,
   ResumeUserListDoc,
   ResumeUserDeleteDoc,
+  ResumeUserTemplateSettingsDoc,
 } from '../docs/resume.user.doc'
 import {
   ResumeWorkDTO,
@@ -86,6 +88,10 @@ import {
   RESUME_GENERATE_PROMPT,
   RESUME_VOICE_BIO_PROMPT,
 } from '../constants/resume.ai.constant'
+import { ResumeCreateDto } from '../dto/resume.create.dto'
+import { ENUM_TEMPLATE_STATUS_CODE_ERROR } from 'src/modules/template/constants/template.status-code.constant'
+import { IResumeDoc } from '../interfaces/resume.interface'
+import { ResumeTemplateSettingsDTO } from '../dto/resume.template-settings.dto'
 
 @ApiTags('Modules.User.Resume')
 @Controller({ version: '1', path: '/resume' })
@@ -95,6 +101,7 @@ export class ResumeUserController {
     private readonly awsS3Service: AwsService,
     private readonly aiService: OpenAIService,
     private readonly resumeService: ResumeService,
+    private readonly templateService: TemplateService,
     private readonly paginationService: PaginationService
   ) {}
 
@@ -143,23 +150,27 @@ export class ResumeUserController {
   @UserProtected()
   @AuthJwtUserAccessProtected()
   @Post('/')
-  async create(@GetUser() user: UserDoc): Promise<IResponse> {
-    const create = await this.resumeService.create({ user: user._id, title: 'بدون عنوان' })
-    const template = RESUME_TEMPLATES[0]
+  async create(
+    @GetUser() user: UserDoc,
+    @Body() { template, title }: Omit<ResumeCreateDto, 'user'>
+  ): Promise<IResponse> {
+    const templateEntity = await this.templateService.findOneById(template)
 
-    const pdfFile = await this.pdfService.generatePdf(template.path, create.toJSON())
-    const pathPrefix: string = await this.resumeService.getFileUploadPath(create._id)
-    const randomFilename: IAwsS3RandomFilename = await this.awsS3Service.createRandomFilename(pathPrefix)
-
-    const file = {
-      buffer: pdfFile,
-      size: pdfFile.byteLength,
-      originalname: 'output.pdf',
+    if (!templateEntity) {
+      throw new NotFoundException({
+        statusCode: ENUM_TEMPLATE_STATUS_CODE_ERROR.TEMPLATE_NOT_FOUND_ERROR,
+        message: 'template.error.notFound',
+      })
     }
-    const aws = await this.awsS3Service.putItemInBucket(file, randomFilename)
-    const updated = await this.resumeService.updateFile(create, aws)
 
-    return { data: updated._id }
+    const create = await this.resumeService.create({
+      title,
+      template,
+      user: user._id,
+      templateSettings: templateEntity.defaultSettings,
+    })
+
+    return { data: create._id }
   }
 
   @ResumeUserGetDoc()
@@ -174,16 +185,67 @@ export class ResumeUserController {
     return { data: foundResume }
   }
 
+  @ResumeUserGetDoc()
+  @Response('resume.get')
+  @UserProtected()
+  @AuthJwtUserAccessProtected()
+  @ResumeUserGetGuard()
+  @Get('/:resume/settings')
+  async getSettings(@GetUser() user: UserDoc, @GetResume() resume: ResumeDoc): Promise<IResponse> {
+    const foundResume = await this.resumeService.findOne({ user: user._id, _id: resume._id })
+
+    return { data: foundResume.templateSettings }
+  }
+
+  @Response('resume.update')
+  @UserProtected()
+  @AuthJwtUserAccessProtected()
+  @ResumeUserGetGuard()
+  @Put('/:resume/settings')
+  async updateSettings(@GetResume() resume: ResumeDoc, @Body() body: ResumeTemplateSettingsDTO): Promise<IResponse> {
+    const foundResume = await this.resumeService.updateTemplateSettings(resume, body)
+
+    return { data: foundResume.templateSettings }
+  }
+
+  @Response('resume.update')
+  @UserProtected()
+  @AuthJwtUserAccessProtected()
+  @ResumeUserGetGuard()
+  @Put('/:resume/template')
+  async updateTemplate(@GetResume() resume: ResumeDoc, @Body() body: { template: string }): Promise<IResponse> {
+    const templateEntity = await this.templateService.findOneById(body.template)
+
+    if (!templateEntity) {
+      throw new NotFoundException({
+        statusCode: ENUM_TEMPLATE_STATUS_CODE_ERROR.TEMPLATE_NOT_FOUND_ERROR,
+        message: 'template.error.notFound',
+      })
+    }
+
+    const foundResume = await this.resumeService.updateTemplate(resume, templateEntity)
+
+    return { data: foundResume._id }
+  }
+
   @Response('resume.update')
   @ResumeUserGetGuard()
   @UserProtected()
   @AuthJwtUserAccessProtected()
   @Post('/:resume/update')
-  async update(@GetResume() resume: ResumeDoc): Promise<IResponse> {
-    const template = RESUME_TEMPLATES[0]
+  async update(@GetResume<IResumeDoc>() resume: IResumeDoc): Promise<IResponse> {
+    const templateEntity = await this.templateService.findOneById(resume.template._id)
+
+    if (!templateEntity) {
+      throw new NotFoundException({
+        statusCode: ENUM_TEMPLATE_STATUS_CODE_ERROR.TEMPLATE_NOT_FOUND_ERROR,
+        message: 'template.error.notFound',
+      })
+    }
+
     const resumeData = this.resumeService.toPersianDate(resume)
 
-    const pdfFile = await this.pdfService.generatePdf(template.path, resumeData)
+    const pdfFile = await this.pdfService.generatePdf(templateEntity.path, resumeData)
     const pathPrefix: string = await this.resumeService.getFileUploadPath(resume._id)
     const randomFilename: IAwsS3RandomFilename = await this.awsS3Service.createRandomFilename(pathPrefix)
 
@@ -193,7 +255,7 @@ export class ResumeUserController {
       originalname: 'output.pdf',
     }
     const aws = await this.awsS3Service.putItemInBucket(file, randomFilename)
-    const updated = await this.resumeService.updateFile(resume, aws)
+    const updated = await this.resumeService.updateFile(resume as unknown as ResumeDoc, aws)
 
     return { data: { _id: updated._id, url: aws.completedUrl } }
   }
@@ -484,6 +546,20 @@ export class ResumeUserController {
     @Body() body: { volunteers: ResumeVolunteerDTO[] }
   ): Promise<IResponse> {
     const update = await this.resumeService.updateVolunteer(resume, body.volunteers)
+    return { data: update.toJSON() }
+  }
+
+  @ResumeUserTemplateSettingsDoc()
+  @Response('resume.update', {
+    serialization: ResumeGetSerialization,
+  })
+  @ResumeUserGetGuard()
+  @UserProtected()
+  @AuthJwtUserAccessProtected()
+  @RequestParamGuard(ResumeRequestDto)
+  @Put('/:resume/template-settings')
+  async templateSettings(@GetResume() resume: ResumeDoc, @Body() body: ResumeTemplateSettingsDTO): Promise<IResponse> {
+    const update = await this.resumeService.updateTemplateSettings(resume, body)
     return { data: update.toJSON() }
   }
 

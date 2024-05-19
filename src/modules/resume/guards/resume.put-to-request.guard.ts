@@ -13,7 +13,7 @@ export class ResumePutToRequestGuard implements CanActivate {
     const { params } = request
     const { resume } = params
 
-    const check: ResumeDoc = await this.resumeService.findOneById(resume)
+    const check: ResumeDoc = await this.resumeService.findOneById(resume, { join: true })
     request.__resume = check
 
     return true

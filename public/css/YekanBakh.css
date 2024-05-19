@@ -1,0 +1,30 @@
+@font-face {
+  font-family: 'YekanBakh';
+  src: url('/fonts/YekanBakh/YekanBakh-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'YekanBakh';
+  src: url('/fonts/YekanBakh/YekanBakh-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'YekanBakh';
+  src: url('/fonts/YekanBakh/YekanBakh-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'YekanBakh';
+  src: url('/fonts/YekanBakh/YekanBakh-Bold.woff2') format('woff2');
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'YekanBakh';
+  src: url('/fonts/YekanBakh/YekanBakh-ExtraBold.woff2') format('woff2');
+  font-weight: 800;
+  font-style: normal;
+}

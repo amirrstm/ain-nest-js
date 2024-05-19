@@ -11,6 +11,7 @@ import { PromptModule } from 'src/modules/prompts/prompt.module'
 import { SettingModule } from 'src/modules/setting/setting.module'
 import { HistoryModule } from 'src/modules/history/history.module'
 import { CategoryModule } from 'src/modules/category/category.module'
+import { TemplateModule } from 'src/modules/template/template.module'
 import { CategoryRequestModule } from 'src/modules/category-request/category-request.module'
 
 import { RoleAdminController } from 'src/modules/role/controllers/role.admin.controller'
@@ -22,6 +23,7 @@ import { PromptAdminController } from 'src/modules/prompts/controllers/prompt.ad
 import { SettingAdminController } from 'src/modules/setting/controllers/setting.admin.controller'
 import { HistoryAdminController } from 'src/modules/history/controllers/history.admin.controller'
 import { CategoryAdminController } from 'src/modules/category/controllers/category.admin.controller'
+import { TemplateAdminController } from 'src/modules/template/controllers/template.admin.controller'
 import { CategoryRequestAdminController } from 'src/modules/category-request/controllers/category-request.admin.controller'
 
 @Module({
@@ -33,8 +35,9 @@ import { CategoryRequestAdminController } from 'src/modules/category-request/con
     PromptAdminController,
     InputAdminController,
     PlanAdminController,
-    HistoryAdminController,
     ResumeAdminController,
+    HistoryAdminController,
+    TemplateAdminController,
     CategoryRequestAdminController,
   ],
   providers: [],
@@ -51,6 +54,7 @@ import { CategoryRequestAdminController } from 'src/modules/category-request/con
     PlanModule,
     ResumeModule,
     HistoryModule,
+    TemplateModule,
     CategoryRequestModule,
   ],
 })

@@ -15,6 +15,7 @@ import { ResumeModule } from 'src/modules/resume/resume.module'
 import { PromptModule } from 'src/modules/prompts/prompt.module'
 import { SettingModule } from 'src/modules/setting/setting.module'
 import { CategoryModule } from 'src/modules/category/category.module'
+import { TemplateModule } from 'src/modules/template/template.module'
 import { UserPlanModule } from 'src/modules/user-plan/user-plan.module'
 
 import { HealthPublicController } from 'src/health/controllers/health.public.controller'
@@ -25,6 +26,7 @@ import { CompanyPublicController } from 'src/modules/data/controllers/company.pu
 import { ResumePublicController } from 'src/modules/resume/controllers/resume.public.controller'
 import { ProvincePublicController } from 'src/modules/data/controllers/province.public.controller'
 import { SettingPublicController } from 'src/modules/setting/controllers/setting.public.controller'
+import { TemplatePublicController } from 'src/modules/template/controllers/template.public.controller'
 import { CategoryPublicController } from 'src/modules/category/controllers/category.public.controller'
 import { OccupationPublicController } from 'src/modules/data/controllers/occupation.public.controller'
 import { UniversityPublicController } from 'src/modules/data/controllers/university.public.controller'
@@ -41,6 +43,7 @@ import { StudyFieldPublicController } from 'src/modules/data/controllers/study-f
     ResumePublicController,
     CompanyPublicController,
     ProvincePublicController,
+    TemplatePublicController,
     OccupationPublicController,
     StudyFieldPublicController,
     UniversityPublicController,
@@ -63,6 +66,7 @@ import { StudyFieldPublicController } from 'src/modules/data/controllers/study-f
     InputModule,
     ResumeModule,
     DataModule,
+    TemplateModule,
   ],
 })
 export class RoutesPublicModule {}

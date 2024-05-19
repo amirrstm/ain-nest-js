@@ -32,6 +32,9 @@ import {
 } from '../dto'
 import { HelperDateService } from 'src/common/helper/services/helper.date.service'
 import { AwsS3Serialization } from 'src/common/aws/serializations/aws.serialization'
+import { IResumeDoc } from '../interfaces/resume.interface'
+import { ResumeTemplateSettingsDTO } from '../dto/resume.template-settings.dto'
+import { TemplateDoc } from 'src/modules/template/repository/entities/template.entity'
 
 @Injectable()
 export class ResumeService implements IResumeService {
@@ -44,8 +47,8 @@ export class ResumeService implements IResumeService {
     return this.resumeRepository.findAll<T>(find, options)
   }
 
-  async findOneById(_id: string, options?: IDatabaseFindOneOptions): Promise<ResumeDoc> {
-    return this.resumeRepository.findOneById<ResumeDoc>(_id, options)
+  async findOneById<T = ResumeDoc>(_id: string, options?: IDatabaseFindOneOptions): Promise<T> {
+    return this.resumeRepository.findOneById<T>(_id, options)
   }
 
   async findOne(find: Record<string, any>, options?: IDatabaseFindOneOptions): Promise<ResumeDoc> {
@@ -56,10 +59,15 @@ export class ResumeService implements IResumeService {
     return this.resumeRepository.getTotal(find, options)
   }
 
-  async create({ user, title }: ResumeCreateDto, options?: IDatabaseCreateOptions): Promise<ResumeDoc> {
+  async create(
+    { user, title, template, templateSettings }: ResumeCreateDto,
+    options?: IDatabaseCreateOptions
+  ): Promise<ResumeDoc> {
     const create: ResumeEntity = new ResumeEntity()
     create.user = user
     create.title = title
+    create.template = template
+    create.templateSettings = templateSettings
 
     return this.resumeRepository.create<ResumeEntity>(create, options)
   }
@@ -71,6 +79,7 @@ export class ResumeService implements IResumeService {
     create.title = data.title
     create.basic = data.basic
     create.skills = data.skills
+    create.template = data.template
     create.education = data.education
 
     return this.resumeRepository.create<ResumeEntity>(create, options)
@@ -104,6 +113,17 @@ export class ResumeService implements IResumeService {
 
   async updateTitle(repository: ResumeDoc, title: string, options?: IDatabaseSaveOptions): Promise<ResumeDoc> {
     repository.title = title
+
+    return this.resumeRepository.save(repository, options)
+  }
+
+  async updateTemplate(
+    repository: ResumeDoc,
+    template: TemplateDoc,
+    options?: IDatabaseSaveOptions
+  ): Promise<ResumeDoc> {
+    repository.template = template._id
+    repository.templateSettings = template.defaultSettings
 
     return this.resumeRepository.save(repository, options)
   }
@@ -260,6 +280,16 @@ export class ResumeService implements IResumeService {
     return this.resumeRepository.save(repository, options)
   }
 
+  async updateTemplateSettings(
+    repository: ResumeDoc,
+    templateSettings: ResumeTemplateSettingsDTO,
+    options?: IDatabaseSaveOptions
+  ): Promise<ResumeDoc> {
+    repository.templateSettings = templateSettings
+
+    return this.resumeRepository.save(repository, options)
+  }
+
   async active(repository: ResumeDoc, options?: IDatabaseSaveOptions): Promise<ResumeDoc> {
     repository.isActive = true
 
@@ -276,7 +306,7 @@ export class ResumeService implements IResumeService {
     return this.resumeRepository.delete(repository, options)
   }
 
-  toPersianDate(repository: ResumeDoc): ResumeDoc {
+  toPersianDate(repository: IResumeDoc): ResumeDoc {
     const resume: ResumeDoc = repository.toJSON()
 
     const work = resume.work.map(work => {

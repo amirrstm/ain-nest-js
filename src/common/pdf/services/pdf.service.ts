@@ -6,7 +6,6 @@ import { Injectable } from '@nestjs/common'
 
 import { createPdf } from '../utils'
 import { IPdfService } from '../interfaces/pdf.service.interface'
-import { PDF_VIEW_DIR } from '../constants/pdf.enum.constant'
 
 const readFileAsync = promisify(fs.readFile)
 
@@ -15,15 +14,12 @@ export class PdfService implements IPdfService {
   constructor() {}
 
   async generatePdf(templateName: string, data?: any): Promise<Buffer> {
-    const templatePath = join(process.cwd(), PDF_VIEW_DIR, `${templateName}.hbs`)
+    const templatePath = join(process.cwd(), 'views', `${templateName}.hbs`)
     const templateHtml = await readFileAsync(templatePath, 'utf-8')
 
     const compiledTemplate = handlebars.compile(templateHtml)
     const htmlContent = compiledTemplate(data)
 
-    return await createPdf(htmlContent, {
-      printBackground: true,
-      margin: { top: '60px', bottom: '60px' },
-    })
+    return await createPdf(htmlContent, { printBackground: true, margin: { bottom: 60 } })
   }
 }

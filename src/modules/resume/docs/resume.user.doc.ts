@@ -35,6 +35,7 @@ import {
 } from '../dto'
 import { FileSingleDto } from 'src/common/file/dtos/file.single.dto'
 import { ResumeDocParamsId } from '../constants/resume.doc.constant'
+import { ResumeTemplateSettingsDTO } from '../dto/resume.template-settings.dto'
 
 export function ResumeUserListDoc(): MethodDecorator {
   return applyDecorators(
@@ -317,6 +318,21 @@ export function ResumeUserProfileDoc(): MethodDecorator {
     }),
     DocRequest({
       body: ResumeProfileDTO,
+      bodyType: ENUM_DOC_REQUEST_BODY_TYPE.JSON,
+    }),
+    DocGuard({ role: true }),
+    DocAuth({ jwtAccessToken: true }),
+    DocResponse<ResumeGetSerialization>('resume.update', { serialization: ResumeGetSerialization })
+  )
+}
+
+export function ResumeUserTemplateSettingsDoc(): MethodDecorator {
+  return applyDecorators(
+    Doc({
+      summary: 'Update Resume Template Settings',
+    }),
+    DocRequest({
+      body: ResumeTemplateSettingsDTO,
       bodyType: ENUM_DOC_REQUEST_BODY_TYPE.JSON,
     }),
     DocGuard({ role: true }),

@@ -5,6 +5,7 @@ import { DatabaseMongoUUIDRepositoryAbstract } from 'src/common/database/abstrac
 
 import { ResumeDoc, ResumeEntity } from '../entities/resume.entity'
 import { UserEntity } from 'src/modules/user/repository/entities/user.entity'
+import { TemplateEntity } from 'src/modules/template/repository/entities/template.entity'
 
 @Injectable()
 export class ResumeRepository extends DatabaseMongoUUIDRepositoryAbstract<ResumeEntity, ResumeDoc> {
@@ -18,6 +19,12 @@ export class ResumeRepository extends DatabaseMongoUUIDRepositoryAbstract<Resume
         localField: 'user',
         foreignField: '_id',
         model: UserEntity.name,
+      },
+      {
+        path: 'template',
+        localField: 'template',
+        foreignField: '_id',
+        model: TemplateEntity.name,
       },
     ])
   }

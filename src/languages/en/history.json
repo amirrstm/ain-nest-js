@@ -1,10 +1,11 @@
 {
-  "list": "List History Success.",
-  "get": "Get History Success.",
-  "create": "Create Succeed",
-  "delete": "Delete Succeed",
+  "list": "لیست تاریخچه ها",
+  "get": "تاریخچه",
+  "create": "تاریخچه جدید",
+  "delete": "حذف تاریخچه",
+  "feedback": "نظر شما با موفقیت ثبت شد",
   "error": {
-    "notFound": "History not found",
+    "notFound": "تاریخچه یافت نشد",
     "inactive": "History is inactive",
     "exist": "History exist",
     "isActiveInvalid": "History is active invalid",

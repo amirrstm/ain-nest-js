@@ -9,9 +9,9 @@ export const createPdf = async (htmlContent: any, options?: puppeteer.PDFOptions
   })
   const page = await browser.newPage()
 
-  await page.evaluate((fontPaths: { src: string; weight: string }[]) => {
+  await page.evaluate((fontPaths: { src: string; weight: string; name: string }[]) => {
     fontPaths.forEach(fontPath => {
-      const font = new FontFace('YekanBakh', `url(${fontPath.src})`, { weight: fontPath.weight })
+      const font = new FontFace(fontPath.name, `url(${fontPath.src})`, { weight: fontPath.weight })
       document.fonts.add(font)
     })
   }, PDF_FONT_FAMILY)

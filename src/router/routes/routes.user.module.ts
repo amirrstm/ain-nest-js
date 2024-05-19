@@ -10,6 +10,7 @@ import { ResumeModule } from 'src/modules/resume/resume.module'
 import { PromptModule } from 'src/modules/prompts/prompt.module'
 import { HistoryModule } from 'src/modules/history/history.module'
 import { CategoryModule } from 'src/modules/category/category.module'
+import { TemplateModule } from 'src/modules/template/template.module'
 import { UserPlanModule } from 'src/modules/user-plan/user-plan.module'
 import { CategoryRequestModule } from 'src/modules/category-request/category-request.module'
 
@@ -41,6 +42,7 @@ import { CategoryRequestUserController } from 'src/modules/category-request/cont
     UserPlanModule,
     ChatModule,
     ResumeModule,
+    TemplateModule,
     CategoryRequestModule,
   ],
 })

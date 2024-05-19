@@ -1,0 +1,12 @@
+{
+  "list": "List Chat Success.",
+  "get": "Get Chat Success.",
+  "create": "Create Succeed",
+  "update": "Update Succeed",
+  "delete": "Delete Succeed",
+
+  "error": {
+    "exist": "Chat exist",
+    "notFound": "Chat not found"
+  }
+}

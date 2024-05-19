@@ -40,8 +40,12 @@ import {
   IResumeSpeech,
   IResumeTeaching,
   IResumeVolunteer,
+  IResumeTemplateSettings,
 } from '../../interfaces/resume.fields'
+
 import { AwsS3Serialization } from 'src/common/aws/serializations/aws.serialization'
+import { TemplateEntity } from 'src/modules/template/repository/entities/template.entity'
+import { IResumeTemplateSettingsField } from './fields/template-settings'
 
 export const ResumeDatabaseName = 'resumes'
 
@@ -59,6 +63,20 @@ export class ResumeEntity extends DatabaseMongoUUIDEntityAbstract {
     required: false,
   })
   title: string
+
+  @Prop({
+    index: true,
+    required: true,
+    ref: TemplateEntity.name,
+  })
+  template: string
+
+  @Prop({
+    _id: false,
+    required: false,
+    type: IResumeTemplateSettingsField,
+  })
+  templateSettings: IResumeTemplateSettings
 
   @Prop({
     _id: false,
@@ -108,6 +126,7 @@ export class ResumeEntity extends DatabaseMongoUUIDEntityAbstract {
   work: IResumeWork[]
 
   @Prop({
+    _id: false,
     default: [],
     required: false,
     type: [IResumeEducationField],
@@ -115,6 +134,7 @@ export class ResumeEntity extends DatabaseMongoUUIDEntityAbstract {
   education: IResumeEducation[]
 
   @Prop({
+    _id: false,
     default: [],
     required: false,
     type: [IResumeSkillField],
@@ -122,6 +142,7 @@ export class ResumeEntity extends DatabaseMongoUUIDEntityAbstract {
   skills: IResumeSkill[]
 
   @Prop({
+    _id: false,
     default: [],
     required: false,
     type: [IResumeProjectField],
@@ -129,6 +150,7 @@ export class ResumeEntity extends DatabaseMongoUUIDEntityAbstract {
   projects: IResumeProject[]
 
   @Prop({
+    _id: false,
     default: [],
     required: false,
     type: [IResumeAwardField],
@@ -136,6 +158,7 @@ export class ResumeEntity extends DatabaseMongoUUIDEntityAbstract {
   awards: IResumeAward[]
 
   @Prop({
+    _id: false,
     default: [],
     required: false,
     type: [IResumePublicationField],
@@ -143,6 +166,7 @@ export class ResumeEntity extends DatabaseMongoUUIDEntityAbstract {
   publications: IResumePublication[]
 
   @Prop({
+    _id: false,
     default: [],
     required: false,
     type: [IResumeLanguageField],
@@ -150,6 +174,7 @@ export class ResumeEntity extends DatabaseMongoUUIDEntityAbstract {
   languages: IResumeLanguage[]
 
   @Prop({
+    _id: false,
     default: [],
     required: false,
     type: [IResumeCertificateField],
@@ -157,6 +182,7 @@ export class ResumeEntity extends DatabaseMongoUUIDEntityAbstract {
   certificates: IResumeCertificate[]
 
   @Prop({
+    _id: false,
     default: [],
     required: false,
     type: [IResumeVolunteerField],
@@ -164,6 +190,7 @@ export class ResumeEntity extends DatabaseMongoUUIDEntityAbstract {
   volunteer: IResumeVolunteer[]
 
   @Prop({
+    _id: false,
     default: [],
     required: false,
     type: [IResumeInterestField],
@@ -171,6 +198,7 @@ export class ResumeEntity extends DatabaseMongoUUIDEntityAbstract {
   interests: IResumeInterest[]
 
   @Prop({
+    _id: false,
     default: [],
     required: false,
     type: [IResumeReferenceField],
@@ -178,6 +206,7 @@ export class ResumeEntity extends DatabaseMongoUUIDEntityAbstract {
   references: IResumeReference[]
 
   @Prop({
+    _id: false,
     default: [],
     required: false,
     type: [IResumeInventionField],
@@ -185,6 +214,7 @@ export class ResumeEntity extends DatabaseMongoUUIDEntityAbstract {
   inventions: IResumeInvention[]
 
   @Prop({
+    _id: false,
     default: [],
     required: false,
     type: [IResumeProfileField],
@@ -192,6 +222,7 @@ export class ResumeEntity extends DatabaseMongoUUIDEntityAbstract {
   profiles: IResumeProfile[]
 
   @Prop({
+    _id: false,
     default: [],
     required: false,
     type: [IResumeSpeechField],
@@ -199,6 +230,7 @@ export class ResumeEntity extends DatabaseMongoUUIDEntityAbstract {
   speeches: IResumeSpeech[]
 
   @Prop({
+    _id: false,
     default: [],
     required: false,
     type: [IResumeTeachingField],

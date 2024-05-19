@@ -75,11 +75,7 @@ export class HealthPublicController {
   @Get('/storage')
   async checkStorage(): Promise<IResponse> {
     const data = await this.health.check([
-      () =>
-        this.diskHealthIndicator.checkStorage('diskHealth', {
-          thresholdPercent: 0.75,
-          path: '/',
-        }),
+      () => this.diskHealthIndicator.checkStorage('diskHealth', { thresholdPercent: 0.75, path: '/' }),
     ])
 
     return {

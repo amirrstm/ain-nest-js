@@ -1,7 +1,10 @@
 import { faker } from '@faker-js/faker'
 
 import { ApiProperty } from '@nestjs/swagger'
-import { IsNotEmpty, IsUUID } from 'class-validator'
+import { Type } from 'class-transformer'
+import { IsNotEmpty, IsOptional, IsUUID, ValidateNested } from 'class-validator'
+import { TemplateDefaultSettingsDTO } from 'src/modules/template/dtos/template.create.dto'
+import { ITemplateDefaultSettings } from 'src/modules/template/interfaces/template.interface'
 
 export class ResumeCreateDto {
   @ApiProperty({
@@ -14,6 +17,14 @@ export class ResumeCreateDto {
 
   @ApiProperty({
     required: true,
+    example: faker.string.uuid(),
+  })
+  @IsNotEmpty()
+  @IsUUID('4')
+  readonly template: string
+
+  @ApiProperty({
+    required: true,
     example: faker.lorem.text(),
   })
   @IsNotEmpty()
@@ -21,7 +32,10 @@ export class ResumeCreateDto {
 
   @ApiProperty({
     required: false,
-    example: faker.system.filePath(),
+    description: 'Default settings of template',
   })
-  readonly filePath?: string
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => TemplateDefaultSettingsDTO)
+  templateSettings?: ITemplateDefaultSettings
 }

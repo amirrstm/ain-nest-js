@@ -1,0 +1,18 @@
+{
+  "list": "List Template Success.",
+  "get": "Get Template Success.",
+  "create": "Create Succeed",
+  "update": "Update Succeed",
+  "updatePermission": "Update permission Succeed",
+  "delete": "Delete Succeed",
+  "inactive": "Inactive Succeed",
+  "active": "Active Succeed",
+  "error": {
+    "exist": "Template exist",
+    "used": "Template in used",
+    "notFound": "Template not found",
+    "inactive": "Template is inactive",
+    "typeForbidden": "Template type not allowed",
+    "isActiveInvalid": "Template is active invalid"
+  }
+}

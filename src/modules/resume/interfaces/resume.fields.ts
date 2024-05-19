@@ -143,3 +143,15 @@ export interface IResumeInvention {
   summary?: string
   url?: string
 }
+
+export interface IResumeTemplateSettings {
+  nameColor?: string
+  jobTitleColor?: string
+  sectionTitleColor?: string
+  placesColor?: string
+  defaultFont?: string
+  roundedProfilePicture?: boolean
+  skillBarColor?: string
+  hideInformationIcon?: boolean
+  blockMargins?: string
+}
