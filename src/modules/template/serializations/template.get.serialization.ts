@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { Exclude, Type } from 'class-transformer'
+import { Exclude } from 'class-transformer'
 import { ApiHideProperty, ApiProperty } from '@nestjs/swagger'
 import { ResponseIdSerialization } from 'src/common/response/serializations/response.id.serialization'
 

@@ -69,7 +69,6 @@ import { FileUploadSingle } from 'src/common/file/decorators/file.decorator'
 import { ENUM_FILE_MIME } from 'src/common/file/constants/file.enum.constant'
 import { IAwsS3RandomFilename } from 'src/common/aws/interfaces/aws.interface'
 import { AwsS3Serialization } from 'src/common/aws/serializations/aws.serialization'
-import { RESUME_TEMPLATES } from '../constants/resume.constant'
 import { PaginationQuery } from 'src/common/pagination/decorators/pagination.decorator'
 import {
   RESUME_DEFAULT_AVAILABLE_ORDER_BY,
