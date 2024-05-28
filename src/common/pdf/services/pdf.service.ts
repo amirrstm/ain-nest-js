@@ -1,7 +1,7 @@
 import * as fs from 'fs'
 import { join } from 'path'
 import { promisify } from 'util'
-import * as handlebars from 'handlebars'
+import handlebars from 'handlebars'
 import { Injectable } from '@nestjs/common'
 
 import { createPdf } from '../utils'
@@ -20,6 +20,6 @@ export class PdfService implements IPdfService {
     const compiledTemplate = handlebars.compile(templateHtml)
     const htmlContent = compiledTemplate(data)
 
-    return await createPdf(htmlContent, { printBackground: true, margin: { bottom: 60 } })
+    return await createPdf(htmlContent, { printBackground: true })
   }
 }

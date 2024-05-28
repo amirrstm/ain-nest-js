@@ -40,11 +40,13 @@
     "seed:plan": "nestjs-command seed:plan",
     "seed:province": "nestjs-command seed:province",
     "seed:category": "nestjs-command seed:category",
+    "seed:template": "nestjs-command seed:template",
     "rollback:role": "nestjs-command remove:role",
     "rollback:user": "nestjs-command remove:user",
     "rollback:plan": "nestjs-command remove:plan",
     "rollback:category": "nestjs-command remove:category",
     "rollback:province": "nestjs-command remove:province",
+    "rollback:template": "nestjs-command remove:template",
     "seed": "yarn seed:role && yarn seed:user",
     "rollback": "yarn rollback:user && yarn rollback:role"
   },

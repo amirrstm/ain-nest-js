@@ -243,20 +243,18 @@ export class ResumeUserController {
     }
 
     const resumeData = this.resumeService.toPersianDate(resume)
-
     const pdfFile = await this.pdfService.generatePdf(templateEntity.path, resumeData)
-    const pathPrefix: string = await this.resumeService.getFileUploadPath(resume._id)
-    const randomFilename: IAwsS3RandomFilename = await this.awsS3Service.createRandomFilename(pathPrefix)
 
-    const file = {
-      buffer: pdfFile,
-      size: pdfFile.byteLength,
-      originalname: 'output.pdf',
-    }
-    const aws = await this.awsS3Service.putItemInBucket(file, randomFilename)
-    const updated = await this.resumeService.updateFile(resume as unknown as ResumeDoc, aws)
+    // const pathPrefix: string = await this.resumeService.getFileUploadPath(resume._id)
+    // const randomFilename: IAwsS3RandomFilename = await this.awsS3Service.createRandomFilename(pathPrefix)
 
-    return { data: { _id: updated._id, url: aws.completedUrl } }
+    // const file = { buffer: pdfFile, size: pdfFile.byteLength, originalname: 'output.pdf' }
+    // const aws = await this.awsS3Service.putItemInBucket(file, randomFilename)
+    // const updated = await this.resumeService.updateFile(resume as unknown as ResumeDoc, aws)
+
+    // return { data: { _id: updated._id, url: aws.completedUrl } }
+
+    return { data: { url: 'Updated' } }
   }
 
   @Response('resume.update')

@@ -1,5 +1,7 @@
 import * as puppeteer from 'puppeteer'
 import { PDF_FONT_FAMILY } from '../constants/pdf.enum.constant'
+import { writeFileSync } from 'fs'
+import { join } from 'path'
 
 export const createPdf = async (htmlContent: any, options?: puppeteer.PDFOptions): Promise<Buffer> => {
   const browser = await puppeteer.launch({
@@ -21,6 +23,8 @@ export const createPdf = async (htmlContent: any, options?: puppeteer.PDFOptions
   const pdfOptions: puppeteer.PDFOptions = { format: 'A4', ...options }
 
   const pdfBuffer = await page.pdf(pdfOptions)
+
+  writeFileSync(join(process.cwd(), 'public', `pdf/output.pdf`), pdfBuffer)
   await browser.close()
 
   return pdfBuffer

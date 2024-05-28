@@ -9,12 +9,14 @@ import { PlanModule } from 'src/modules/plan/plan.module'
 import { DataModule } from 'src/modules/data/data.module'
 import { EmailModule } from 'src/modules/email/email.module'
 import { CategoryModule } from 'src/modules/category/category.module'
+import { TemplateModule } from 'src/modules/template/template.module'
 
 import { MigrationPlanSeed } from './seeds/migration.plan.seed'
 import { MigrationRoleSeed } from './seeds/migration.role.seed'
 import { MigrationUserSeed } from './seeds/migration.user.seed'
 import { MigrationCategorySeed } from './seeds/migration.category.seed'
 import { MigrationProvinceSeed } from './seeds/migration.province.seed'
+import { MigrationTemplateSeed } from './seeds/migration.template.seed'
 
 @Module({
   imports: [
@@ -24,11 +26,19 @@ import { MigrationProvinceSeed } from './seeds/migration.province.seed'
     RoleModule,
     UserModule,
     EmailModule,
-    CategoryModule,
     PlanModule,
     DataModule,
+    TemplateModule,
+    CategoryModule,
   ],
-  providers: [MigrationRoleSeed, MigrationUserSeed, MigrationCategorySeed, MigrationPlanSeed, MigrationProvinceSeed],
+  providers: [
+    MigrationRoleSeed,
+    MigrationUserSeed,
+    MigrationCategorySeed,
+    MigrationPlanSeed,
+    MigrationProvinceSeed,
+    MigrationTemplateSeed,
+  ],
   exports: [],
 })
 export class MigrationModule {}

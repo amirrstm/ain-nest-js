@@ -35,4 +35,8 @@ export const IResumeTemplateSettingsField = {
     type: String,
     required: false,
   },
+  extra: {
+    type: Object,
+    required: false,
+  },
 }
