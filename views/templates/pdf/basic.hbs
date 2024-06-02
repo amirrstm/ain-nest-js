@@ -11,8 +11,7 @@
     <script src='https://cdn.tailwindcss.com'></script>
     <style>
       .text-primary { color: #0097cf; } body { margin: 0; } .progress-bar { background-color: #e5e7eb; border-radius:
-      0.25rem; position: relative; overflow: hidden; } .progress-bar .progress-tracker { background-color: #0097cf;
-      height: 100%; }
+      0.25rem; position: relative; overflow: hidden; }
 
       {{! Spacing }}
       @page { size: A4; margin-top: 13mm; } @page:first { margin-top: 0; }
@@ -29,6 +28,12 @@
       {{! Titles Color }}
       .text-titles { color:
       {{templateSettings.sectionTitleColor}}; }
+
+      {{! Progress }}
+      .progress-bar .progress-tracker { height: 100%; background-color:{{templateSettings.skillBarColor}}; }
+
+      {{! Margin }}
+      .block-margin { padding-top:{{templateSettings.blockMargins}}; }
 
     </style>
 
@@ -63,7 +68,7 @@
 
           {{! Education}}
           {{#if education}}
-            <div class='pt-6'>
+            <div class='block-margin'>
               <h3 class='font-bold text-lg text-titles' style='break-after: avoid;'>سوابق تحصیلی</h3>
 
               {{#each education}}
@@ -98,20 +103,29 @@
 
           {{! Work Experience }}
           {{#if work}}
-            <div class='pt-6'>
+            <div class='block-margin'>
               <h3 class='font-bold text-lg text-titles' style='break-after: avoid;'>سوابق شغلی</h3>
 
               {{#each work}}
                 <div class='pr-2' style='page-break-inside: avoid;'>
                   <div class='pt-3 flex items-center gap-1'>
-                    <h4 class='font-bold text-sm'>{{position}}</h4>
+                    <h4 class='font-bold text-xs'>{{position}}</h4>
                     <p class='text-xs w-3 border-t border-t-gray-200'></p>
                     <div class='flex items-center'>
-                      <p class='text-xs text-places'>{{name}}</p>،&nbsp;
-                      <p class='text-xs text-gray-800'>{{location.state}}،&nbsp;{{location.city}}</p>
+                      <p class='text-places' style='font-size: 10px;'>{{name}}</p>
+                      <p class='text-gray-800' style='font-size: 10px;'>
+
+                        {{#if location.country}}
+                          <span>،&nbsp;{{location.country}}</span>
+                        {{/if}}
+
+                        {{#if location.city}}
+                          <span>،&nbsp;{{location.city}}</span>
+                        {{/if}}
+                      </p>
                     </div>
                   </div>
-                  <p class='text-xs text-gray-500 mt-1'>
+                  <p class='text-gray-500 mt-1' style='font-size: 10px;'>
                     <span>از</span>
                     <span dir='ltr'>{{startDate}}</span>
 
@@ -124,7 +138,7 @@
 
                   </p>
                   <ul class='text-gray-800 list-disc mt-2 mx-6'>
-                    {{#each highlights}}<li style='font-size: 12px;'>{{this}}</li>{{/each}}
+                    {{#each highlights}}<li style='font-size: 10px;'>{{this}}</li>{{/each}}
                   </ul>
                 </div>
               {{/each}}
@@ -133,16 +147,16 @@
 
           {{! Projects }}
           {{#if projects}}
-            <div class='pt-6'>
+            <div class='block-margin'>
               <h3 class='font-bold text-lg text-titles' style='break-after: avoid;'>پروژه‌ها</h3>
 
               {{#each projects}}
                 <div class='pr-2' style='page-break-inside: avoid;'>
                   <div class='pt-3 flex items-center gap-1'>
-                    <h4 class='font-bold text-sm'>{{name}}</h4>
+                    <h4 class='font-bold text-xs'>{{name}}</h4>
                     <p class='text-xs w-3 border-t border-t-gray-200'></p>
 
-                    <p class='text-xs text-places'>{{organization}}</p>
+                    <p class='text-places' style='font-size: 10px;'>{{organization}}</p>
 
                   </div>
 
@@ -155,7 +169,7 @@
                   <p class='text-xs text-gray-600'>
                     {{description}}
                   </p>
-                  <p class='text-xs text-gray-500 mt-1'>
+                  <p class='text-gray-500 mt-1' style='font-size: 10px;'>
                     <span>از</span>
                     <span dir='ltr'>{{startDate}}</span>
 
@@ -167,7 +181,7 @@
                     {{/if}}
 
                   </p>
-                  <ul class='text-xs text-gray-800 list-disc mt-2 mx-6'>
+                  <ul class='text-gray-800 list-disc mt-2 mx-6' style='font-size: 10px;'>
                     {{#each highlights}}<li>{{this}}</li>{{/each}}
                   </ul>
                 </div>
@@ -177,7 +191,7 @@
 
           {{! Certificates }}
           {{#if certificates}}
-            <div class='pt-6'>
+            <div class='block-margin'>
               <h3 class='font-bold text-lg text-titles' style='break-after: avoid;'>دوره‌ها و گواهینامه‌ها</h3>
 
               {{#each certificates}}
@@ -205,7 +219,7 @@
 
           {{! Publications }}
           {{#if publications}}
-            <div class='pt-6'>
+            <div class='block-margin'>
               <h3 class='font-bold text-lg text-titles' style='break-after: avoid;'>تحقیقات و مقالات</h3>
 
               {{#each publications}}
@@ -238,7 +252,7 @@
 
           {{! Awards }}
           {{#if awards}}
-            <div class='pt-6'>
+            <div class='block-margin'>
               <h3 class='font-bold text-lg text-titles' style='break-after: avoid;'>
                 جوایز و افتخارات
               </h3>
@@ -267,7 +281,7 @@
 
           {{! Speeches }}
           {{#if speeches}}
-            <div class='pt-6'>
+            <div class='block-margin'>
               <h3 class='font-bold text-lg text-titles' style='break-after: avoid;'>ارائه‌ها و سخنرانی‌ها</h3>
 
               {{#each speeches}}
@@ -298,7 +312,7 @@
 
           {{! Teaching }}
           {{#if teaching}}
-            <div class='pt-6'>
+            <div class='block-margin'>
               <h3 class='font-bold text-lg text-titles' style='break-after: avoid;'>سوابق تدریس</h3>
 
               {{#each teaching}}
@@ -331,7 +345,7 @@
 
           {{! Invention }}
           {{#if inventions}}
-            <div class='pt-6'>
+            <div class='block-margin'>
               <h3 class='font-bold text-lg text-titles' style='break-after: avoid;'>اختراعات</h3>
 
               {{#each inventions}}
@@ -360,7 +374,7 @@
 
           {{! Volunteer }}
           {{#if volunteer}}
-            <div class='pt-6'>
+            <div class='block-margin'>
               <h3 class='font-bold text-lg text-titles' style='break-after: avoid;'>فعالیت‌های داوطلبانه</h3>
 
               {{#each volunteer}}
@@ -444,7 +458,7 @@
           {{! Skills }}
           {{#if skills}}
             <div class='pt-6'>
-              <h3 class='font-bold text-lg text-titles' style='break-after: avoid;'>مهارت‌ها</h3>
+              <h3 class='font-bold text-sm text-titles' style='break-after: avoid;'>مهارت‌ها</h3>
 
               {{#each skills}}
                 <div class='pt-3 pr-2'>
@@ -468,7 +482,7 @@
           {{! Language }}
           {{#if languages}}
             <div class='pt-6'>
-              <h3 class='font-bold text-lg text-titles' style='break-after: avoid;'>زبان‌ها</h3>
+              <h3 class='font-bold text-sm text-titles' style='break-after: avoid;'>زبان‌ها</h3>
 
               {{#each languages}}
                 <div class='pt-3 pr-2'>
@@ -489,7 +503,7 @@
           {{! Social }}
           {{#if profiles}}
             <div class='mt-8'>
-              <h3 class='font-bold text-lg text-titles' style='break-after: avoid;'>
+              <h3 class='font-bold text-sm text-titles' style='break-after: avoid;'>
                 شبکه‌های اجتماعی
               </h3>
               <div class='space-y-2 pt-3 pr-2'>
@@ -506,7 +520,7 @@
           {{! References }}
           {{#if references}}
             <div class='mt-8'>
-              <h3 class='font-bold text-lg text-titles' style='break-after: avoid;'>
+              <h3 class='font-bold text-sm text-titles' style='break-after: avoid;'>
                 معرف‌ها
               </h3>
               <div class='space-y-2 pt-3 pr-2'>
@@ -527,7 +541,7 @@
           {{! Interests }}
           {{#if interests}}
             <div class='mt-8'>
-              <h3 class='font-bold text-lg text-titles' style='break-after: avoid;'>
+              <h3 class='font-bold text-sm text-titles' style='break-after: avoid;'>
                 علایق
               </h3>
               <div class='space-y-2 pt-3 pr-2'>

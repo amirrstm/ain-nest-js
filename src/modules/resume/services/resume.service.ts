@@ -418,6 +418,11 @@ export class ResumeService implements IResumeService {
       return language
     })
 
+    const templateSettings = { ...resume.templateSettings }
+    if (templateSettings?.blockMargins) {
+      templateSettings.blockMargins = `${Number(templateSettings.blockMargins) * 1.5}rem`
+    }
+
     return {
       ...resume,
       work,
@@ -433,6 +438,7 @@ export class ResumeService implements IResumeService {
       publications,
       teaching,
       inventions,
+      templateSettings,
     } as ResumeDoc
   }
 

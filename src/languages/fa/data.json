@@ -51,7 +51,7 @@
     }
   },
 
-  "companies": {
+  "company": {
     "list": "List Study Field Success.",
     "get": "Get Study Field Success.",
     "create": "Create Succeed",

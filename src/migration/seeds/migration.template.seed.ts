@@ -54,6 +54,23 @@ export class MigrationTemplateSeed {
           blockMargins: '1',
         },
       },
+      {
+        lang: 'fa',
+        name: 'رسمی',
+        description: 'قالب رسمی',
+        path: 'templates/pdf/formal',
+        type: ENUM_TEMPLATE_TYPE.PDF,
+        image: '85ff767d-ed74-433c-8e60-2adfa2bee900',
+
+        defaultSettings: {
+          nameColor: '#000',
+          jobTitleColor: '#000',
+          sectionTitleColor: '#000',
+          defaultFont: 'YekanBakh',
+          hideInformationIcon: false,
+          blockMargins: '1',
+        },
+      },
     ]
 
     try {

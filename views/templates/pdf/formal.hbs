@@ -11,23 +11,37 @@
     <script src='https://cdn.tailwindcss.com'></script>
 
     <style>
-      .text-primary { color: #1f2223; } body { margin: 0; } .progress-bar { background-color: #e5e7eb; border-radius:
-      0.25rem; position: relative; overflow: hidden; } .progress-bar .progress-tracker { background-color: #1f2223;
-      height: 100%; }
+      .progress-bar { background-color: #e5e7eb; border-radius: 0.25rem; position: relative; overflow: hidden; }
     </style>
 
   </head>
-  <body dir='rtl' style="font-family: 'YekanBakh';">
+  <body dir='rtl' style='font-family: {{templateSettings.defaultFont}};'>
+    <style>
+      {{! Places Color }}
+      .text-places { color:
+      {{templateSettings.placesColor}}; }
+
+      {{! Titles Color }}
+      .text-titles { color:
+      {{templateSettings.sectionTitleColor}}; }
+
+      {{! Margin }}
+      .block-margin { padding-top:{{templateSettings.blockMargins}}; }
+
+      {{! Progress }}
+      .progress-bar .progress-tracker { height: 100%; background-color:{{templateSettings.sectionTitleColor}}; }
+    </style>
+
     <div class='relative mx-auto' style='width: 210mm;'>
       <div class='text-center border-b py-4'>
-        <h1 class='font-bold text-xl'>
+        <h1 class='font-bold text-xl' style='color : {{templateSettings.nameColor}}'>
           {{basic.firstName}}
           {{#if basic.lastName}}
             {{basic.lastName}}
           {{/if}}
 
         </h1>
-        <h2 class='font-light text-xl mt-1'>
+        <h2 class='font-light text-xl mt-1' style='color : {{templateSettings.jobTitleColor}}'>
           {{basic.label}}
         </h2>
       </div>
@@ -85,8 +99,8 @@
       <div class='px-8'>
         {{! Education}}
         {{#if education}}
-          <div class='mt-6 grid grid-cols-12 gap-3'>
-            <div class='col-span-3'><h3 class='font-bold text-lg text-primary'>سوابق تحصیلی</h3></div>
+          <div class='block-margin grid grid-cols-12 gap-3'>
+            <div class='col-span-3'><h3 class='font-bold text-lg text-titles'>سوابق تحصیلی</h3></div>
 
             <div class='col-span-9'>
               {{#each education}}
@@ -122,8 +136,8 @@
 
         {{! Skills }}
         {{#if skills}}
-          <div class='mt-6 grid grid-cols-12 gap-3'>
-            <div class='col-span-3'><h3 class='font-bold text-lg text-primary'>مهارت‌ها</h3></div>
+          <div class='block-margin grid grid-cols-12 gap-3'>
+            <div class='col-span-3'><h3 class='font-bold text-lg text-titles'>مهارت‌ها</h3></div>
 
             <div class='col-span-9'>
               {{#each skills}}
@@ -148,8 +162,8 @@
 
         {{! Work Experience }}
         {{#if work}}
-          <div class='mt-6 grid grid-cols-12 gap-3'>
-            <div class='col-span-3'><h3 class='font-bold text-lg text-primary'>سوابق شغلی</h3></div>
+          <div class='block-margin grid grid-cols-12 gap-3'>
+            <div class='col-span-3'><h3 class='font-bold text-lg text-titles'>سوابق شغلی</h3></div>
 
             <div class='col-span-9'>
               {{#each work}}
@@ -185,8 +199,8 @@
 
         {{! Language }}
         {{#if languages}}
-          <div class='mt-6 grid grid-cols-12 gap-3'>
-            <div class='col-span-3'><h3 class='font-bold text-lg text-primary'>زبان‌ها</h3></div>
+          <div class='block-margin grid grid-cols-12 gap-3'>
+            <div class='col-span-3'><h3 class='font-bold text-lg text-titles'>زبان‌ها</h3></div>
 
             <div class='col-span-9'>
               {{#each languages}}
@@ -208,8 +222,8 @@
 
         {{! Projects }}
         {{#if projects}}
-          <div class='mt-6 grid grid-cols-12 gap-3'>
-            <div class='col-span-3'><h3 class='font-bold text-lg text-primary'>پروژه‌ها</h3></div>
+          <div class='block-margin grid grid-cols-12 gap-3'>
+            <div class='col-span-3'><h3 class='font-bold text-lg text-titles'>پروژه‌ها</h3></div>
 
             <div class='col-span-9'>
               {{#each projects}}
@@ -254,8 +268,8 @@
 
         {{! Certificates }}
         {{#if certificates}}
-          <div class='mt-6 grid grid-cols-12 gap-3'>
-            <div class='col-span-3'><h3 class='font-bold text-lg text-primary'>دوره‌ها و گواهینامه‌ها</h3></div>
+          <div class='block-margin grid grid-cols-12 gap-3'>
+            <div class='col-span-3'><h3 class='font-bold text-lg text-titles'>دوره‌ها و گواهینامه‌ها</h3></div>
 
             <div class='col-span-9'>
               {{#each certificates}}
@@ -283,8 +297,8 @@
         {{/if}}
 
         {{#if publications}}
-          <div class='mt-6 grid grid-cols-12 gap-3'>
-            <div class='col-span-3'><h3 class='font-bold text-lg text-primary'>تحقیقات و مقالات</h3></div>
+          <div class='block-margin grid grid-cols-12 gap-3'>
+            <div class='col-span-3'><h3 class='font-bold text-lg text-titles'>تحقیقات و مقالات</h3></div>
 
             <div class='col-span-9'>
               {{#each publications}}
@@ -318,9 +332,9 @@
 
         {{! Awards }}
         {{#if awards}}
-          <div class='mt-6 grid grid-cols-12 gap-3'>
+          <div class='block-margin grid grid-cols-12 gap-3'>
             <div class='col-span-3'>
-              <h3 class='font-bold text-lg text-primary'>
+              <h3 class='font-bold text-lg text-titles'>
                 جوایز و افتخارات
               </h3>
             </div>
@@ -351,8 +365,8 @@
 
         {{! Speeches }}
         {{#if speeches}}
-          <div class='mt-6 grid grid-cols-12 gap-3'>
-            <div class='col-span-3'><h3 class='font-bold text-lg text-primary'>ارائه‌ها و سخنرانی‌ها</h3></div>
+          <div class='block-margin grid grid-cols-12 gap-3'>
+            <div class='col-span-3'><h3 class='font-bold text-lg text-titles'>ارائه‌ها و سخنرانی‌ها</h3></div>
 
             <div class='col-span-9'>
               {{#each speeches}}
@@ -384,8 +398,8 @@
 
         {{! Teaching }}
         {{#if teaching}}
-          <div class='mt-6 grid grid-cols-12 gap-3'>
-            <div class='col-span-3'><h3 class='font-bold text-lg text-primary'>سوابق تدریس</h3></div>
+          <div class='block-margin grid grid-cols-12 gap-3'>
+            <div class='col-span-3'><h3 class='font-bold text-lg text-titles'>سوابق تدریس</h3></div>
 
             <div class='col-span-9'>
               {{#each teaching}}
@@ -419,8 +433,8 @@
 
         {{! Invention }}
         {{#if inventions}}
-          <div class='mt-6 grid grid-cols-12 gap-3'>
-            <div class='col-span-3'><h3 class='font-bold text-lg text-primary'>اختراعات</h3></div>
+          <div class='block-margin grid grid-cols-12 gap-3'>
+            <div class='col-span-3'><h3 class='font-bold text-lg text-titles'>اختراعات</h3></div>
 
             <div class='col-span-9'>
               {{#each inventions}}
@@ -450,8 +464,8 @@
 
         {{! Volunteer }}
         {{#if volunteer}}
-          <div class='mt-6 grid grid-cols-12 gap-3'>
-            <div class='col-span-3'><h3 class='font-bold text-lg text-primary'>فعالیت‌های داوطلبانه</h3></div>
+          <div class='block-margin grid grid-cols-12 gap-3'>
+            <div class='col-span-3'><h3 class='font-bold text-lg text-titles'>فعالیت‌های داوطلبانه</h3></div>
 
             <div class='col-span-9'>
               {{#each volunteer}}
@@ -486,9 +500,9 @@
         {{/if}}
 
         {{#if profiles}}
-          <div class='mt-6 grid grid-cols-12 gap-3'>
+          <div class='block-margin grid grid-cols-12 gap-3'>
             <div class='col-span-3'>
-              <h3 class='font-bold text-lg text-primary'>
+              <h3 class='font-bold text-lg text-titles'>
                 شبکه‌های اجتماعی
               </h3>
             </div>
@@ -505,9 +519,9 @@
 
         {{! References }}
         {{#if references}}
-          <div class='mt-6 grid grid-cols-12 gap-3'>
+          <div class='block-margin grid grid-cols-12 gap-3'>
             <div class='col-span-3'>
-              <h3 class='font-bold text-lg text-primary'>
+              <h3 class='font-bold text-lg text-titles'>
                 معرف‌ها
               </h3>
             </div>
@@ -528,9 +542,9 @@
 
         {{! Interests }}
         {{#if interests}}
-          <div class='mt-6 grid grid-cols-12 gap-3'>
+          <div class='block-margin grid grid-cols-12 gap-3'>
             <div class='col-span-3'>
-              <h3 class='font-bold text-lg text-primary'>
+              <h3 class='font-bold text-lg text-titles'>
                 علایق
               </h3>
             </div>

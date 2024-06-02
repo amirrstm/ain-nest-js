@@ -11,13 +11,12 @@
     <script src='https://cdn.tailwindcss.com'></script>
 
     <style>
-      .text-primary { color: #d6974c; } .text-secondary { color: #60768A; } body { margin: 0; } .progress-bar {
-      background-color: #d1d1d1; border-radius: 0.25rem; position: relative; overflow: hidden; } .progress-bar
-      .progress-tracker { background-color: #60768A; height: 100%; } .triangle { width: 0; height: 0; border-style:
-      solid; border-width: 0 0 130px 600px ; border-color: transparent transparent transparent #d6974c; position:
-      absolute; top: 0; left: 0; z-index: 0; } .triangle-small { width: 0; height: 0; border-style: solid; border-width:
-      0 310px 80px 0; border-color: transparent #60768A transparent transparent; position: absolute; right: 0; top: 0;
-      z-index: 0; }
+      .text-secondary { color: #60768A; } body { margin: 0; } .progress-bar { background-color: #d1d1d1; border-radius:
+      0.25rem; position: relative; overflow: hidden; } .triangle { width: 0; height: 0; border-style: solid;
+      border-width: 0 0 130px 600px ; border-color: transparent transparent transparent #d6974c; position: absolute;
+      top: 0; left: 0; z-index: 0; } .triangle-small { width: 0; height: 0; border-style: solid; border-width: 0 310px
+      80px 0; border-color: transparent #60768A transparent transparent; position: absolute; right: 0; top: 0; z-index:
+      0; }
 
       {{! Breaks }}
       h1, h2, h3, h4, h5, h6, p, ul, ol, .page-break { page-break-inside: avoid; } .page-break-before {
@@ -25,7 +24,24 @@
     </style>
 
   </head>
-  <body dir='rtl' style="font-family: 'YekanBakh';">
+  <body dir='rtl' style='font-family: {{templateSettings.defaultFont}};'>
+    <style>
+      {{! Places Color }}
+      .text-places { color:
+      {{templateSettings.placesColor}}; }
+
+      {{! Titles Color }}
+      .text-titles { color:
+      {{templateSettings.sectionTitleColor}}; }
+
+      {{! Progress }}
+      .progress-bar .progress-tracker { height: 100%; background-color:{{templateSettings.skillBarColor}}; }
+
+      {{! Margin }}
+      .block-margin { padding-top:{{templateSettings.blockMargins}}; }
+
+    </style>
+
     <div class='fixed top-0 right-0 h-screen' style='background-color: #D8EBFD; width: 30%; z-index: -1;'></div>
 
     <div class='relative mx-auto' style='width: 210mm;'>
@@ -139,7 +155,7 @@
 
             {{! Social }}
             {{#if profiles}}
-              <div class='mt-8'>
+              <div class='pt-6'>
                 <h3 class='font-bold text-lg text-secondary'>
                   شبکه‌های اجتماعی
                 </h3>
@@ -156,7 +172,7 @@
 
             {{! References }}
             {{#if references}}
-              <div class='mt-8'>
+              <div class='pt-6'>
                 <h3 class='font-bold text-lg text-secondary'>
                   معرف‌ها
                 </h3>
@@ -177,7 +193,7 @@
 
             {{! Interests }}
             {{#if interests}}
-              <div class='mt-8'>
+              <div class='pt-6'>
                 <h3 class='font-bold text-lg text-secondary'>
                   علایق
                 </h3>
@@ -202,14 +218,14 @@
 
         <div class='col-span-8 pl-8' style='padding-top: 80px;'>
           <div>
-            <h1 class='font-bold text-xl'>
+            <h1 class='font-bold text-xl' style='color : {{templateSettings.nameColor}}'>
               {{basic.firstName}}
               {{#if basic.lastName}}
                 {{basic.lastName}}
               {{/if}}
 
             </h1>
-            <h2 class='font-light text-xl mt-1'>
+            <h2 class='font-light text-xl mt-1' style='color : {{templateSettings.jobTitleColor}}'>
               {{basic.label}}
             </h2>
           </div>
@@ -222,8 +238,8 @@
 
           {{! Education}}
           {{#if education}}
-            <div class='pt-6'>
-              <h3 class='font-bold text-lg text-primary'>سوابق تحصیلی</h3>
+            <div class='block-margin'>
+              <h3 class='font-bold text-lg text-titles'>سوابق تحصیلی</h3>
 
               {{#each education}}
                 <div class='pr-2'>
@@ -247,7 +263,7 @@
                     <p class='text-xs w-3 border-t border-t-gray-200'></p>
 
                     <p class='flex items-center'>
-                      <p class='text-xs text-primary'>{{institution}}</p>،&nbsp;
+                      <p class='text-xs text-places'>{{institution}}</p>،&nbsp;
                       <p class='text-xs text-gray-800'>{{location.country}}،&nbsp;{{location.city}}</p>
                     </p>
                   </div>
@@ -261,8 +277,8 @@
 
           {{! Work Experience }}
           {{#if work}}
-            <div class='pt-6'>
-              <h3 class='font-bold text-lg text-primary'>سوابق شغلی</h3>
+            <div class='block-margin'>
+              <h3 class='font-bold text-lg text-titles'>سوابق شغلی</h3>
 
               {{#each work}}
                 <div class='pr-2 page-break'>
@@ -283,7 +299,7 @@
                     </p>
                     <p class='text-xs w-3 border-t border-t-gray-200'></p>
                     <div class='flex items-center'>
-                      <p class='text-xs text-primary'>{{name}}</p>،&nbsp;
+                      <p class='text-xs text-places'>{{name}}</p>،&nbsp;
                       <p class='text-xs text-gray-800'>{{location.state}}،&nbsp;{{location.city}}</p>
                     </div>
                   </div>
@@ -297,8 +313,8 @@
 
           {{! Projects }}
           {{#if projects}}
-            <div class='pt-6'>
-              <h3 class='font-bold text-lg text-primary' style='break-after: avoid;'>پروژه‌ها</h3>
+            <div class='block-margin'>
+              <h3 class='font-bold text-lg text-titles' style='break-after: avoid;'>پروژه‌ها</h3>
 
               {{#each projects}}
                 <div class='pr-2 page-break'>
@@ -306,14 +322,14 @@
                     <h4 class='font-bold text-sm'>{{name}}</h4>
                     <p class='text-xs w-3 border-t border-t-gray-200'></p>
 
-                    <p class='text-xs text-primary'>{{organization}}</p>
+                    <p class='text-xs text-places'>{{organization}}</p>
 
                   </div>
 
                   {{#if url}}
                     <div class='flex text-xs gap-1 my-1'>
                       <p class='text-gray-500'>آدرس پروژه:</p>
-                      <a href={{url}} class='text-xs text-primary'>{{url}}</a></div>
+                      <a href={{url}} class='text-xs text-places'>{{url}}</a></div>
                   {{/if}}
 
                   <p class='text-xs text-gray-600'>
@@ -341,8 +357,8 @@
 
           {{! Certificates }}
           {{#if certificates}}
-            <div class='pt-6'>
-              <h3 class='font-bold text-lg text-primary'>دوره‌ها و گواهینامه‌ها</h3>
+            <div class='block-margin'>
+              <h3 class='font-bold text-lg text-titles'>دوره‌ها و گواهینامه‌ها</h3>
 
               {{#each certificates}}
                 <div class='pr-2'>
@@ -357,7 +373,7 @@
                   {{#if url}}
                     <div class='flex text-xs gap-1 my-1'>
                       <p class='text-gray-500'>لینک:</p>
-                      <a href={{url}} class='text-xs text-primary'>{{url}}</a></div>
+                      <a href={{url}} class='text-xs text-places'>{{url}}</a></div>
                   {{/if}}
                   <p class='text-xs text-gray-500 mt-1'>
                     <span dir='ltr'>{{date}}</span>
@@ -369,15 +385,15 @@
 
           {{! Publications }}
           {{#if publications}}
-            <div class='pt-6'>
-              <h3 class='font-bold text-lg text-primary'>تحقیقات و مقالات</h3>
+            <div class='block-margin'>
+              <h3 class='font-bold text-lg text-titles'>تحقیقات و مقالات</h3>
 
               {{#each publications}}
                 <div class='pr-2 page-break'>
                   <div class='pt-3 flex items-center gap-1'>
                     <h4 class='font-bold text-sm'>{{name}}</h4>
                     <p class='text-xs w-3 border-t border-t-gray-200'></p>
-                    <p class='text-xs text-primary'>{{publisher}}</p>
+                    <p class='text-xs text-places'>{{publisher}}</p>
                   </div>
 
                   {{#if summary}}
@@ -389,7 +405,7 @@
                   {{#if url}}
                     <div class='flex text-xs gap-1 my-1'>
                       <p class='text-gray-500'>لینک:</p>
-                      <a href={{url}} class='text-xs text-primary'>{{url}}</a></div>
+                      <a href={{url}} class='text-xs text-places'>{{url}}</a></div>
                   {{/if}}
 
                   <p class='text-xs text-gray-500 mt-1'>
@@ -402,8 +418,8 @@
 
           {{! Awards }}
           {{#if awards}}
-            <div class='pt-6'>
-              <h3 class='font-bold text-lg text-primary'>
+            <div class='block-margin'>
+              <h3 class='font-bold text-lg text-titles'>
                 جوایز و افتخارات
               </h3>
 
@@ -412,7 +428,7 @@
                   <div class='pt-3 flex items-center gap-1'>
                     <h4 class='font-bold text-sm'>{{title}}</h4>
                     <p class='text-xs w-3 border-t border-t-gray-200'></p>
-                    <p class='text-xs text-primary'>{{awarder}}</p>
+                    <p class='text-xs text-places'>{{awarder}}</p>
                   </div>
 
                   {{#if summary}}
@@ -431,8 +447,8 @@
 
           {{! Speeches }}
           {{#if speeches}}
-            <div class='pt-6'>
-              <h3 class='font-bold text-lg text-primary'>ارائه‌ها و سخنرانی‌ها</h3>
+            <div class='block-margin'>
+              <h3 class='font-bold text-lg text-titles'>ارائه‌ها و سخنرانی‌ها</h3>
 
               {{#each speeches}}
                 <div class='pr-2 page-break'>
@@ -449,7 +465,7 @@
                   {{#if url}}
                     <div class='flex text-xs gap-1 my-1'>
                       <p class='text-gray-500'>لینک:</p>
-                      <a href={{url}} class='text-xs text-primary'>{{url}}</a></div>
+                      <a href={{url}} class='text-xs text-places'>{{url}}</a></div>
                   {{/if}}
 
                   <p class='text-xs text-gray-500 mt-1'>
@@ -462,15 +478,15 @@
 
           {{! Teaching }}
           {{#if teaching}}
-            <div class='pt-6'>
-              <h3 class='font-bold text-lg text-primary'>سوابق تدریس</h3>
+            <div class='block-margin'>
+              <h3 class='font-bold text-lg text-titles'>سوابق تدریس</h3>
 
               {{#each teaching}}
                 <div class='pr-2 page-break'>
                   <div class='pt-3 flex items-center gap-1'>
                     <h4 class='font-bold text-sm'>{{title}}</h4>
                     <p class='text-xs w-3 border-t border-t-gray-200'></p>
-                    <p class='text-xs text-primary'>{{institution}}</p>
+                    <p class='text-xs text-places'>{{institution}}</p>
                   </div>
 
                   {{#if location}}
@@ -495,8 +511,8 @@
 
           {{! Invention }}
           {{#if inventions}}
-            <div class='pt-6'>
-              <h3 class='font-bold text-lg text-primary'>اختراعات</h3>
+            <div class='block-margin'>
+              <h3 class='font-bold text-lg text-titles'>اختراعات</h3>
 
               {{#each inventions}}
                 <div class='pr-2 page-break'>
@@ -511,7 +527,7 @@
                   {{#if url}}
                     <div class='flex text-xs gap-1 my-1'>
                       <p class='text-gray-500'>لینک:</p>
-                      <a href={{url}} class='text-xs text-primary'>{{url}}</a></div>
+                      <a href={{url}} class='text-xs text-places'>{{url}}</a></div>
                   {{/if}}
 
                   <p class='text-xs text-gray-500 mt-1'>
@@ -524,15 +540,15 @@
 
           {{! Volunteer }}
           {{#if volunteer}}
-            <div class='pt-6'>
-              <h3 class='font-bold text-lg text-primary'>فعالیت‌های داوطلبانه</h3>
+            <div class='block-margin'>
+              <h3 class='font-bold text-lg text-titles'>فعالیت‌های داوطلبانه</h3>
 
               {{#each volunteer}}
                 <div class='pr-2 page-break'>
                   <div class='pt-3 flex items-center gap-1'>
                     <h4 class='font-bold text-sm'>{{position}}</h4>
                     <p class='text-xs w-3 border-t border-t-gray-200'></p>
-                    <p class='text-xs text-primary'>{{organization}}</p>
+                    <p class='text-xs text-places'>{{organization}}</p>
                   </div>
                   <p class='text-xs text-gray-600 mt-1'>
                     {{summary}}
