@@ -1,9 +1,13 @@
+import { join } from 'path'
+import { writeFileSync } from 'fs'
 import * as puppeteer from 'puppeteer'
 import { PDF_FONT_FAMILY } from '../constants/pdf.enum.constant'
-import { writeFileSync } from 'fs'
-import { join } from 'path'
 
-export const createPdf = async (htmlContent: any, options?: puppeteer.PDFOptions): Promise<Buffer> => {
+export const createPdf = async (
+  htmlContent: any,
+  hasOutput?: boolean,
+  options?: puppeteer.PDFOptions
+): Promise<Buffer> => {
   const browser = await puppeteer.launch({
     headless: true,
     defaultViewport: { width: 1920, height: 1080 },
@@ -21,10 +25,12 @@ export const createPdf = async (htmlContent: any, options?: puppeteer.PDFOptions
 
   await page.setContent(htmlContent)
   const pdfOptions: puppeteer.PDFOptions = { format: 'A4', ...options }
-
   const pdfBuffer = await page.pdf(pdfOptions)
 
-  writeFileSync(join(process.cwd(), 'public', `pdf/output.pdf`), pdfBuffer)
+  if (hasOutput) {
+    writeFileSync(join(process.cwd(), 'public', `pdf/output.pdf`), pdfBuffer)
+  }
+
   await browser.close()
 
   return pdfBuffer

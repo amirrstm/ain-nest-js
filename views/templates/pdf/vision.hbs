@@ -109,12 +109,12 @@
             {{! Skills }}
             {{#if skills}}
               <div class='pt-6'>
-                <h3 class='font-bold text-lg text-secondary'>مهارت‌ها</h3>
+                <h3 class='font-bold text-secondary'>مهارت‌ها</h3>
 
                 {{#each skills}}
                   <div class='pt-3 pr-2'>
-                    <h4 class='font-bold text-sm'>{{name}}</h4>
-                    <p class='text-xs text-gray-500 mt-1'>
+                    <h4 class='font-bold text-xs'>{{name}}</h4>
+                    <p class='text-gray-500 mt-1' style='font-size: 10px;'>
                       {{description}}
                     </p>
 
@@ -134,7 +134,7 @@
             {{! Language }}
             {{#if languages}}
               <div class='pt-6'>
-                <h3 class='font-bold text-lg text-secondary'>زبان‌ها</h3>
+                <h3 class='font-bold text-secondary'>زبان‌ها</h3>
 
                 {{#each languages}}
                   <div class='pt-3 pr-2'>
@@ -156,7 +156,7 @@
             {{! Social }}
             {{#if profiles}}
               <div class='pt-6'>
-                <h3 class='font-bold text-lg text-secondary'>
+                <h3 class='font-bold text-secondary'>
                   شبکه‌های اجتماعی
                 </h3>
                 <div class='space-y-2 pt-3 pr-2'>
@@ -173,7 +173,7 @@
             {{! References }}
             {{#if references}}
               <div class='pt-6'>
-                <h3 class='font-bold text-lg text-secondary'>
+                <h3 class='font-bold text-secondary'>
                   معرف‌ها
                 </h3>
                 <div class='space-y-2 pt-3 pr-2'>
@@ -194,7 +194,7 @@
             {{! Interests }}
             {{#if interests}}
               <div class='pt-6'>
-                <h3 class='font-bold text-lg text-secondary'>
+                <h3 class='font-bold text-secondary'>
                   علایق
                 </h3>
                 <div class='space-y-2 pt-3 pr-2'>
@@ -239,16 +239,16 @@
           {{! Education}}
           {{#if education}}
             <div class='block-margin'>
-              <h3 class='font-bold text-lg text-titles'>سوابق تحصیلی</h3>
+              <h3 class='font-bold text-titles'>سوابق تحصیلی</h3>
 
               {{#each education}}
                 <div class='pr-2'>
                   <div class='pt-3 flex items-center gap-1'>
-                    <h4 class='font-bold text-sm'>{{studyType}}&nbsp;{{area}}</h4>
+                    <h4 class='font-bold text-xs'>{{studyType}}&nbsp;{{area}}</h4>
                   </div>
 
                   <div class='flex items-center gap-1'>
-                    <p class='text-xs text-gray-500 mt-1'>
+                    <p class='text-gray-500 mt-1' style='font-size: 10px;'>
                       <span>از</span>
                       <span dir='ltr'>{{startDate}}</span>
 
@@ -262,9 +262,19 @@
                     </p>
                     <p class='text-xs w-3 border-t border-t-gray-200'></p>
 
-                    <p class='flex items-center'>
-                      <p class='text-xs text-places'>{{institution}}</p>،&nbsp;
-                      <p class='text-xs text-gray-800'>{{location.country}}،&nbsp;{{location.city}}</p>
+                    <p class='flex items-center' style='font-size: 10px;'>
+                      {{#if institution}}
+                        <p class='text-places' style='font-size: 10px;'>{{institution}}</p>
+                      {{/if}}
+
+                      {{#if location.country}}
+                        <span class='text-places' style='font-size: 10px;'>،&nbsp;{{location.country}}</span>
+                      {{/if}}
+
+                      {{#if location.city}}
+                        <span class='text-gray-800' style='font-size: 10px;'>،&nbsp;{{location.city}}</span>
+                      {{/if}}
+
                     </p>
                   </div>
                   <ul class='text-xs text-gray-800 list-disc mt-2 mx-6'>
@@ -278,7 +288,7 @@
           {{! Work Experience }}
           {{#if work}}
             <div class='block-margin'>
-              <h3 class='font-bold text-lg text-titles'>سوابق شغلی</h3>
+              <h3 class='font-bold text-titles'>سوابق شغلی</h3>
 
               {{#each work}}
                 <div class='pr-2 page-break'>
@@ -286,7 +296,7 @@
                     <h4 class='font-bold text-sm'>{{position}}</h4>
                   </div>
                   <div class='flex items-center gap-1'>
-                    <p class='text-xs text-gray-500 mt-1'>
+                    <p class='text-gray-500 mt-1' style='font-size: 10px;'>
                       <span>از</span>
                       <span dir='ltr'>{{startDate}}</span>
 
@@ -297,14 +307,22 @@
                         <span dir='ltr'>{{endDate}}</span>
                       {{/if}}
                     </p>
-                    <p class='text-xs w-3 border-t border-t-gray-200'></p>
+                    <p class='w-3 border-t border-t-gray-200'></p>
                     <div class='flex items-center'>
-                      <p class='text-xs text-places'>{{name}}</p>،&nbsp;
-                      <p class='text-xs text-gray-800'>{{location.state}}،&nbsp;{{location.city}}</p>
+                      <p class='text-places' style='font-size: 10px;'>{{name}}</p>
+                      <p class='text-gray-800' style='font-size: 10px;'>
+                        {{#if location.country}}
+                          <span>،&nbsp;{{location.country}}</span>
+                        {{/if}}
+
+                        {{#if location.city}}
+                          <span>،&nbsp;{{location.city}}</span>
+                        {{/if}}
+                      </p>
                     </div>
                   </div>
                   <ul class='text-gray-800 list-disc mt-2 mx-6'>
-                    {{#each highlights}}<li style='font-size: 12px;'>{{this}}</li>{{/each}}
+                    {{#each highlights}}<li style='font-size: 10px;'>{{this}}</li>{{/each}}
                   </ul>
                 </div>
               {{/each}}
@@ -314,28 +332,32 @@
           {{! Projects }}
           {{#if projects}}
             <div class='block-margin'>
-              <h3 class='font-bold text-lg text-titles' style='break-after: avoid;'>پروژه‌ها</h3>
+              <h3 class='font-bold text-titles' style='break-after: avoid;'>پروژه‌ها</h3>
 
               {{#each projects}}
                 <div class='pr-2 page-break'>
                   <div class='pt-3 flex items-center gap-1'>
-                    <h4 class='font-bold text-sm'>{{name}}</h4>
+                    <h4 class='font-bold text-xs'>{{name}}</h4>
                     <p class='text-xs w-3 border-t border-t-gray-200'></p>
 
-                    <p class='text-xs text-places'>{{organization}}</p>
+                    <p class='text-places' style='font-size: 10px;'>{{organization}}</p>
 
                   </div>
 
                   {{#if url}}
-                    <div class='flex text-xs gap-1 my-1'>
+                    <div class='flex gap-1 my-1' style='font-size: 10px;'>
                       <p class='text-gray-500'>آدرس پروژه:</p>
-                      <a href={{url}} class='text-xs text-places'>{{url}}</a></div>
+                      <a href={{url}} class='text-places'>{{url}}</a>
+                    </div>
                   {{/if}}
 
-                  <p class='text-xs text-gray-600'>
-                    {{description}}
-                  </p>
-                  <p class='text-xs text-gray-500 mt-1'>
+                  {{#if description}}
+                    <p class='text-gray-600 pt-1' style='font-size: 10px;'>
+                      {{description}}
+                    </p>
+                  {{/if}}
+
+                  <p class='text-gray-500 mt-1' style='font-size: 10px;'>
                     <span>از</span>
                     <span dir='ltr'>{{startDate}}</span>
 
@@ -347,7 +369,7 @@
                     {{/if}}
 
                   </p>
-                  <ul class='text-xs text-gray-800 list-disc mt-2 mx-6'>
+                  <ul class='text-gray-800 list-disc mt-2 mx-6' style='font-size: 10px;'>
                     {{#each highlights}}<li>{{this}}</li>{{/each}}
                   </ul>
                 </div>
@@ -358,14 +380,14 @@
           {{! Certificates }}
           {{#if certificates}}
             <div class='block-margin'>
-              <h3 class='font-bold text-lg text-titles'>دوره‌ها و گواهینامه‌ها</h3>
+              <h3 class='font-bold text-titles' style='break-after: avoid;'>دوره‌ها و گواهینامه‌ها</h3>
 
               {{#each certificates}}
                 <div class='pr-2'>
                   <div class='pt-3 flex items-center gap-1'>
-                    <h4 class='font-bold text-sm'>{{name}}</h4>
+                    <h4 class='font-bold text-xs'>{{name}}</h4>
                   </div>
-                  <p class='text-xs text-gray-600 mt-1'>
+                  <p class='text-gray-600 mt-1' style='font-size: 10px;'>
                     <span>موسسه: </span>
                     <span>{{issuer}}</span>
                   </p>
@@ -375,7 +397,7 @@
                       <p class='text-gray-500'>لینک:</p>
                       <a href={{url}} class='text-xs text-places'>{{url}}</a></div>
                   {{/if}}
-                  <p class='text-xs text-gray-500 mt-1'>
+                  <p class='text-gray-500 mt-1' style='font-size: 10px;'>
                     <span dir='ltr'>{{date}}</span>
                   </p>
                 </div>
@@ -386,18 +408,18 @@
           {{! Publications }}
           {{#if publications}}
             <div class='block-margin'>
-              <h3 class='font-bold text-lg text-titles'>تحقیقات و مقالات</h3>
+              <h3 class='font-bold text-titles' style='break-after: avoid;'>تحقیقات و مقالات</h3>
 
               {{#each publications}}
                 <div class='pr-2 page-break'>
                   <div class='pt-3 flex items-center gap-1'>
-                    <h4 class='font-bold text-sm'>{{name}}</h4>
+                    <h4 class='font-bold text-xs'>{{name}}</h4>
                     <p class='text-xs w-3 border-t border-t-gray-200'></p>
                     <p class='text-xs text-places'>{{publisher}}</p>
                   </div>
 
                   {{#if summary}}
-                    <p class='text-xs text-gray-600 mt-1'>
+                    <p class='text-gray-600 mt-1' style='font-size: 10px;'>
                       <span>{{summary}}</span>
                     </p>
                   {{/if}}
@@ -408,7 +430,7 @@
                       <a href={{url}} class='text-xs text-places'>{{url}}</a></div>
                   {{/if}}
 
-                  <p class='text-xs text-gray-500 mt-1'>
+                  <p class='text-gray-500 mt-1' style='font-size: 10px;'>
                     <span dir='ltr'>{{releaseDate}}</span>
                   </p>
                 </div>
@@ -419,25 +441,25 @@
           {{! Awards }}
           {{#if awards}}
             <div class='block-margin'>
-              <h3 class='font-bold text-lg text-titles'>
+              <h3 class='font-bold text-titles' style='break-after: avoid;'>
                 جوایز و افتخارات
               </h3>
 
               {{#each awards}}
                 <div class='pr-2 page-break'>
                   <div class='pt-3 flex items-center gap-1'>
-                    <h4 class='font-bold text-sm'>{{title}}</h4>
+                    <h4 class='font-bold text-xs'>{{title}}</h4>
                     <p class='text-xs w-3 border-t border-t-gray-200'></p>
                     <p class='text-xs text-places'>{{awarder}}</p>
                   </div>
 
                   {{#if summary}}
-                    <p class='text-xs text-gray-600 mt-1'>
+                    <p class='text-gray-600 mt-1' style='font-size: 10px;'>
                       <span>{{summary}}</span>
                     </p>
                   {{/if}}
 
-                  <p class='text-xs text-gray-500 mt-1'>
+                  <p class='text-gray-500 mt-1' style='font-size: 10px;'>
                     <span dir='ltr'>{{date}}</span>
                   </p>
                 </div>
@@ -448,27 +470,28 @@
           {{! Speeches }}
           {{#if speeches}}
             <div class='block-margin'>
-              <h3 class='font-bold text-lg text-titles'>ارائه‌ها و سخنرانی‌ها</h3>
+              <h3 class='font-bold text-titles' style='break-after: avoid;'>ارائه‌ها و سخنرانی‌ها</h3>
 
               {{#each speeches}}
                 <div class='pr-2 page-break'>
                   <div class='pt-3 flex items-center gap-1'>
-                    <h4 class='font-bold text-sm'>{{name}}</h4>
+                    <h4 class='font-bold text-xs'>{{name}}</h4>
                   </div>
 
                   {{#if summary}}
-                    <p class='text-xs text-gray-600 mt-1'>
+                    <p class='text-gray-600 mt-1' style='font-size: 10px;'>
                       <span>{{summary}}</span>
                     </p>
                   {{/if}}
 
                   {{#if url}}
-                    <div class='flex text-xs gap-1 my-1'>
+                    <div class='flex gap-1 my-1' style='font-size: 10px;'>
                       <p class='text-gray-500'>لینک:</p>
-                      <a href={{url}} class='text-xs text-places'>{{url}}</a></div>
+                      <a href={{url}} class='text-places'>{{url}}</a>
+                    </div>
                   {{/if}}
 
-                  <p class='text-xs text-gray-500 mt-1'>
+                  <p class='text-gray-500 mt-1' style='font-size: 10px;'>
                     <span dir='ltr'>{{date}}</span>
                   </p>
                 </div>
@@ -479,29 +502,36 @@
           {{! Teaching }}
           {{#if teaching}}
             <div class='block-margin'>
-              <h3 class='font-bold text-lg text-titles'>سوابق تدریس</h3>
+              <h3 class='font-bold text-titles' style='break-after: avoid;'>سوابق تدریس</h3>
 
               {{#each teaching}}
                 <div class='pr-2 page-break'>
                   <div class='pt-3 flex items-center gap-1'>
-                    <h4 class='font-bold text-sm'>{{title}}</h4>
+                    <h4 class='font-bold text-xs'>{{title}}</h4>
                     <p class='text-xs w-3 border-t border-t-gray-200'></p>
                     <p class='text-xs text-places'>{{institution}}</p>
                   </div>
 
                   {{#if location}}
-                    <p class='text-xs text-gray-800 mt-1'>
-                      <span>{{location.country}}، {{location.city}}، {{location.state}}</span>
+                    <p class='text-gray-800 mt-1' style='font-size: 10px;'>
+                      {{#if location.country}}
+                        <span>{{location.country}}</span>
+                      {{/if}}
+
+                      {{#if location.city}}
+                        <span>،&nbsp;{{location.city}}</span>
+                      {{/if}}
+
                     </p>
                   {{/if}}
 
                   {{#if summary}}
-                    <p class='text-xs text-gray-600 mt-1'>
+                    <p class='text-gray-600 mt-1' style='font-size: 10px;'>
                       <span>{{summary}}</span>
                     </p>
                   {{/if}}
 
-                  <p class='text-xs text-gray-500 mt-1'>
+                  <p class='text-gray-500 mt-1' style='font-size: 10px;'>
                     <span dir='ltr'>{{date}}</span>
                   </p>
                 </div>
@@ -512,25 +542,26 @@
           {{! Invention }}
           {{#if inventions}}
             <div class='block-margin'>
-              <h3 class='font-bold text-lg text-titles'>اختراعات</h3>
+              <h3 class='font-bold text-titles' style='break-after: avoid;'>اختراعات</h3>
 
               {{#each inventions}}
                 <div class='pr-2 page-break'>
                   <div class='pt-3 flex items-center gap-1'>
-                    <h4 class='font-bold text-sm'>{{name}}</h4>
+                    <h4 class='font-bold text-xs'>{{name}}</h4>
                   </div>
 
-                  <p class='text-xs text-gray-600 mt-1'>
+                  <p class='text-gray-600 mt-1' style='font-size: 10px;'>
                     <span>{{summary}}</span>
                   </p>
 
                   {{#if url}}
-                    <div class='flex text-xs gap-1 my-1'>
+                    <div class='flex gap-1 my-1' style='font-size: 10px;'>
                       <p class='text-gray-500'>لینک:</p>
-                      <a href={{url}} class='text-xs text-places'>{{url}}</a></div>
+                      <a href={{url}} class='text-places'>{{url}}</a>
+                    </div>
                   {{/if}}
 
-                  <p class='text-xs text-gray-500 mt-1'>
+                  <p class='text-gray-500 mt-1' style='font-size: 10px;'>
                     <span dir='ltr'>{{date}}</span>
                   </p>
                 </div>
@@ -541,19 +572,19 @@
           {{! Volunteer }}
           {{#if volunteer}}
             <div class='block-margin'>
-              <h3 class='font-bold text-lg text-titles'>فعالیت‌های داوطلبانه</h3>
+              <h3 class='font-bold text-titles' style='break-after: avoid;'>فعالیت‌های داوطلبانه</h3>
 
               {{#each volunteer}}
                 <div class='pr-2 page-break'>
                   <div class='pt-3 flex items-center gap-1'>
-                    <h4 class='font-bold text-sm'>{{position}}</h4>
-                    <p class='text-xs w-3 border-t border-t-gray-200'></p>
-                    <p class='text-xs text-places'>{{organization}}</p>
+                    <h4 class='font-bold text-xs'>{{position}}</h4>
+                    <p class='w-3 border-t border-t-gray-200'></p>
+                    <p class='text-places' style='font-size: 10px;'>{{organization}}</p>
                   </div>
-                  <p class='text-xs text-gray-600 mt-1'>
+                  <p class='text-gray-600 mt-1' style='font-size: 10px;'>
                     {{summary}}
                   </p>
-                  <p class='text-xs text-gray-500 mt-1'>
+                  <p class='text-gray-500 mt-1' style='font-size: 10px;'>
                     <span>از</span>
                     <span dir='ltr'>{{startDate}}</span>
 
@@ -565,7 +596,7 @@
                     {{/if}}
                   </p>
 
-                  <ul class='text-xs text-gray-800 list-disc mt-2 mx-6'>
+                  <ul class='text-gray-800 list-disc mt-2 mx-6' style='font-size: 10px;'>
                     {{#each highlights}}<li>{{this}}</li>{{/each}}
                   </ul>
                 </div>

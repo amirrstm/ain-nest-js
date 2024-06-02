@@ -74,14 +74,14 @@
               {{#each education}}
                 <div class='pr-2'>
                   <div class='pt-3 flex items-center gap-1'>
-                    <h4 class='font-bold text-sm'>{{studyType}}&nbsp;{{area}}</h4>
-                    <p class='text-xs w-3 border-t border-t-gray-200'></p>
-                    <div class='flex items-center'>
-                      <p class='text-xs text-places'>{{institution}}</p>،&nbsp;
-                      <p class='text-xs text-gray-800'>{{location.country}}،&nbsp;{{location.city}}</p>
+                    <h4 class='font-bold' style='font-size: 10px;'>{{studyType}}&nbsp;{{area}}</h4>
+                    <p class='w-3 border-t border-t-gray-200'></p>
+                    <div class='flex items-center' style='font-size: 10px;'>
+                      <p class='text-places'>{{institution}}</p>،&nbsp;
+                      <p class='text-gray-800'>{{location.country}}،&nbsp;{{location.city}}</p>
                     </div>
                   </div>
-                  <p class='text-xs text-gray-500 mt-1'>
+                  <p class='text-gray-500 mt-1' style='font-size: 10px;'>
                     <span>از</span>
                     <span dir='ltr'>{{startDate}}</span>
 
@@ -93,7 +93,7 @@
                     {{/if}}
 
                   </p>
-                  <ul class='text-xs text-gray-800 list-disc mt-2 mx-6'>
+                  <ul class='text-gray-800 list-disc mt-2 mx-6' style='font-size: 10px;'>
                     {{#each highlights}}<li>{{this}}</li>{{/each}}
                   </ul>
                 </div>
@@ -114,7 +114,6 @@
                     <div class='flex items-center'>
                       <p class='text-places' style='font-size: 10px;'>{{name}}</p>
                       <p class='text-gray-800' style='font-size: 10px;'>
-
                         {{#if location.country}}
                           <span>،&nbsp;{{location.country}}</span>
                         {{/if}}
@@ -462,7 +461,7 @@
 
               {{#each skills}}
                 <div class='pt-3 pr-2'>
-                  <h4 class='font-bold text-sm'>{{name}}</h4>
+                  <h4 class='font-bold text-xs'>{{name}}</h4>
                   <p class='text-xs text-gray-500 mt-1'>
                     {{description}}
                   </p>

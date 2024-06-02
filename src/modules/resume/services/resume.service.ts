@@ -81,6 +81,8 @@ export class ResumeService implements IResumeService {
     create.skills = data.skills
     create.template = data.template
     create.education = data.education
+    create.languages = data.languages
+    create.templateSettings = data.templateSettings
 
     return this.resumeRepository.create<ResumeEntity>(create, options)
   }

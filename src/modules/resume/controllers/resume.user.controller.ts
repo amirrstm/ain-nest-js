@@ -84,6 +84,7 @@ import { OpenAIService } from 'src/common/open-ai/services/open-ai.service'
 import { ENUM_AI_ROLE } from 'src/common/open-ai/constants/open-ai.enum.constant'
 import {
   RESUME_BIO_GENERATE_PROMPT,
+  RESUME_GENERATE_OCCUPATION_PROMPT,
   RESUME_GENERATE_PROMPT,
   RESUME_VOICE_BIO_PROMPT,
 } from '../constants/resume.ai.constant'
@@ -242,19 +243,21 @@ export class ResumeUserController {
       })
     }
 
+    if (resume.file) {
+      await this.awsS3Service.deleteFolder(resume.file.path)
+    }
+
     const resumeData = this.resumeService.toPersianDate(resume)
     const pdfFile = await this.pdfService.generatePdf(templateEntity.path, resumeData)
 
-    // const pathPrefix: string = await this.resumeService.getFileUploadPath(resume._id)
-    // const randomFilename: IAwsS3RandomFilename = await this.awsS3Service.createRandomFilename(pathPrefix)
+    const pathPrefix: string = await this.resumeService.getFileUploadPath(resume._id)
+    const randomFilename: IAwsS3RandomFilename = await this.awsS3Service.createRandomFilename(pathPrefix)
 
-    // const file = { buffer: pdfFile, size: pdfFile.byteLength, originalname: 'output.pdf' }
-    // const aws = await this.awsS3Service.putItemInBucket(file, randomFilename)
-    // const updated = await this.resumeService.updateFile(resume as unknown as ResumeDoc, aws)
+    const file = { buffer: pdfFile, size: pdfFile.byteLength, originalname: 'output.pdf' }
+    const aws = await this.awsS3Service.putItemInBucket(file, randomFilename)
+    const updated = await this.resumeService.updateFile(resume as unknown as ResumeDoc, aws)
 
-    // return { data: { _id: updated._id, url: aws.completedUrl } }
-
-    return { data: { url: 'Updated' } }
+    return { data: { _id: updated._id, url: aws.completedUrl } }
   }
 
   @Response('resume.update')
@@ -283,6 +286,10 @@ export class ResumeUserController {
     )
     file: IFile
   ): Promise<IResponse> {
+    if (resume.image) {
+      await this.awsS3Service.deleteFolder(resume.image.path)
+    }
+
     const pathPrefix: string = await this.resumeService.getImageUploadPath(resume._id)
     const randomFilename: IAwsS3RandomFilename = await this.awsS3Service.createRandomFilename(pathPrefix)
 
@@ -618,6 +625,7 @@ export class ResumeUserController {
   @Post('/voice')
   async createResumeFromVoice(
     @GetUser() user: UserDoc,
+    @Body() body: { template: string },
     @UploadedFile(
       new FileRequiredPipe(),
       new FileTypePipe([ENUM_FILE_MIME.WAV, ENUM_FILE_MIME.MP3, ENUM_FILE_MIME.WEBM])
@@ -625,6 +633,7 @@ export class ResumeUserController {
     file: IFile
   ): Promise<IResponse> {
     const systemPrompt = RESUME_GENERATE_PROMPT
+    const templateEntity = await this.templateService.findOneById(body.template)
 
     const voiceContent = await this.aiService.transcribeAudio(file.buffer)
     const bio = await this.aiService.getMessageFromGpt4([
@@ -640,9 +649,12 @@ export class ResumeUserController {
     const aiData = JSON.parse(bio.choices[0].message.content)
     const create = await this.resumeService.createWithData({
       user: user._id,
+      template: body.template,
+      title: 'ساخته شده توسط صدا',
+      templateSettings: templateEntity.defaultSettings,
+
       education: aiData.educations,
       work: aiData.work_experiences,
-      title: 'ساخته شده توسط صدا',
       basic: {
         email: user.email,
         lastName: user.lastName,
@@ -651,6 +663,58 @@ export class ResumeUserController {
         summary: aiData.about_me,
       },
       skills: (aiData.skills || []).map((skill: string) => ({ name: skill, hasLevel: true, level: 5 })),
+      languages: (aiData.languages || []).map((language: string) => ({ name: language, hasLevel: true, level: 5 })),
+    })
+
+    return { data: create._id }
+  }
+
+  @Response('resume.update')
+  @UserProtected()
+  @AuthJwtUserAccessProtected()
+  @FileUploadSingle()
+  @Post('/occupation')
+  async createResumeFromOccupation(
+    @GetUser() user: UserDoc,
+    @Body() body: { occupation: string; description?: string; template: string }
+  ): Promise<IResponse> {
+    const systemPrompt = sprintf(RESUME_GENERATE_OCCUPATION_PROMPT, { role: body.occupation })
+    const templateEntity = await this.templateService.findOneById(body.template)
+
+    const bio = await this.aiService.getMessageFromGpt4([
+      {
+        role: ENUM_AI_ROLE.SYSTEM,
+        content: systemPrompt,
+      },
+
+      ...(body.description
+        ? [
+            {
+              role: ENUM_AI_ROLE.USER,
+              content: body.description,
+            },
+          ]
+        : []),
+    ])
+    const aiData = JSON.parse(bio.choices[0].message.content)
+
+    const create = await this.resumeService.createWithData({
+      user: user._id,
+      template: body.template,
+      title: 'ساخته شده توسط آی‌نویس',
+      templateSettings: templateEntity.defaultSettings,
+
+      education: aiData.educations,
+      work: aiData.work_experiences,
+      basic: {
+        email: user.email,
+        lastName: user.lastName,
+        firstName: user.firstName,
+        label: aiData.job_title,
+        summary: aiData.about_me,
+      },
+      skills: (aiData.skills || []).map((skill: string) => ({ name: skill, hasLevel: true, level: 5 })),
+      languages: (aiData.languages || []).map((language: string) => ({ name: language, hasLevel: true, level: 5 })),
     })
 
     return { data: create._id }

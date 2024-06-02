@@ -20,6 +20,6 @@ export class PdfService implements IPdfService {
     const compiledTemplate = handlebars.compile(templateHtml)
     const htmlContent = compiledTemplate(data)
 
-    return await createPdf(htmlContent, { printBackground: true })
+    return await createPdf(htmlContent, false, { printBackground: true })
   }
 }

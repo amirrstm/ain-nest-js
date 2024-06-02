@@ -57,7 +57,7 @@ export class OpenAIService implements IOpenAIService {
         role: message.role,
         content: message.content,
       })),
-      temperature: 0.5,
+      temperature: 0.7,
       max_tokens: 3000,
       response_format: { type: 'json_object' },
       ...options,
