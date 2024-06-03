@@ -21,6 +21,7 @@ import { UserPlanModule } from 'src/modules/user-plan/user-plan.module'
 import { HealthPublicController } from 'src/health/controllers/health.public.controller'
 import { UserPublicController } from 'src/modules/user/controllers/user.public.controller'
 import { PlanPublicController } from 'src/modules/plan/controllers/plan.public.controller'
+import { TonePublicController } from 'src/modules/data/controllers/tone.public.controller'
 import { SkillPublicController } from 'src/modules/data/controllers/skill.public.controller'
 import { CompanyPublicController } from 'src/modules/data/controllers/company.public.controller'
 import { ResumePublicController } from 'src/modules/resume/controllers/resume.public.controller'
@@ -34,6 +35,7 @@ import { StudyFieldPublicController } from 'src/modules/data/controllers/study-f
 
 @Module({
   controllers: [
+    TonePublicController,
     HealthPublicController,
     SettingPublicController,
     UserPublicController,

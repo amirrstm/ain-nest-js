@@ -52,15 +52,15 @@
   },
 
   "company": {
-    "list": "List Study Field Success.",
-    "get": "Get Study Field Success.",
+    "list": "List Companies Success.",
+    "get": "Get Companies Success.",
     "create": "Create Succeed",
     "update": "Update Succeed",
     "delete": "Delete Succeed",
 
     "error": {
-      "exist": "Study Field exist",
-      "notFound": "Study Field not found"
+      "exist": "Companies exist",
+      "notFound": "Companies not found"
     }
   },
 
@@ -74,6 +74,19 @@
     "error": {
       "exist": "Study Field exist",
       "notFound": "Study Field not found"
+    }
+  },
+
+  "tone": {
+    "list": "List Tones Success.",
+    "get": "Get Tones Success.",
+    "create": "Create Succeed",
+    "update": "Update Succeed",
+    "delete": "Delete Succeed",
+
+    "error": {
+      "exist": "Tones exist",
+      "notFound": "Tones not found"
     }
   }
 }

@@ -14,6 +14,7 @@ import { TemplateModule } from 'src/modules/template/template.module'
 import { MigrationPlanSeed } from './seeds/migration.plan.seed'
 import { MigrationRoleSeed } from './seeds/migration.role.seed'
 import { MigrationUserSeed } from './seeds/migration.user.seed'
+import { MigrationToneSeed } from './seeds/migration.tone.seed'
 import { MigrationCategorySeed } from './seeds/migration.category.seed'
 import { MigrationProvinceSeed } from './seeds/migration.province.seed'
 import { MigrationTemplateSeed } from './seeds/migration.template.seed'
@@ -34,8 +35,9 @@ import { MigrationTemplateSeed } from './seeds/migration.template.seed'
   providers: [
     MigrationRoleSeed,
     MigrationUserSeed,
-    MigrationCategorySeed,
+    MigrationToneSeed,
     MigrationPlanSeed,
+    MigrationCategorySeed,
     MigrationProvinceSeed,
     MigrationTemplateSeed,
   ],
