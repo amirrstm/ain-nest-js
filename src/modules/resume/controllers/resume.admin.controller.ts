@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common'
+import { Controller, Get, Query } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 
 import { ResponsePaging } from 'src/common/response/decorators/response.decorator'
@@ -44,9 +44,10 @@ export class ResumeAdminController {
       RESUME_DEFAULT_AVAILABLE_SEARCH,
       RESUME_DEFAULT_AVAILABLE_ORDER_BY
     )
-    { _search, _limit, _offset, _order }: PaginationListDto
+    { _search, _limit, _offset, _order }: PaginationListDto,
+    @Query() query: Record<string, any>
   ): Promise<IResponsePaging> {
-    const find: Record<string, any> = { ..._search }
+    const find: Record<string, any> = { ..._search, user: query.user }
 
     const resumes: ResumeEntity[] = await this.resumeService.findAll<ResumeEntity>(find, {
       paging: {

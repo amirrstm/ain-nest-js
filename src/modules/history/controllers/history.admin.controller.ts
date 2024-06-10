@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common'
+import { Body, Controller, Get, Post, Query } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 
 import { AuthJwtAdminAccessProtected } from 'src/common/auth/decorators/auth.jwt.decorator'
@@ -50,32 +50,36 @@ export class HistoryAdminController {
       HISTORY_DEFAULT_AVAILABLE_SEARCH,
       HISTORY_DEFAULT_AVAILABLE_ORDER_BY
     )
-    { _search, _limit, _offset, _order }: PaginationListDto
+    { _search, _limit, _offset, _order }: PaginationListDto,
+    @Query() query: Record<string, any>
   ): Promise<IResponsePaging> {
     const find: Record<string, any> = { ..._search }
 
-    const histories: HistoryEntity[] = await this.historyService.findAll<HistoryEntity>(find, {
-      paging: {
-        limit: _limit,
-        offset: _offset,
-      },
-      order: _order,
-      plainObject: true,
-      join: [
-        {
-          path: 'user',
-          select: ['_id', 'mobileNumber', 'email'],
+    const histories: HistoryEntity[] = await this.historyService.findAll<HistoryEntity>(
+      { ...find, user: query.user },
+      {
+        paging: {
+          limit: _limit,
+          offset: _offset,
         },
-        {
-          path: 'category',
-          select: ['_id', 'name'],
-        },
-        {
-          path: 'inputValues.input',
-          select: ['_id', 'title'],
-        },
-      ],
-    })
+        order: _order,
+        plainObject: true,
+        join: [
+          {
+            path: 'user',
+            select: ['_id', 'mobileNumber', 'email'],
+          },
+          {
+            path: 'category',
+            select: ['_id', 'name'],
+          },
+          {
+            path: 'inputValues.input',
+            select: ['_id', 'title'],
+          },
+        ],
+      }
+    )
 
     const total: number = await this.historyService.getTotal(find)
     const totalPage: number = this.paginationService.totalPage(total, _limit)

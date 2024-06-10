@@ -1,8 +1,9 @@
 import { Prop, SchemaFactory } from '@nestjs/mongoose'
-import { Document } from 'mongoose'
+import { Document, Schema } from 'mongoose'
 
 import { DatabaseEntity } from 'src/common/database/decorators/database.decorator'
 import { DatabaseMongoUUIDEntityAbstract } from 'src/common/database/abstracts/mongo/entities/database.mongo.uuid.entity.abstract'
+import { ICategoryMeta } from '../../interfaces/category.interface'
 
 export const CategoryDatabaseName = 'categories'
 
@@ -14,13 +15,14 @@ export class CategoryEntity extends DatabaseMongoUUIDEntityAbstract {
   @Prop({ type: Map, of: String, required: true })
   description: Record<string, string>
 
+  @Prop({ type: Number, required: true })
+  maxTokens: number
+
   @Prop({
-    required: false,
     index: true,
-    lowercase: true,
-    trim: true,
+    unique: true,
+    required: true,
     type: String,
-    maxlength: 50,
   })
   slug: string
 
@@ -31,6 +33,12 @@ export class CategoryEntity extends DatabaseMongoUUIDEntityAbstract {
     ref: CategoryEntity.name,
   })
   parentId?: string
+
+  @Prop({
+    required: false,
+    type: Schema.Types.Mixed,
+  })
+  meta?: ICategoryMeta
 
   @Prop({
     required: true,

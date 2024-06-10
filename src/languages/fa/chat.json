@@ -1,12 +1,12 @@
 {
-  "list": "List Chat Success.",
-  "get": "Get Chat Success.",
-  "create": "Create Succeed",
-  "update": "Update Succeed",
-  "delete": "Delete Succeed",
+  "list": "لیست چت با موفقیت انجام شد.",
+  "get": "دریافت چت با موفقیت انجام شد.",
+  "create": "ایجاد با موفقیت انجام شد",
+  "update": "به‌روزرسانی با موفقیت انجام شد",
+  "delete": "حذف با موفقیت انجام شد",
 
   "error": {
-    "exist": "Chat exist",
-    "notFound": "Chat not found"
+    "exist": "چت وجود دارد",
+    "notFound": "چت پیدا نشد"
   }
 }

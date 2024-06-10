@@ -24,6 +24,17 @@ export class CategoryUpdateDto {
   readonly description: Record<string, string>
 
   @ApiProperty({
+    required: false,
+    description: 'Meta Info for category',
+    example: {
+      title: faker.lorem.sentence(),
+      description: faker.lorem.sentence(),
+    },
+  })
+  @Type(() => Object)
+  readonly meta?: Record<string, any>
+
+  @ApiProperty({
     required: true,
     description: 'Active flag of category',
     example: true,

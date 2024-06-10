@@ -18,7 +18,7 @@ import { IFileExtract } from 'src/common/file/interfaces/file.interface'
 import { FileRequiredPipe } from 'src/common/file/pipes/file.required.pipe'
 import { ENUM_HELPER_FILE_TYPE } from 'src/common/helper/constants/helper.enum.constant'
 import { PaginationService } from 'src/common/pagination/services/pagination.service'
-import { RequestParamGuard } from 'src/common/request/decorators/request.decorator'
+import { RequestCustomLang, RequestParamGuard } from 'src/common/request/decorators/request.decorator'
 import { Response, ResponseFile, ResponsePaging } from 'src/common/response/decorators/response.decorator'
 import { IResponse, IResponsePaging } from 'src/common/response/interfaces/response.interface'
 import { ResponseIdSerialization } from 'src/common/response/serializations/response.id.serialization'
@@ -85,6 +85,7 @@ import { FileTypePipe } from 'src/common/file/pipes/file.type.pipe'
 import { FileExcelExtractPipe } from 'src/common/file/pipes/file.excel-extract.pipe'
 import { FileExcelValidationPipe } from 'src/common/file/pipes/file.excel-validation.pipe'
 import { ENUM_FILE_MIME } from 'src/common/file/constants/file.enum.constant'
+import { UserPlanService } from 'src/modules/user-plan/services/user-plan.service'
 
 @ApiTags('Modules.Admin.User')
 @Controller({
@@ -94,10 +95,11 @@ import { ENUM_FILE_MIME } from 'src/common/file/constants/file.enum.constant'
 export class UserAdminController {
   constructor(
     private readonly authService: AuthService,
-    private readonly paginationService: PaginationService,
     private readonly userService: UserService,
     private readonly roleService: RoleService,
-    private readonly emailService: EmailService
+    private readonly emailService: EmailService,
+    private readonly userPlanService: UserPlanService,
+    private readonly paginationService: PaginationService
   ) {}
 
   @UserAdminListDoc()
@@ -165,9 +167,11 @@ export class UserAdminController {
   @AuthJwtAdminAccessProtected()
   @RequestParamGuard(UserRequestDto)
   @Get('/get/:user')
-  async get(@GetUser() user: UserDoc): Promise<IResponse> {
+  async get(@GetUser() user: UserDoc, @RequestCustomLang() customLang: string): Promise<IResponse> {
     const userWithRole: IUserDoc = await this.userService.joinWithRole(user)
-    return { data: userWithRole.toObject() }
+    const userPlan = await this.userPlanService.findAllWithTranslation(customLang, { user: user._id })
+
+    return { data: { ...userWithRole.toObject(), plan: userPlan } }
   }
 
   @UserAdminCreateDoc()

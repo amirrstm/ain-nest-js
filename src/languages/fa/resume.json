@@ -1,26 +1,26 @@
 {
-  "list": "Resume List Success.",
-  "get": "Get Resume Success.",
-  "create": "Create Succeed",
-  "update": "Update Succeed",
-  "delete": "Delete Succeed",
-  "active": "Active Succeed",
-  "inactive": "Inactive Succeed",
+  "list": "لیست رزومه با موفقیت انجام شد.",
+  "get": "دریافت رزومه با موفقیت انجام شد.",
+  "create": "ایجاد با موفقیت انجام شد",
+  "update": "به‌روزرسانی با موفقیت انجام شد",
+  "delete": "حذف با موفقیت انجام شد",
+  "active": "فعال‌سازی با موفقیت انجام شد",
+  "inactive": "غیرفعال‌سازی با موفقیت انجام شد",
 
   "error": {
-    "exist": "Resume exist",
-    "notFound": "Resume not found",
-    "inactive": "Resume is inactive",
-    "isActiveInvalid": "Resume is active invalid"
+    "exist": "رزومه وجود دارد",
+    "notFound": "رزومه یافت نشد",
+    "inactive": "رزومه غیرفعال است",
+    "isActiveInvalid": "رزومه فعال نامعتبر است"
   },
 
   "text": {
     "education": "سوابق تحصیلی",
     "workExperience": "سوابق شغلی",
-    "skills": "مهارت ها",
-    "languages": "زبان ها",
-    "certificates": "گواهینامه ها",
-    "courses": "دوره ها",
-    "projects": "پروژه ها"
+    "skills": "مهارت‌ها",
+    "languages": "زبان‌ها",
+    "certificates": "گواهینامه‌ها",
+    "courses": "دوره‌ها",
+    "projects": "پروژه‌ها"
   }
 }

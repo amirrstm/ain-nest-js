@@ -1,18 +1,18 @@
 {
-  "list": "List Plan Success.",
-  "get": "Get Plan Success.",
-  "create": "Create Succeed",
-  "update": "Update Succeed",
-  "updatePermission": "Update permission Succeed",
-  "delete": "Delete Succeed",
-  "inactive": "Inactive Succeed",
-  "active": "Active Succeed",
-  "default": "Default Succeed",
+  "list": "لیست برنامه‌ها با موفقیت انجام شد.",
+  "get": "دریافت برنامه با موفقیت انجام شد.",
+  "create": "ایجاد با موفقیت انجام شد",
+  "update": "به‌روزرسانی با موفقیت انجام شد",
+  "updatePermission": "به‌روزرسانی دسترسی با موفقیت انجام شد",
+  "delete": "حذف با موفقیت انجام شد",
+  "inactive": "غیرفعال‌سازی با موفقیت انجام شد",
+  "active": "فعال‌سازی با موفقیت انجام شد",
+  "default": "پیش‌فرض با موفقیت انجام شد",
   "error": {
-    "notFound": "Plan not found",
-    "inactive": "Plan is inactive",
-    "exist": "Plan exist",
-    "isActiveInvalid": "Plan is active invalid",
-    "typeForbidden": "Plan type not allowed"
+    "notFound": "برنامه یافت نشد",
+    "inactive": "برنامه غیرفعال است",
+    "exist": "برنامه وجود دارد",
+    "isActiveInvalid": "برنامه فعال نامعتبر است",
+    "typeForbidden": "نوع برنامه مجاز نیست"
   }
 }

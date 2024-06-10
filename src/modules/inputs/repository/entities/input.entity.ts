@@ -22,7 +22,6 @@ export class InputEntity extends DatabaseMongoUUIDEntityAbstract {
   @Prop({
     required: true,
     index: true,
-    lowercase: true,
     trim: true,
     type: String,
     maxlength: 50,

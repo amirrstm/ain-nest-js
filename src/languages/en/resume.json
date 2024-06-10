@@ -15,12 +15,12 @@
   },
 
   "text": {
-    "education": "سوابق تحصیلی",
-    "workExperience": "سوابق شغلی",
-    "skills": "مهارت ها",
-    "languages": "زبان ها",
-    "certificates": "گواهینامه ها",
-    "courses": "دوره ها",
-    "projects": "پروژه ها"
+    "education": "Education",
+    "workExperience": "Work Experience",
+    "skills": "Skills",
+    "languages": "Languages",
+    "certificates": "Certificates",
+    "courses": "Courses",
+    "projects": "Projects"
   }
 }

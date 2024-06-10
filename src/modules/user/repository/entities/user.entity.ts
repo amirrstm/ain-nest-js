@@ -13,7 +13,6 @@ export class UserEntity extends DatabaseMongoUUIDEntityAbstract {
   @Prop({
     required: false,
     index: true,
-    lowercase: true,
     trim: true,
     type: String,
     maxlength: 50,
@@ -23,7 +22,6 @@ export class UserEntity extends DatabaseMongoUUIDEntityAbstract {
   @Prop({
     required: false,
     index: true,
-    lowercase: true,
     trim: true,
     type: String,
     maxlength: 50,
@@ -46,7 +44,6 @@ export class UserEntity extends DatabaseMongoUUIDEntityAbstract {
     trim: true,
     unique: true,
     sparse: true,
-    lowercase: true,
     type: String,
     maxlength: 100,
   })

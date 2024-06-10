@@ -12,6 +12,7 @@ import { SettingModule } from 'src/modules/setting/setting.module'
 import { HistoryModule } from 'src/modules/history/history.module'
 import { CategoryModule } from 'src/modules/category/category.module'
 import { TemplateModule } from 'src/modules/template/template.module'
+import { UserPlanModule } from 'src/modules/user-plan/user-plan.module'
 import { CategoryRequestModule } from 'src/modules/category-request/category-request.module'
 
 import { RoleAdminController } from 'src/modules/role/controllers/role.admin.controller'
@@ -55,6 +56,7 @@ import { CategoryRequestAdminController } from 'src/modules/category-request/con
     ResumeModule,
     HistoryModule,
     TemplateModule,
+    UserPlanModule,
     CategoryRequestModule,
   ],
 })

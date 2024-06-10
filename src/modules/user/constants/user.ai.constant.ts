@@ -1,0 +1,1 @@
+export const SYSTEM_PROMPT_MESSAGE = `%1$s use tone %2$s for the article.you must generate %3$s text variants.json should contain these info : {blocks:[{type:"header or paragraph or linkTool", data:{level:"is type is header set number", text:"string", link:"is type is link set url", meta:{title:"string"}}}]}`

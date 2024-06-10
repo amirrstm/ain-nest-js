@@ -1,16 +1,16 @@
 {
-  "list": "List Input Success.",
-  "get": "Get Input Success.",
-  "create": "Create Succeed",
-  "update": "Update Succeed",
-  "delete": "Delete Succeed",
-  "inactive": "Inactive Succeed",
-  "active": "Active Succeed",
+  "list": "لیست ورودی‌ها با موفقیت انجام شد.",
+  "get": "دریافت ورودی با موفقیت انجام شد.",
+  "create": "ایجاد با موفقیت انجام شد",
+  "update": "به‌روزرسانی با موفقیت انجام شد",
+  "delete": "حذف با موفقیت انجام شد",
+  "inactive": "غیرفعال‌سازی با موفقیت انجام شد",
+  "active": "فعال‌سازی با موفقیت انجام شد",
   "error": {
-    "notFound": "Input not found",
-    "inactive": "Input is inactive",
-    "exist": "Input exist",
-    "isActiveInvalid": "Input is active invalid",
-    "typeForbidden": "Input type not allowed"
+    "notFound": "ورودی یافت نشد",
+    "inactive": "ورودی غیرفعال است",
+    "exist": "ورودی وجود دارد",
+    "isActiveInvalid": "ورودی فعال نامعتبر است",
+    "typeForbidden": "نوع ورودی مجاز نیست"
   }
 }

@@ -23,4 +23,31 @@ export class UserPromptDto {
   @IsNotEmpty()
   @Type(() => Object)
   readonly inputs: Record<string, string>
+
+  @ApiProperty({
+    required: true,
+    example: faker.string.uuid(),
+    description: 'The tone of the prompt',
+  })
+  @IsUUID('4')
+  @IsNotEmpty()
+  readonly tone: string
+
+  @ApiProperty({
+    required: true,
+    example: faker.lorem.sentence(),
+    description: 'Creativity of the prompt',
+  })
+  @IsNotEmpty()
+  @Type(() => Number)
+  readonly temperature: number
+
+  @ApiProperty({
+    required: true,
+    example: faker.number.int({ max: 3, min: 1 }),
+    description: 'Number of prompts to generate',
+  })
+  @IsNotEmpty()
+  @Type(() => Number)
+  readonly variant: number
 }

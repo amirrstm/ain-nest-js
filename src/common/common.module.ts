@@ -92,9 +92,9 @@ import { DATABASE_CONNECTION_NAME } from 'src/common/database/constants/database
       },
     }),
     MongooseModule.forRootAsync({
-      connectionName: DATABASE_CONNECTION_NAME,
       imports: [DatabaseOptionsModule],
       inject: [DatabaseOptionsService],
+      connectionName: DATABASE_CONNECTION_NAME,
       useFactory: (databaseOptionsService: DatabaseOptionsService) => databaseOptionsService.createOptions(),
     }),
     SmsModule,

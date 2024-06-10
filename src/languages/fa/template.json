@@ -1,18 +1,18 @@
 {
-  "list": "List Template Success.",
-  "get": "Get Template Success.",
-  "create": "Create Succeed",
-  "update": "Update Succeed",
-  "updatePermission": "Update permission Succeed",
-  "delete": "Delete Succeed",
-  "inactive": "Inactive Succeed",
-  "active": "Active Succeed",
+  "list": "لیست قالب‌ها با موفقیت انجام شد.",
+  "get": "دریافت قالب با موفقیت انجام شد.",
+  "create": "ایجاد با موفقیت انجام شد",
+  "update": "به‌روزرسانی با موفقیت انجام شد",
+  "updatePermission": "به‌روزرسانی دسترسی با موفقیت انجام شد",
+  "delete": "حذف با موفقیت انجام شد",
+  "inactive": "غیرفعال‌سازی با موفقیت انجام شد",
+  "active": "فعال‌سازی با موفقیت انجام شد",
   "error": {
-    "exist": "Template exist",
-    "used": "Template in used",
-    "notFound": "Template not found",
-    "inactive": "Template is inactive",
-    "typeForbidden": "Template type not allowed",
-    "isActiveInvalid": "Template is active invalid"
+    "exist": "قالب وجود دارد",
+    "used": "قالب استفاده شده است",
+    "notFound": "قالب یافت نشد",
+    "inactive": "قالب غیرفعال است",
+    "typeForbidden": "نوع قالب مجاز نیست",
+    "isActiveInvalid": "قالب فعال نامعتبر است"
   }
 }

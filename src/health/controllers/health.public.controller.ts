@@ -23,9 +23,9 @@ export class HealthPublicController {
   constructor(
     @DatabaseConnection() private readonly databaseConnection: Connection,
     private readonly health: HealthCheckService,
-    private readonly memoryHealthIndicator: MemoryHealthIndicator,
     private readonly diskHealthIndicator: DiskHealthIndicator,
-    private readonly mongooseIndicator: MongooseHealthIndicator
+    private readonly mongooseIndicator: MongooseHealthIndicator,
+    private readonly memoryHealthIndicator: MemoryHealthIndicator
   ) {}
 
   @HealthCheckDoc()

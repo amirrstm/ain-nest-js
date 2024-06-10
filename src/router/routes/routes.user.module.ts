@@ -5,6 +5,7 @@ import { UserModule } from 'src/modules/user/user.module'
 import { AwsModule } from 'src/common/aws/aws.module'
 import { PlanModule } from 'src/modules/plan/plan.module'
 import { ChatModule } from 'src/modules/chat/chat.module'
+import { DataModule } from 'src/modules/data/data.module'
 import { InputModule } from 'src/modules/inputs/input.module'
 import { ResumeModule } from 'src/modules/resume/resume.module'
 import { PromptModule } from 'src/modules/prompts/prompt.module'
@@ -41,6 +42,7 @@ import { CategoryRequestUserController } from 'src/modules/category-request/cont
     PlanModule,
     UserPlanModule,
     ChatModule,
+    DataModule,
     ResumeModule,
     TemplateModule,
     CategoryRequestModule,

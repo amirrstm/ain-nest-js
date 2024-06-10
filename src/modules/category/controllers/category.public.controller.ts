@@ -151,6 +151,22 @@ export class CategoryPublicController {
     }
   }
 
+  @CategoryPublicListDoc()
+  @Response('category.list', { serialization: CategoryListSerialization })
+  @Get('/plain-list')
+  async listPlain(): Promise<IResponse> {
+    const nonTranslatedFields: Record<string, number> = {
+      _id: 1,
+      slug: 1,
+    }
+    const rawCategories: ICategoryEntity[] = await this.categoryService.rawFindAll<ICategoryEntity>([
+      { $match: { parentId: { $ne: null }, isActive: true } },
+      { $project: { ...nonTranslatedFields } },
+    ])
+
+    return { data: rawCategories }
+  }
+
   @CategoryPublicGetDoc()
   @Response('category.get', {
     serialization: CategoryGetSerialization,
@@ -168,6 +184,7 @@ export class CategoryPublicController {
     const nonTranslatedFields: Record<string, number> = {
       _id: 1,
       slug: 1,
+      meta: 1,
       isActive: 1,
     }
     const rawCategories: ICategoryEntity[] = await this.categoryService.rawFindAll<ICategoryEntity>([

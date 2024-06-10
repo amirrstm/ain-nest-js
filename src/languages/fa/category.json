@@ -1,17 +1,17 @@
 {
-  "list": "لیست دسته بندی ها",
-  "get": "Get Category Success.",
-  "create": "Create Succeed",
-  "update": "Update Succeed",
-  "updatePermission": "Update permission Succeed",
-  "delete": "Delete Succeed",
-  "inactive": "Inactive Succeed",
-  "active": "Active Succeed",
+  "list": "دسته‌بندی با موفقیت لیست شد.",
+  "get": "دسته‌بندی با موفقیت دریافت شد.",
+  "create": "ایجاد با موفقیت انجام شد",
+  "update": "به‌روزرسانی با موفقیت انجام شد",
+  "updatePermission": "به‌روزرسانی دسترسی با موفقیت انجام شد",
+  "delete": "حذف با موفقیت انجام شد",
+  "inactive": "غیرفعال با موفقیت انجام شد",
+  "active": "فعال با موفقیت انجام شد",
   "error": {
-    "notFound": "Category not found",
-    "inactive": "Category is inactive",
-    "exist": "Category exist",
-    "isActiveInvalid": "Category is active invalid",
-    "typeForbidden": "Category type not allowed"
+    "notFound": "دسته‌بندی پیدا نشد",
+    "inactive": "دسته‌بندی غیرفعال است",
+    "exist": "دسته‌بندی وجود دارد",
+    "isActiveInvalid": "دسته‌بندی فعال نامعتبر است",
+    "typeForbidden": "نوع دسته‌بندی مجاز نیست"
   }
 }

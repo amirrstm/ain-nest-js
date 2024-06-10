@@ -49,8 +49,8 @@
     "rollback:category": "nestjs-command remove:category",
     "rollback:province": "nestjs-command remove:province",
     "rollback:template": "nestjs-command remove:template",
-    "seed": "yarn seed:role && yarn seed:user",
-    "rollback": "yarn rollback:user && yarn rollback:role"
+    "seed": "yarn seed:role && yarn seed:user && yarn seed:plan && yarn seed:tone && yarn seed:province && yarn seed:category && yarn seed:template",
+    "rollback": "yarn rollback:user && yarn rollback:role && yarn rollback:plan && yarn rollback:tone && yarn rollback:province && yarn rollback:category && yarn rollback:template"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.540.0",
@@ -83,6 +83,7 @@
     "hbs": "^4.2.0",
     "helmet": "^7.1.0",
     "joi": "^17.12.1",
+    "luxon": "^3.4.4",
     "moment": "^2.30.1",
     "moment-timezone": "^0.5.45",
     "mongoose": "^8.1.1",
@@ -122,6 +123,7 @@
     "@types/html-pdf": "^3.0.3",
     "@types/jest": "^29.5.12",
     "@types/lodash": "^4.14.202",
+    "@types/luxon": "^3.4.2",
     "@types/ms": "^0.7.34",
     "@types/multer": "^1.4.11",
     "@types/node": "^20.11.16",

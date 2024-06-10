@@ -45,5 +45,5 @@
     "timestampInvalid": "Timestamp invalid",
     "toleranceTimeInMs": "Timestamp out of tolerance"
   },
-  "MobileNumberAllowedConstraint": "شماره موبایل وارد شده مجاز نمی‌باشد"
+  "MobileNumberAllowedConstraint": "Mobile number should be a valid mobile number"
 }

@@ -21,6 +21,7 @@ export class ChatEntity extends DatabaseMongoUUIDEntityAbstract {
   user: string
 
   @Prop({
+    _id: false,
     required: true,
     default: [],
     type: [

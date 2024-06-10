@@ -56,14 +56,16 @@ export class CategoryService implements ICategoryService {
   }
 
   async create(
-    { name, slug, parentId, description }: CategoryCreateDto,
+    { name, slug, parentId, description, maxTokens, meta }: CategoryCreateDto,
     options?: IDatabaseCreateOptions
   ): Promise<CategoryDoc> {
     const create: CategoryEntity = new CategoryEntity()
     create.name = name
     create.slug = slug
-    create.parentId = parentId
+    create.meta = meta
     create.isActive = true
+    create.parentId = parentId
+    create.maxTokens = maxTokens
     create.description = description
 
     return this.categoryRepository.create<CategoryEntity>(create, options)
@@ -71,10 +73,11 @@ export class CategoryService implements ICategoryService {
 
   async update(
     repository: CategoryDoc,
-    { name, description, isActive }: CategoryUpdateDto,
+    { name, description, isActive, meta }: CategoryUpdateDto,
     options?: IDatabaseSaveOptions
   ): Promise<CategoryDoc> {
     repository.name = name
+    repository.meta = meta
     repository.isActive = isActive
     repository.description = description
 
@@ -102,13 +105,15 @@ export class CategoryService implements ICategoryService {
   }
 
   async createMany(data: CategoryCreateDto[], options?: IDatabaseCreateManyOptions): Promise<boolean> {
-    const create: CategoryEntity[] = data.map(({ name, description, parentId, slug }) => {
+    const create: CategoryEntity[] = data.map(({ name, description, parentId, slug, maxTokens, meta }) => {
       const entity: CategoryEntity = new CategoryEntity()
       entity.name = name
       entity.slug = slug
-      entity.parentId = parentId
-      entity.description = description
+      entity.meta = meta
       entity.isActive = true
+      entity.parentId = parentId
+      entity.maxTokens = maxTokens
+      entity.description = description
 
       return entity
     })

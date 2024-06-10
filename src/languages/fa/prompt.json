@@ -1,16 +1,16 @@
 {
-  "list": "List Prompt Success.",
-  "get": "Get Prompt Success.",
-  "create": "Create Succeed",
-  "update": "Update Succeed",
-  "delete": "Delete Succeed",
-  "inactive": "Inactive Succeed",
-  "active": "Active Succeed",
+  "list": "لیست پرامپت‌ها با موفقیت انجام شد.",
+  "get": "دریافت پرامپت با موفقیت انجام شد.",
+  "create": "ایجاد با موفقیت انجام شد",
+  "update": "به‌روزرسانی با موفقیت انجام شد",
+  "delete": "حذف با موفقیت انجام شد",
+  "inactive": "غیرفعال‌سازی با موفقیت انجام شد",
+  "active": "فعال‌سازی با موفقیت انجام شد",
   "error": {
-    "notFound": "Prompt not found",
-    "inactive": "Prompt is inactive",
-    "exist": "Prompt exist",
-    "isActiveInvalid": "Prompt is active invalid",
-    "typeForbidden": "Prompt type not allowed"
+    "notFound": "پرامپت یافت نشد",
+    "inactive": "پرامپت غیرفعال است",
+    "exist": "پرامپت وجود دارد",
+    "isActiveInvalid": "پرامپت فعال نامعتبر است",
+    "typeForbidden": "نوع پرامپت مجاز نیست"
   }
 }

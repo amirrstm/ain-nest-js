@@ -25,6 +25,24 @@ export class CategoryCreateDto {
   readonly description: Record<string, string>
 
   @ApiProperty({
+    required: false,
+    description: 'Meta Info for category',
+    example: {
+      title: faker.lorem.sentence(),
+      description: faker.lorem.sentence(),
+    },
+  })
+  @Type(() => Object)
+  readonly meta?: Record<string, any>
+
+  @ApiProperty({
+    required: true,
+    description: 'Max tokens for category',
+    example: faker.number.int(),
+  })
+  readonly maxTokens: number
+
+  @ApiProperty({
     required: true,
     description: 'Slug for category',
     example: faker.internet.displayName(),

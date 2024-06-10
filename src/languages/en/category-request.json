@@ -1,12 +1,12 @@
 {
-  "list": "List Chat Success.",
-  "get": "Get Chat Success.",
+  "list": "List Category Request Success.",
+  "get": "Get Category Request Success.",
   "create": "Create Succeed",
   "update": "Update Succeed",
   "delete": "Delete Succeed",
 
   "error": {
-    "exist": "Chat exist",
-    "notFound": "Chat not found"
+    "exist": "Category Request exist",
+    "notFound": "Category Request not found"
   }
 }

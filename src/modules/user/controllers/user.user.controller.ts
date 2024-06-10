@@ -1,3 +1,4 @@
+import { sprintf } from 'sprintf-js'
 import { Body, ConflictException, Controller, Delete, Post, Put } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 
@@ -12,6 +13,7 @@ import { APP_LANGUAGE } from 'src/app/constants/app.constant'
 import { UserDoc } from 'src/modules/user/repository/entities/user.entity'
 import { OpenAIService } from 'src/common/open-ai/services/open-ai.service'
 import { Response } from 'src/common/response/decorators/response.decorator'
+import { IResponse } from 'src/common/response/interfaces/response.interface'
 import { GetUser, UserProtected } from 'src/modules/user/decorators/user.decorator'
 import { UserPlanDoc } from 'src/modules/user-plan/repository/entities/user-plan.entity'
 import { AuthJwtUserAccessProtected } from 'src/common/auth/decorators/auth.jwt.decorator'
@@ -19,8 +21,10 @@ import { UserUserDeleteSelfDoc, UserUserPromptDoc, UserUserUpdateNameDoc } from 
 
 import { UserPromptDto } from '../dtos/user.prompt.dto'
 import { UserUpdateNameDto } from '../dtos/user.update-name.dto'
-import { IResponse } from 'src/common/response/interfaces/response.interface'
+import { UserImagePromptDto } from '../dtos/user.prompt.image.dto'
+import { SYSTEM_PROMPT_MESSAGE } from '../constants/user.ai.constant'
 
+import { IInputDoc } from 'src/modules/inputs/interfaces/prompt.interface'
 import { IPromptMessage } from 'src/common/open-ai/interfaces/open-ai.interface'
 import { ENUM_AI_ROLE } from 'src/common/open-ai/constants/open-ai.enum.constant'
 import { UserPlanService } from 'src/modules/user-plan/services/user-plan.service'
@@ -28,7 +32,7 @@ import { RequestCustomLang } from 'src/common/request/decorators/request.decorat
 import { ENUM_USER_STATUS_CODE_ERROR } from '../constants/user.status-code.constant'
 import { ENUM_PROMPT_STATUS_CODE_ERROR } from 'src/modules/prompts/constants/prompt.status-code.constant'
 import { ENUM_CATEGORY_STATUS_CODE_ERROR } from 'src/modules/category/constants/category.status-code.constant'
-import { UserImagePromptDto } from '../dtos/user.prompt.image.dto'
+import { ToneService } from 'src/modules/data/services/tone.service'
 
 @ApiTags('Module.User.User')
 @Controller({
@@ -40,6 +44,7 @@ export class UserUserController {
     private readonly planService: PlanService,
     private readonly userService: UserService,
     private readonly aiService: OpenAIService,
+    private readonly toneService: ToneService,
     private readonly inputService: InputService,
     private readonly promptService: PromptService,
     private readonly historyService: HistoryService,
@@ -55,8 +60,7 @@ export class UserUserController {
   async questionPrompt(
     @GetUser() user: UserDoc,
     @Body() body: UserPromptDto,
-    @RequestCustomLang()
-    customLang: string
+    @RequestCustomLang() customLang: string
   ): Promise<IResponse> {
     const lang = customLang || APP_LANGUAGE
     const userPlan: UserPlanDoc = await this.userPlanService.findOne({ user: user._id })
@@ -92,7 +96,7 @@ export class UserUserController {
       })
     }
 
-    const inputs = await this.inputService.findAllWithTranslation(lang, { category: category._id })
+    const inputs = await this.inputService.findAllWithTranslation<IInputDoc>(lang, { category: category._id })
 
     if (!inputs || inputs.length === 0) {
       throw new ConflictException({
@@ -103,16 +107,23 @@ export class UserUserController {
 
     let inputContent = ''
 
-    inputs.forEach((input, idx) => {
-      if (body.inputs[input.name]) {
-        inputContent += `${input.title}: ${body.inputs[input.name]} ${idx > 0 ? '\n' : ''}`
+    inputs.forEach(input => {
+      if (body.inputs[input.name] && body.inputs[input.name].length > 0) {
+        const keyName = input.name
+        inputContent += sprintf(input.description, { [keyName]: body.inputs[input.name] })
       }
     })
+
+    const tone = await this.toneService.findOneById(body.tone, { plainObject: true })
+    const variant = String(body.variant)
+    const desiredTone = tone.name['en']
+    const systemPrompt = prompt.description[lang]
+    const SYSTEM_MESSAGE = sprintf(SYSTEM_PROMPT_MESSAGE, systemPrompt, desiredTone, variant)
 
     const messages: IPromptMessage[] = [
       {
         role: ENUM_AI_ROLE.SYSTEM,
-        content: prompt.description[lang],
+        content: SYSTEM_MESSAGE,
       },
       {
         role: ENUM_AI_ROLE.USER,
@@ -120,9 +131,12 @@ export class UserUserController {
       },
     ]
 
-    const aiResponse = await this.aiService.getMessageFromPrompt(messages)
+    const aiResponse = await this.aiService.getMessageFromPrompt(messages, {
+      temperature: body.temperature,
+      max_tokens: category.maxTokens ?? 3000,
+    })
 
-    await this.userPlanService.update(userPlan, { used: userPlan.used + 1 })
+    await this.userPlanService.update(userPlan, { used: userPlan.used + body.variant })
     const createdHistory = await this.historyService.create({
       user: user._id,
       category: category._id,

@@ -24,13 +24,13 @@ export class OpenAIService implements IOpenAIService {
     }
 
     return await this.openAI.chat.completions.create({
+      // model: 'gpt-4o-2024-05-13',
       model: 'gpt-3.5-turbo-0125',
       messages: messages.map(message => ({
         role: message.role,
         content: message.content,
       })),
-      temperature: 0.5,
-      max_tokens: 2000,
+      response_format: { type: 'json_object' },
       ...options,
     })
   }

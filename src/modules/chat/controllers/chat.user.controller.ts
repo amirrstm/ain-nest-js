@@ -95,10 +95,7 @@ export class ChatUserController {
     const newChat = await this.chatService.create({ user: user._id, message: body })
     const messages: IPromptMessage[] = []
 
-    messages.push({
-      role: ENUM_AI_ROLE.USER,
-      content: body.content,
-    })
+    messages.push({ role: ENUM_AI_ROLE.USER, content: body.content })
 
     const aiResponse = await this.aiService.getMessageFromPrompt(messages, { max_tokens: 1500, temperature: 0.6 })
     await this.userPlanService.update(userPlan, { used: userPlan.used + 1 })

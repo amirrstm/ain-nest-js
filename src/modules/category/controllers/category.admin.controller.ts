@@ -174,7 +174,7 @@ export class CategoryAdminController {
   @Post('/create')
   async create(
     @Body()
-    { name, parentId, slug, description }: CategoryCreateDto
+    { name, parentId, slug, description, maxTokens, meta }: CategoryCreateDto
   ): Promise<IResponse> {
     const exist: boolean = await this.categoryService.existBySlug(slug)
 
@@ -188,7 +188,9 @@ export class CategoryAdminController {
     const create = await this.categoryService.create({
       name,
       slug,
+      meta,
       parentId,
+      maxTokens,
       description,
     })
 

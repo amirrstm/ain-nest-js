@@ -1,92 +1,92 @@
 {
   "province": {
-    "list": "List Province Success.",
-    "get": "Get Province Success.",
-    "create": "Create Succeed",
-    "update": "Update Succeed",
-    "delete": "Delete Succeed",
+    "list": "لیست استان‌ها با موفقیت انجام شد.",
+    "get": "دریافت استان با موفقیت انجام شد.",
+    "create": "ایجاد با موفقیت انجام شد",
+    "update": "به‌روزرسانی با موفقیت انجام شد",
+    "delete": "حذف با موفقیت انجام شد",
 
     "error": {
-      "exist": "Province exist",
-      "notFound": "Province not found"
+      "exist": "استان وجود دارد",
+      "notFound": "استان پیدا نشد"
     }
   },
 
   "occupation": {
-    "list": "List Occupation Success.",
-    "get": "Get Occupation Success.",
-    "create": "Create Succeed",
-    "update": "Update Succeed",
-    "delete": "Delete Succeed",
+    "list": "لیست مشاغل با موفقیت انجام شد.",
+    "get": "دریافت شغل با موفقیت انجام شد.",
+    "create": "ایجاد با موفقیت انجام شد",
+    "update": "به‌روزرسانی با موفقیت انجام شد",
+    "delete": "حذف با موفقیت انجام شد",
 
     "error": {
-      "exist": "Occupation exist",
-      "notFound": "Occupation not found"
+      "exist": "شغل وجود دارد",
+      "notFound": "شغل پیدا نشد"
     }
   },
 
   "studyField": {
-    "list": "List Study Field Success.",
-    "get": "Get Study Field Success.",
-    "create": "Create Succeed",
-    "update": "Update Succeed",
-    "delete": "Delete Succeed",
+    "list": "لیست رشته‌های تحصیلی با موفقیت انجام شد.",
+    "get": "دریافت رشته تحصیلی با موفقیت انجام شد.",
+    "create": "ایجاد با موفقیت انجام شد",
+    "update": "به‌روزرسانی با موفقیت انجام شد",
+    "delete": "حذف با موفقیت انجام شد",
 
     "error": {
-      "exist": "Study Field exist",
-      "notFound": "Study Field not found"
+      "exist": "رشته تحصیلی وجود دارد",
+      "notFound": "رشته تحصیلی پیدا نشد"
     }
   },
 
   "university": {
-    "list": "List Study Field Success.",
-    "get": "Get Study Field Success.",
-    "create": "Create Succeed",
-    "update": "Update Succeed",
-    "delete": "Delete Succeed",
+    "list": "لیست رشته‌های تحصیلی با موفقیت انجام شد.",
+    "get": "دریافت رشته تحصیلی با موفقیت انجام شد.",
+    "create": "ایجاد با موفقیت انجام شد",
+    "update": "به‌روزرسانی با موفقیت انجام شد",
+    "delete": "حذف با موفقیت انجام شد",
 
     "error": {
-      "exist": "Study Field exist",
-      "notFound": "Study Field not found"
+      "exist": "رشته تحصیلی وجود دارد",
+      "notFound": "رشته تحصیلی پیدا نشد"
     }
   },
 
   "company": {
-    "list": "List Companies Success.",
-    "get": "Get Companies Success.",
-    "create": "Create Succeed",
-    "update": "Update Succeed",
-    "delete": "Delete Succeed",
+    "list": "لیست شرکت‌ها با موفقیت انجام شد.",
+    "get": "دریافت شرکت با موفقیت انجام شد.",
+    "create": "ایجاد با موفقیت انجام شد",
+    "update": "به‌روزرسانی با موفقیت انجام شد",
+    "delete": "حذف با موفقیت انجام شد",
 
     "error": {
-      "exist": "Companies exist",
-      "notFound": "Companies not found"
+      "exist": "شرکت وجود دارد",
+      "notFound": "شرکت پیدا نشد"
     }
   },
 
   "skill": {
-    "list": "List Study Field Success.",
-    "get": "Get Study Field Success.",
-    "create": "Create Succeed",
-    "update": "Update Succeed",
-    "delete": "Delete Succeed",
+    "list": "لیست رشته‌های تحصیلی با موفقیت انجام شد.",
+    "get": "دریافت رشته تحصیلی با موفقیت انجام شد.",
+    "create": "ایجاد با موفقیت انجام شد",
+    "update": "به‌روزرسانی با موفقیت انجام شد",
+    "delete": "حذف با موفقیت انجام شد",
 
     "error": {
-      "exist": "Study Field exist",
-      "notFound": "Study Field not found"
+      "exist": "رشته تحصیلی وجود دارد",
+      "notFound": "رشته تحصیلی پیدا نشد"
     }
   },
 
   "tone": {
-    "list": "List Tones Success.",
-    "get": "Get Tones Success.",
-    "create": "Create Succeed",
-    "update": "Update Succeed",
-    "delete": "Delete Succeed",
+    "list": "لیست تن‌ها با موفقیت انجام شد.",
+    "get": "دریافت تن با موفقیت انجام شد.",
+    "create": "ایجاد با موفقیت انجام شد",
+    "update": "به‌روزرسانی با موفقیت انجام شد",
+    "delete": "حذف با موفقیت انجام شد",
 
     "error": {
-      "exist": "Tones exist",
-      "notFound": "Tones not found"
+      "exist": "تن وجود دارد",
+      "notFound": "تن پیدا نشد"
     }
   }
 }

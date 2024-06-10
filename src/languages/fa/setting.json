@@ -1,9 +1,9 @@
 {
-  "list": "List Setting Success.",
-  "get": "Get Setting Success.",
-  "update": "Update Succeed",
+  "list": "لیست تنظیمات با موفقیت انجام شد.",
+  "get": "دریافت تنظیمات با موفقیت انجام شد.",
+  "update": "به‌روزرسانی با موفقیت انجام شد",
   "error": {
-    "notFound": "Setting not found",
-    "valueNotAllowed": "Setting value not allowed"
+    "notFound": "تنظیمات یافت نشد",
+    "valueNotAllowed": "مقدار تنظیمات مجاز نیست"
   }
 }

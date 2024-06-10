@@ -1,18 +1,18 @@
 {
-  "list": "List Role Success.",
-  "get": "Get Role Success.",
-  "create": "Create Succeed",
-  "update": "Update Succeed",
-  "updatePermission": "Update permission Succeed",
-  "delete": "Delete Succeed",
-  "inactive": "Inactive Succeed",
-  "active": "Active Succeed",
+  "list": "لیست نقش‌ها با موفقیت انجام شد.",
+  "get": "دریافت نقش با موفقیت انجام شد.",
+  "create": "ایجاد با موفقیت انجام شد",
+  "update": "به‌روزرسانی با موفقیت انجام شد",
+  "updatePermission": "به‌روزرسانی دسترسی با موفقیت انجام شد",
+  "delete": "حذف با موفقیت انجام شد",
+  "inactive": "غیرفعال‌سازی با موفقیت انجام شد",
+  "active": "فعال‌سازی با موفقیت انجام شد",
   "error": {
-    "notFound": "Role not found",
-    "inactive": "Role is inactive",
-    "exist": "Role exist",
-    "used": "Role in used",
-    "isActiveInvalid": "Role is active invalid",
-    "typeForbidden": "Role type not allowed"
+    "notFound": "نقش یافت نشد",
+    "inactive": "نقش غیرفعال است",
+    "exist": "نقش وجود دارد",
+    "used": "نقش استفاده شده است",
+    "isActiveInvalid": "نقش فعال نامعتبر است",
+    "typeForbidden": "نوع نقش مجاز نیست"
   }
 }
