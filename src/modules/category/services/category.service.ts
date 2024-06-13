@@ -73,12 +73,13 @@ export class CategoryService implements ICategoryService {
 
   async update(
     repository: CategoryDoc,
-    { name, description, isActive, meta }: CategoryUpdateDto,
+    { name, description, isActive, meta, maxTokens }: CategoryUpdateDto,
     options?: IDatabaseSaveOptions
   ): Promise<CategoryDoc> {
     repository.name = name
     repository.meta = meta
     repository.isActive = isActive
+    repository.maxTokens = maxTokens
     repository.description = description
 
     return this.categoryRepository.save(repository, options)

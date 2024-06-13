@@ -24,6 +24,13 @@ export class CategoryUpdateDto {
   readonly description: Record<string, string>
 
   @ApiProperty({
+    required: true,
+    description: 'Max tokens for category',
+    example: faker.number.int(),
+  })
+  readonly maxTokens: number
+
+  @ApiProperty({
     required: false,
     description: 'Meta Info for category',
     example: {

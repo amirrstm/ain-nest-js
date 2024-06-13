@@ -22,7 +22,7 @@ import { UserUserDeleteSelfDoc, UserUserPromptDoc, UserUserUpdateNameDoc } from 
 import { UserPromptDto } from '../dtos/user.prompt.dto'
 import { UserUpdateNameDto } from '../dtos/user.update-name.dto'
 import { UserImagePromptDto } from '../dtos/user.prompt.image.dto'
-import { SYSTEM_PROMPT_MESSAGE } from '../constants/user.ai.constant'
+import { PROMPT_LANGUAGES, SYSTEM_PROMPT_MESSAGE } from '../constants/user.ai.constant'
 
 import { IInputDoc } from 'src/modules/inputs/interfaces/prompt.interface'
 import { IPromptMessage } from 'src/common/open-ai/interfaces/open-ai.interface'
@@ -110,15 +110,18 @@ export class UserUserController {
     inputs.forEach(input => {
       if (body.inputs[input.name] && body.inputs[input.name].length > 0) {
         const keyName = input.name
-        inputContent += sprintf(input.description, { [keyName]: body.inputs[input.name] })
+        inputContent += sprintf(input.description, body.inputs[keyName])
       }
     })
 
     const tone = await this.toneService.findOneById(body.tone, { plainObject: true })
+
+    const language = PROMPT_LANGUAGES[lang as keyof typeof PROMPT_LANGUAGES]
+
     const variant = String(body.variant)
     const desiredTone = tone.name['en']
     const systemPrompt = prompt.description[lang]
-    const SYSTEM_MESSAGE = sprintf(SYSTEM_PROMPT_MESSAGE, systemPrompt, desiredTone, variant)
+    const SYSTEM_MESSAGE = sprintf(SYSTEM_PROMPT_MESSAGE, language, systemPrompt, desiredTone, variant)
 
     const messages: IPromptMessage[] = [
       {

@@ -135,12 +135,12 @@ export class MigrationCategorySeed {
 
       {
         name: {
-          en: 'SMS Generator',
-          fa: 'متن پیامک',
+          en: 'SMS & Notification',
+          fa: 'پیامک و اعلانات',
         },
         description: {
-          en: 'Generate engaging and effective SMS content for your marketing campaigns.',
-          fa: 'محتوای پیامک جذاب و موثر برای کمپین های بازاریابی خود تولید کنید.',
+          en: 'Generate engaging and effective SMS and notifications for your marketing campaigns.',
+          fa: 'محتوای پیامک و اعلان جذاب و موثر برای کمپین های بازاریابی خود تولید کنید.',
         },
         maxTokens: 250,
         slug: 'sms-generator',
@@ -248,14 +248,14 @@ export class MigrationCategorySeed {
       {
         name: {
           en: 'Blog Outline',
-          fa: 'خلاصه وبلاگ',
+          fa: 'ایده یا عنوان وبلاگ',
         },
         description: {
-          fa: 'خلاصه‌ای جذاب و مفید برای وبلاگ خود بنویسید',
+          fa: 'یک عنوان جذاب و مفید برای وبلاگ خود بنویسید',
           en: 'Write an engaging and useful summary for your blog',
         },
         maxTokens: 250,
-        slug: 'ideal-title',
+        slug: 'blog-outline',
         parentId: website._id,
       },
       {
@@ -334,7 +334,7 @@ export class MigrationCategorySeed {
           fa: 'خبرنامه برای وب‌سایت خود تولید کنید',
         },
         maxTokens: 250,
-        slug: 'newsletter-generatro',
+        slug: 'newsletter-generator',
         parentId: website._id,
       },
 
@@ -369,7 +369,7 @@ export class MigrationCategorySeed {
       {
         name: {
           en: 'Cover Letters',
-          fa: 'نامه‌های اداری و کاری',
+          fa: 'کاور لتر',
         },
         description: {
           en: 'Generate cover letters for your business',
