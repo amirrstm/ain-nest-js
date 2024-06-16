@@ -60,11 +60,12 @@ export class ResumeService implements IResumeService {
   }
 
   async create(
-    { user, title, template, templateSettings }: ResumeCreateDto,
+    { user, title, template, templateSettings, lang }: ResumeCreateDto,
     options?: IDatabaseCreateOptions
   ): Promise<ResumeDoc> {
     const create: ResumeEntity = new ResumeEntity()
     create.user = user
+    create.lang = lang
     create.title = title
     create.template = template
     create.templateSettings = templateSettings
@@ -75,6 +76,7 @@ export class ResumeService implements IResumeService {
   async createWithData(data: Record<string, any>, options?: IDatabaseCreateOptions): Promise<ResumeDoc> {
     const create: ResumeEntity = new ResumeEntity()
     create.work = data.work
+    create.lang = data.lang
     create.user = data.user
     create.title = data.title
     create.basic = data.basic

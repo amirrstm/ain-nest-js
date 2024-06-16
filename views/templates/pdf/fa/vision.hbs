@@ -51,10 +51,9 @@
       <div class='grid grid-cols-12 gap-8'>
         <div class='col-span-4 h-full'>
           {{#if image}}
-            <div style='padding-top: 30px; z-index: 10;' class='relative'><img
-                src='{{image.completedUrl}}'
-                class='w-32 h-32 rounded-full mx-auto'
-              /></div>
+            <div style='padding-top: 30px; z-index: 10;' class='relative'>
+              <img src='{{image.completedUrl}}' class='w-32 h-32 rounded-full mx-auto' />
+            </div>
           {{/if}}
           <div class='flex flex-col px-10'>
             {{#if image}}
@@ -65,35 +64,35 @@
 
             <div class='space-y-1'>
               {{#if basic.email}}
-                <div class='flex items-center gap-2 text-sm'>
+                <div class='flex items-center gap-2 text-xs'>
                   <i class='fa-solid fa-envelope'></i>
                   <span dir='ltr'>{{basic.email}}</span>
                 </div>
               {{/if}}
 
               {{#if basic.phone}}
-                <div class='flex items center gap-2 text-sm'>
+                <div class='flex items center gap-2 text-xs'>
                   <i class='fa-solid fa-phone'></i>
                   <span dir='ltr'>{{basic.phone.countryCode}}{{basic.phone.text}}</span>
                 </div>
               {{/if}}
 
               {{#if basic.url}}
-                <div class='flex items center gap-2 text-sm'>
+                <div class='flex items center gap-2 text-xs'>
                   <i class='fa-solid fa-globe'></i>
                   <span dir='ltr'>{{basic.url}}</span>
                 </div>
               {{/if}}
 
               {{#if basic.birthDate}}
-                <div class='flex items center gap-2 text-sm'>
+                <div class='flex items center gap-2 text-xs'>
                   <i class='fa-solid fa-calendar-days'></i>
                   <span>{{basic.birthDate}}</span>
                 </div>
               {{/if}}
 
               {{#if basic.location.country}}
-                <div class='flex items center gap-2 text-sm'>
+                <div class='flex items center gap-2 text-xs'>
                   <i class='fa-solid fa-map-marker-alt'></i>
                   <span>
                     <span>{{basic.location.country}}</span>
@@ -278,7 +277,7 @@
                     </p>
                   </div>
                   <ul class='text-xs text-gray-800 list-disc mt-2 mx-6'>
-                    {{#each highlights}}<li>{{this}}</li>{{/each}}
+                    {{#each highlights}}<li style='font-size: 10px;'>{{this}}</li>{{/each}}
                   </ul>
                 </div>
               {{/each}}
@@ -287,7 +286,7 @@
 
           {{! Work Experience }}
           {{#if work}}
-            <div class='block-margin'>
+            <div class='block-margin relative'>
               <h3 class='font-bold text-titles'>سوابق شغلی</h3>
 
               {{#each work}}
@@ -521,7 +520,6 @@
                       {{#if location.city}}
                         <span>،&nbsp;{{location.city}}</span>
                       {{/if}}
-
                     </p>
                   {{/if}}
 

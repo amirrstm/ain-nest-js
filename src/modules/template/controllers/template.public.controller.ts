@@ -26,7 +26,7 @@ import { TemplateRequestDto } from '../dtos/template.request.dto'
 import { TemplateEntity } from '../repository/entities/template.entity'
 import { ENUM_TEMPLATE_TYPE } from '../constants/template.enum.constant'
 import { TemplateAdminGetGuard } from '../decorators/template.admin.decorator'
-import { RequestParamGuard } from 'src/common/request/decorators/request.decorator'
+import { RequestCustomLang, RequestParamGuard } from 'src/common/request/decorators/request.decorator'
 import { TemplateGetSerialization } from '../serializations/template.get.serialization'
 import { TemplatePublicGetDoc, TemplatePublicListDoc } from '../docs/template.public.doc'
 import { TemplateListSerialization } from '../serializations/template.list.serialization'
@@ -55,6 +55,7 @@ export class TemplatePublicController {
     { _search, _limit, _offset, _order }: PaginationListDto,
     @PaginationQueryFilterInBoolean('isActive', TEMPLATE_DEFAULT_IS_ACTIVE)
     isActive: Record<string, any>,
+    @RequestCustomLang() lang: string,
     @PaginationQueryFilterInEnum('type', TEMPLATE_DEFAULT_TYPE, ENUM_TEMPLATE_TYPE)
     type: Record<string, any>
   ): Promise<IResponsePaging> {
@@ -62,6 +63,7 @@ export class TemplatePublicController {
       ..._search,
       ...isActive,
       ...type,
+      lang,
     }
 
     const templates: TemplateEntity[] = await this.templateService.findAll<TemplateEntity>(find, {

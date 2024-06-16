@@ -8,7 +8,7 @@ import { UserDoc } from 'src/modules/user/repository/entities/user.entity'
 import { Response, ResponsePaging } from 'src/common/response/decorators/response.decorator'
 import { IResponse, IResponsePaging } from 'src/common/response/interfaces/response.interface'
 import { GetUser, UserProtected } from 'src/modules/user/decorators/user.decorator'
-import { RequestParamGuard } from 'src/common/request/decorators/request.decorator'
+import { RequestCustomLang, RequestParamGuard } from 'src/common/request/decorators/request.decorator'
 import { TemplateService } from 'src/modules/template/services/template.service'
 import { AuthJwtUserAccessProtected } from 'src/common/auth/decorators/auth.jwt.decorator'
 
@@ -119,9 +119,10 @@ export class ResumeUserController {
       RESUME_DEFAULT_AVAILABLE_ORDER_BY
     )
     { _search, _limit, _offset, _order }: PaginationListDto,
-    @GetUser() user: UserDoc
+    @GetUser() user: UserDoc,
+    @RequestCustomLang() lang: string
   ): Promise<IResponsePaging> {
-    const find: Record<string, any> = { ..._search, user: user._id }
+    const find: Record<string, any> = { ..._search, user: user._id, lang }
 
     const resumes: ResumeEntity[] = await this.resumeService.findAll<ResumeEntity>(find, {
       paging: {
@@ -152,6 +153,7 @@ export class ResumeUserController {
   @Post('/')
   async create(
     @GetUser() user: UserDoc,
+    @RequestCustomLang() lang: string[],
     @Body() { template, title }: Omit<ResumeCreateDto, 'user'>
   ): Promise<IResponse> {
     const templateEntity = await this.templateService.findOneById(template)
@@ -166,6 +168,7 @@ export class ResumeUserController {
     const create = await this.resumeService.create({
       title,
       template,
+      lang: lang[0],
       user: user._id,
       templateSettings: templateEntity.defaultSettings,
     })
@@ -626,12 +629,14 @@ export class ResumeUserController {
   async createResumeFromVoice(
     @GetUser() user: UserDoc,
     @Body() body: { template: string },
+    @RequestCustomLang() customLang: string[],
     @UploadedFile(
       new FileRequiredPipe(),
       new FileTypePipe([ENUM_FILE_MIME.WAV, ENUM_FILE_MIME.MP3, ENUM_FILE_MIME.WEBM])
     )
     file: IFile
   ): Promise<IResponse> {
+    const lang = customLang[0]
     const systemPrompt = RESUME_GENERATE_PROMPT
     const templateEntity = await this.templateService.findOneById(body.template)
 
@@ -648,10 +653,11 @@ export class ResumeUserController {
     ])
     const aiData = JSON.parse(bio.choices[0].message.content)
     const create = await this.resumeService.createWithData({
+      lang: lang,
       user: user._id,
       template: body.template,
-      title: 'ساخته شده توسط صدا',
       templateSettings: templateEntity.defaultSettings,
+      title: lang === 'fa' ? 'ساخته شده توسط صدا' : 'Created From Your Voice',
 
       education: aiData.educations,
       work: aiData.work_experiences,
@@ -676,8 +682,10 @@ export class ResumeUserController {
   @Post('/occupation')
   async createResumeFromOccupation(
     @GetUser() user: UserDoc,
+    @RequestCustomLang() customLang: string[],
     @Body() body: { occupation: string; description?: string; template: string }
   ): Promise<IResponse> {
+    const lang = customLang[0]
     const systemPrompt = sprintf(RESUME_GENERATE_OCCUPATION_PROMPT, { role: body.occupation })
     const templateEntity = await this.templateService.findOneById(body.template)
 
@@ -699,10 +707,11 @@ export class ResumeUserController {
     const aiData = JSON.parse(bio.choices[0].message.content)
 
     const create = await this.resumeService.createWithData({
+      lang,
       user: user._id,
       template: body.template,
-      title: 'ساخته شده توسط آی‌نویس',
       templateSettings: templateEntity.defaultSettings,
+      title: lang === 'fa' ? 'ساخته شده توسط آی‌نویس' : 'Created By AINevis',
 
       education: aiData.educations,
       work: aiData.work_experiences,

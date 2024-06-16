@@ -65,6 +65,12 @@ export class ResumeEntity extends DatabaseMongoUUIDEntityAbstract {
   title: string
 
   @Prop({
+    type: String,
+    required: true,
+  })
+  lang: string
+
+  @Prop({
     index: true,
     required: true,
     ref: TemplateEntity.name,

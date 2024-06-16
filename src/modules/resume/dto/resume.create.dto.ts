@@ -31,6 +31,13 @@ export class ResumeCreateDto {
   readonly title: string
 
   @ApiProperty({
+    required: true,
+    example: faker.lorem.text(),
+  })
+  @IsNotEmpty()
+  readonly lang: string
+
+  @ApiProperty({
     required: false,
     description: 'Default settings of template',
   })

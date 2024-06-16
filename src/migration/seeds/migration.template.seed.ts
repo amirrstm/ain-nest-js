@@ -18,8 +18,8 @@ export class MigrationTemplateSeed {
       {
         lang: 'fa',
         name: 'بسیک',
-        path: 'templates/pdf/basic',
-        image: '1d9a2b5c-ece5-4cf3-a17c-29add5518100',
+        path: 'templates/pdf/fa/basic',
+        image: '546d07a0-ded3-4909-c31a-60cb2606da00',
         description: 'قالب بسیک',
         type: ENUM_TEMPLATE_TYPE.PDF,
         defaultSettings: {
@@ -36,11 +36,31 @@ export class MigrationTemplateSeed {
       },
       {
         lang: 'fa',
+        name: 'مدرن',
+        description: 'قالب مدرن',
+        path: 'templates/pdf/fa/modern',
+        type: ENUM_TEMPLATE_TYPE.PDF,
+        image: '33b3cee7-e78b-40fd-97ee-68432aefee00',
+
+        defaultSettings: {
+          nameColor: '#000',
+          jobTitleColor: '#0097cf',
+          sectionTitleColor: '#0097cf',
+          placesColor: '#0097cf',
+          defaultFont: 'YekanBakh',
+          roundedProfilePicture: true,
+          skillBarColor: '#ffffff',
+          hideInformationIcon: false,
+          blockMargins: '1',
+        },
+      },
+      {
+        lang: 'fa',
         name: 'ویژن',
         description: 'قالب ویژن',
-        path: 'templates/pdf/vision',
+        path: 'templates/pdf/fa/vision',
         type: ENUM_TEMPLATE_TYPE.PDF,
-        image: '85ff767d-ed74-433c-8e60-2adfa2bee900',
+        image: '741b7a43-136b-4675-330c-22be1cf6df00',
 
         defaultSettings: {
           nameColor: '#000',
@@ -56,17 +76,19 @@ export class MigrationTemplateSeed {
       },
       {
         lang: 'fa',
-        name: 'رسمی',
-        description: 'قالب رسمی',
-        path: 'templates/pdf/formal',
+        name: 'فیوچر',
+        description: 'قالب فیوچر',
+        path: 'templates/pdf/fa/future',
         type: ENUM_TEMPLATE_TYPE.PDF,
-        image: '85ff767d-ed74-433c-8e60-2adfa2bee900',
+        image: 'eeedf539-4134-4a9b-f4f2-bca846fd0c00',
 
         defaultSettings: {
           nameColor: '#000',
-          jobTitleColor: '#000',
+          jobTitleColor: '#0097cf',
           sectionTitleColor: '#000',
+          placesColor: '#000',
           defaultFont: 'YekanBakh',
+          roundedProfilePicture: true,
           hideInformationIcon: false,
           blockMargins: '1',
         },
