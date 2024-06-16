@@ -14,7 +14,7 @@ export class MigrationTemplateSeed {
     describe: 'seed templates',
   })
   async seeds(): Promise<void> {
-    const dataAdmin: TemplateCreateDto[] = [
+    const dataPersian: TemplateCreateDto[] = [
       {
         lang: 'fa',
         name: 'بسیک',
@@ -95,8 +95,86 @@ export class MigrationTemplateSeed {
       },
     ]
 
+    const dataEnglish: TemplateCreateDto[] = [
+      {
+        lang: 'en',
+        name: 'Basic',
+        description: 'Basic template',
+        type: ENUM_TEMPLATE_TYPE.PDF,
+        image: '546d07a0-ded3-4909-c31a-60cb2606da00',
+        path: 'templates/pdf/en/basic',
+        defaultSettings: {
+          nameColor: '#000',
+          jobTitleColor: '#0097cf',
+          sectionTitleColor: '#0097cf',
+          placesColor: '#0097cf',
+          defaultFont: 'Roboto',
+          roundedProfilePicture: true,
+          skillBarColor: '#0097cf',
+          hideInformationIcon: false,
+          blockMargins: '1',
+        },
+      },
+      {
+        lang: 'en',
+        name: 'Modern',
+        description: 'Modern template',
+        type: ENUM_TEMPLATE_TYPE.PDF,
+        image: '33b3cee7-e78b-40fd-97ee-68432aefee00',
+        path: 'templates/pdf/en/modern',
+        defaultSettings: {
+          nameColor: '#000',
+          jobTitleColor: '#0097cf',
+          sectionTitleColor: '#0097cf',
+          placesColor: '#0097cf',
+          defaultFont: 'Roboto',
+          roundedProfilePicture: true,
+          skillBarColor: '#ffffff',
+          hideInformationIcon: false,
+          blockMargins: '1',
+        },
+      },
+      {
+        lang: 'en',
+        name: 'Vision',
+        description: 'Vision template',
+        type: ENUM_TEMPLATE_TYPE.PDF,
+        image: '741b7a43-136b-4675-330c-22be1cf6df00',
+        path: 'templates/pdf/en/vision',
+        defaultSettings: {
+          nameColor: '#000',
+          jobTitleColor: '#d6974c',
+          sectionTitleColor: '#d6974c',
+          placesColor: '#d6974c',
+          defaultFont: 'Roboto',
+          roundedProfilePicture: true,
+          skillBarColor: '#d6974c',
+          hideInformationIcon: false,
+          blockMargins: '1',
+        },
+      },
+      {
+        lang: 'en',
+        name: 'Future',
+        description: 'Future template',
+        type: ENUM_TEMPLATE_TYPE.PDF,
+        image: 'eeedf539-4134-4a9b-f4f2-bca846fd0c00',
+        path: 'templates/pdf/en/future',
+        defaultSettings: {
+          nameColor: '#000',
+          jobTitleColor: '#0097cf',
+          sectionTitleColor: '#000',
+          placesColor: '#000',
+          defaultFont: 'Roboto',
+          roundedProfilePicture: true,
+          hideInformationIcon: false,
+          blockMargins: '1',
+        },
+      },
+    ]
+
     try {
-      await this.templateService.createMany(dataAdmin)
+      await this.templateService.createMany([...dataPersian, ...dataEnglish])
     } catch (err: any) {
       throw new Error(err.message)
     }

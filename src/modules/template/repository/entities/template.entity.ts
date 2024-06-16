@@ -14,9 +14,7 @@ export class TemplateEntity extends DatabaseMongoUUIDEntityAbstract {
     required: true,
     index: true,
     unique: true,
-    lowercase: true,
     trim: true,
-    maxlength: 30,
     type: String,
   })
   name: string

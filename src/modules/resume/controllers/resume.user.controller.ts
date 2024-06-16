@@ -62,6 +62,7 @@ import {
   ResumeVolunteerDTO,
 } from '../dto'
 
+import { AI_LANG } from 'src/common/open-ai/constants/ai.constant'
 import { IFile } from 'src/common/file/interfaces/file.interface'
 import { FileTypePipe } from 'src/common/file/pipes/file.type.pipe'
 import { FileRequiredPipe } from 'src/common/file/pipes/file.required.pipe'
@@ -70,6 +71,8 @@ import { ENUM_FILE_MIME } from 'src/common/file/constants/file.enum.constant'
 import { IAwsS3RandomFilename } from 'src/common/aws/interfaces/aws.interface'
 import { AwsS3Serialization } from 'src/common/aws/serializations/aws.serialization'
 import { PaginationQuery } from 'src/common/pagination/decorators/pagination.decorator'
+import { ENUM_TEMPLATE_STATUS_CODE_ERROR } from 'src/modules/template/constants/template.status-code.constant'
+
 import {
   RESUME_DEFAULT_AVAILABLE_ORDER_BY,
   RESUME_DEFAULT_AVAILABLE_SEARCH,
@@ -86,10 +89,8 @@ import {
   RESUME_BIO_GENERATE_PROMPT,
   RESUME_GENERATE_OCCUPATION_PROMPT,
   RESUME_GENERATE_PROMPT,
-  RESUME_VOICE_BIO_PROMPT,
 } from '../constants/resume.ai.constant'
 import { ResumeCreateDto } from '../dto/resume.create.dto'
-import { ENUM_TEMPLATE_STATUS_CODE_ERROR } from 'src/modules/template/constants/template.status-code.constant'
 import { IResumeDoc } from '../interfaces/resume.interface'
 import { ResumeTemplateSettingsDTO } from '../dto/resume.template-settings.dto'
 
@@ -153,9 +154,10 @@ export class ResumeUserController {
   @Post('/')
   async create(
     @GetUser() user: UserDoc,
-    @RequestCustomLang() lang: string[],
+    @RequestCustomLang() customLang: string[],
     @Body() { template, title }: Omit<ResumeCreateDto, 'user'>
   ): Promise<IResponse> {
+    const lang = customLang[0]
     const templateEntity = await this.templateService.findOneById(template)
 
     if (!templateEntity) {
@@ -166,9 +168,9 @@ export class ResumeUserController {
     }
 
     const create = await this.resumeService.create({
+      lang,
       title,
       template,
-      lang: lang[0],
       user: user._id,
       templateSettings: templateEntity.defaultSettings,
     })
@@ -250,7 +252,7 @@ export class ResumeUserController {
       await this.awsS3Service.deleteFolder(resume.file.path)
     }
 
-    const resumeData = this.resumeService.toPersianDate(resume)
+    const resumeData = this.resumeService.toPersianDate(resume, resume.lang)
     const pdfFile = await this.pdfService.generatePdf(templateEntity.path, resumeData)
 
     const pathPrefix: string = await this.resumeService.getFileUploadPath(resume._id)
@@ -591,37 +593,6 @@ export class ResumeUserController {
   }
 
   @Response('resume.update')
-  @ResumeUserGetGuard()
-  @UserProtected()
-  @AuthJwtUserAccessProtected()
-  @FileUploadSingle()
-  @Put('/:resume/bio-voice')
-  async uploadBioVoice(
-    @GetResume() resume: ResumeDoc,
-    @UploadedFile(
-      new FileRequiredPipe(),
-      new FileTypePipe([ENUM_FILE_MIME.WAV, ENUM_FILE_MIME.MP3, ENUM_FILE_MIME.WEBM])
-    )
-    file: IFile
-  ): Promise<IResponse> {
-    const systemPrompt = sprintf(RESUME_VOICE_BIO_PROMPT, { role: resume.basic.label })
-
-    const voiceContent = await this.aiService.transcribeAudio(file.buffer)
-    const bio = await this.aiService.getMessageFromPrompt([
-      {
-        role: ENUM_AI_ROLE.SYSTEM,
-        content: systemPrompt,
-      },
-      {
-        role: ENUM_AI_ROLE.USER,
-        content: voiceContent,
-      },
-    ])
-
-    return { data: { text: bio.choices[0].message.content } }
-  }
-
-  @Response('resume.update')
   @UserProtected()
   @AuthJwtUserAccessProtected()
   @FileUploadSingle()
@@ -637,10 +608,11 @@ export class ResumeUserController {
     file: IFile
   ): Promise<IResponse> {
     const lang = customLang[0]
-    const systemPrompt = RESUME_GENERATE_PROMPT
-    const templateEntity = await this.templateService.findOneById(body.template)
+    const systemPrompt = `${AI_LANG(lang)}${RESUME_GENERATE_PROMPT}`
 
+    const templateEntity = await this.templateService.findOneById(body.template)
     const voiceContent = await this.aiService.transcribeAudio(file.buffer)
+
     const bio = await this.aiService.getMessageFromGpt4([
       {
         role: ENUM_AI_ROLE.SYSTEM,
@@ -686,8 +658,9 @@ export class ResumeUserController {
     @Body() body: { occupation: string; description?: string; template: string }
   ): Promise<IResponse> {
     const lang = customLang[0]
-    const systemPrompt = sprintf(RESUME_GENERATE_OCCUPATION_PROMPT, { role: body.occupation })
     const templateEntity = await this.templateService.findOneById(body.template)
+
+    const systemPrompt = sprintf(`${AI_LANG(lang)}${RESUME_GENERATE_OCCUPATION_PROMPT}`, { role: body.occupation })
 
     const bio = await this.aiService.getMessageFromGpt4([
       {
@@ -734,8 +707,9 @@ export class ResumeUserController {
   @UserProtected()
   @AuthJwtUserAccessProtected()
   @Get('/:resume/bio-ai')
-  async getBioFromAI(@GetResume() resume: ResumeDoc): Promise<IResponse> {
-    const systemPrompt = sprintf(RESUME_BIO_GENERATE_PROMPT, { role: resume.basic.label })
+  async getBioFromAI(@GetResume() resume: ResumeDoc, @RequestCustomLang() customLang: string[]): Promise<IResponse> {
+    const lang = customLang[0]
+    const systemPrompt = sprintf(`${AI_LANG(lang)}${RESUME_BIO_GENERATE_PROMPT}`, { role: resume.basic.label })
 
     const bio = await this.aiService.getMessageFromPrompt([
       {

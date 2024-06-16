@@ -310,15 +310,16 @@ export class ResumeService implements IResumeService {
     return this.resumeRepository.delete(repository, options)
   }
 
-  toPersianDate(repository: IResumeDoc): ResumeDoc {
+  toPersianDate(repository: IResumeDoc, lang: string): ResumeDoc {
     const resume: ResumeDoc = repository.toJSON()
+    const locale = { fa: 'fa-IR', en: 'en-US' }[lang]
 
     const work = resume.work.map(work => {
       if (work.startDate) {
-        work.startDate = this.helperDateService.formatPersian(work?.startDate as Date)
+        work.startDate = this.helperDateService.formatPersian(work?.startDate as Date, locale)
       }
       if (work.endDate) {
-        work.endDate = this.helperDateService.formatPersian(work?.endDate as Date)
+        work.endDate = this.helperDateService.formatPersian(work?.endDate as Date, locale)
       }
 
       return work
@@ -326,11 +327,11 @@ export class ResumeService implements IResumeService {
 
     const education = resume.education.map(education => {
       if (education.startDate) {
-        education.startDate = this.helperDateService.formatPersian(education?.startDate as Date)
+        education.startDate = this.helperDateService.formatPersian(education?.startDate as Date, locale)
       }
 
       if (education.endDate) {
-        education.endDate = this.helperDateService.formatPersian(education?.endDate as Date)
+        education.endDate = this.helperDateService.formatPersian(education?.endDate as Date, locale)
       }
 
       return education
@@ -338,10 +339,10 @@ export class ResumeService implements IResumeService {
 
     const projects = resume.projects.map(project => {
       if (project.startDate) {
-        project.startDate = this.helperDateService.formatPersian(project?.startDate as Date)
+        project.startDate = this.helperDateService.formatPersian(project?.startDate as Date, locale)
       }
       if (project.endDate) {
-        project.endDate = this.helperDateService.formatPersian(project?.endDate as Date)
+        project.endDate = this.helperDateService.formatPersian(project?.endDate as Date, locale)
       }
 
       return project
@@ -349,7 +350,7 @@ export class ResumeService implements IResumeService {
 
     const certificates = resume.certificates.map(certificate => {
       if (certificate.date) {
-        certificate.date = this.helperDateService.formatPersian(certificate?.date as Date)
+        certificate.date = this.helperDateService.formatPersian(certificate?.date as Date, locale)
       }
 
       return certificate
@@ -357,7 +358,7 @@ export class ResumeService implements IResumeService {
 
     const awards = resume.awards.map(award => {
       if (award.date) {
-        award.date = this.helperDateService.formatPersian(award?.date as Date)
+        award.date = this.helperDateService.formatPersian(award?.date as Date, locale)
       }
 
       return award
@@ -365,7 +366,7 @@ export class ResumeService implements IResumeService {
 
     const publications = resume.publications.map(publication => {
       if (publication.releaseDate) {
-        publication.releaseDate = this.helperDateService.formatPersian(publication?.releaseDate as Date)
+        publication.releaseDate = this.helperDateService.formatPersian(publication?.releaseDate as Date, locale)
       }
 
       return publication
@@ -373,7 +374,7 @@ export class ResumeService implements IResumeService {
 
     const teaching = resume.teaching.map(teaching => {
       if (teaching.date) {
-        teaching.date = this.helperDateService.formatPersian(teaching?.date as Date)
+        teaching.date = this.helperDateService.formatPersian(teaching?.date as Date, locale)
       }
 
       return teaching
@@ -381,11 +382,11 @@ export class ResumeService implements IResumeService {
 
     const volunteer = resume.volunteer.map(volunteer => {
       if (volunteer.startDate) {
-        volunteer.startDate = this.helperDateService.formatPersian(volunteer?.startDate as Date)
+        volunteer.startDate = this.helperDateService.formatPersian(volunteer?.startDate as Date, locale)
       }
 
       if (volunteer.endDate) {
-        volunteer.endDate = this.helperDateService.formatPersian(volunteer?.endDate as Date)
+        volunteer.endDate = this.helperDateService.formatPersian(volunteer?.endDate as Date, locale)
       }
 
       return volunteer
@@ -393,7 +394,7 @@ export class ResumeService implements IResumeService {
 
     const speeches = resume.speeches.map(speech => {
       if (speech.date) {
-        speech.date = this.helperDateService.formatPersian(speech?.date as Date)
+        speech.date = this.helperDateService.formatPersian(speech?.date as Date, locale)
       }
 
       return speech
@@ -401,7 +402,7 @@ export class ResumeService implements IResumeService {
 
     const inventions = resume.inventions.map(invention => {
       if (invention.date) {
-        invention.date = this.helperDateService.formatPersian(invention?.date as Date)
+        invention.date = this.helperDateService.formatPersian(invention?.date as Date, locale)
       }
 
       return invention
@@ -409,7 +410,9 @@ export class ResumeService implements IResumeService {
 
     const basic = { ...resume.basic }
     if (basic.birthDate) {
-      basic.birthDate = this.helperDateService.formatPersian(resume.basic?.birthDate as Date, { day: 'numeric' })
+      basic.birthDate = this.helperDateService.formatPersian(resume.basic?.birthDate as Date, locale, {
+        day: 'numeric',
+      })
     }
 
     const skills = resume.skills.map(skill => {

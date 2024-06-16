@@ -2,6 +2,7 @@ import { sprintf } from 'sprintf-js'
 import { Body, ConflictException, Controller, Delete, Post, Put } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 
+import { ToneService } from 'src/modules/data/services/tone.service'
 import { UserService } from 'src/modules/user/services/user.service'
 import { PlanService } from 'src/modules/plan/services/plan.service'
 import { InputService } from 'src/modules/inputs/services/input.service'
@@ -10,6 +11,7 @@ import { HistoryService } from 'src/modules/history/services/history.service'
 import { CategoryService } from 'src/modules/category/services/category.service'
 
 import { APP_LANGUAGE } from 'src/app/constants/app.constant'
+import { AI_LANG } from 'src/common/open-ai/constants/ai.constant'
 import { UserDoc } from 'src/modules/user/repository/entities/user.entity'
 import { OpenAIService } from 'src/common/open-ai/services/open-ai.service'
 import { Response } from 'src/common/response/decorators/response.decorator'
@@ -22,7 +24,7 @@ import { UserUserDeleteSelfDoc, UserUserPromptDoc, UserUserUpdateNameDoc } from 
 import { UserPromptDto } from '../dtos/user.prompt.dto'
 import { UserUpdateNameDto } from '../dtos/user.update-name.dto'
 import { UserImagePromptDto } from '../dtos/user.prompt.image.dto'
-import { PROMPT_LANGUAGES, SYSTEM_PROMPT_MESSAGE } from '../constants/user.ai.constant'
+import { SYSTEM_PROMPT_MESSAGE } from '../constants/user.ai.constant'
 
 import { IInputDoc } from 'src/modules/inputs/interfaces/prompt.interface'
 import { IPromptMessage } from 'src/common/open-ai/interfaces/open-ai.interface'
@@ -32,7 +34,6 @@ import { RequestCustomLang } from 'src/common/request/decorators/request.decorat
 import { ENUM_USER_STATUS_CODE_ERROR } from '../constants/user.status-code.constant'
 import { ENUM_PROMPT_STATUS_CODE_ERROR } from 'src/modules/prompts/constants/prompt.status-code.constant'
 import { ENUM_CATEGORY_STATUS_CODE_ERROR } from 'src/modules/category/constants/category.status-code.constant'
-import { ToneService } from 'src/modules/data/services/tone.service'
 
 @ApiTags('Module.User.User')
 @Controller({
@@ -116,8 +117,7 @@ export class UserUserController {
 
     const tone = await this.toneService.findOneById(body.tone, { plainObject: true })
 
-    const language = PROMPT_LANGUAGES[lang as keyof typeof PROMPT_LANGUAGES]
-
+    const language = AI_LANG(lang)
     const variant = String(body.variant)
     const desiredTone = tone.name['en']
     const systemPrompt = prompt.description[lang]

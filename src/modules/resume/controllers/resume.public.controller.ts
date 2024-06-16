@@ -22,8 +22,8 @@ export class ResumePublicController {
       'frame-ancestors https://*.ainevis.com http://*.ainevis.com http://localhost:3500'
     )
 
-    res.render(resume.template.path, { ...this.resumeService.toPersianDate(resume) })
+    res.render(resume.template.path, { ...this.resumeService.toPersianDate(resume, resume.lang) })
 
-    return { ...this.resumeService.toPersianDate(resume) }
+    return { ...this.resumeService.toPersianDate(resume, resume.lang) }
   }
 }

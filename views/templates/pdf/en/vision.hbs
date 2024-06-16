@@ -1,0 +1,370 @@
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <title>Resume</title>
+
+    <link rel='preconnect' href='https://fonts.googleapis.com' />
+    <link rel='preconnect' href='https://fonts.gstatic.com' />
+    <link
+      rel='stylesheet'
+      href='https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap'
+    />
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css' rel='stylesheet' />
+    <script src='https://cdn.tailwindcss.com'></script>
+
+    <style>
+      .text-secondary { color: #60768A; } body { margin: 0; } .progress-bar { background-color: #d1d1d1; border-radius:
+      0.25rem; position: relative; overflow: hidden; } .triangle { width: 0; height: 0; border-style: solid;
+      border-width: 0 600px 130px 0 ; border-color: transparent #d6974c transparent transparent; position: absolute;
+      top: 0; right: 0; z-index: 0; } .triangle-small { width: 0; height: 0; border-style: solid; border-width: 80px
+      310px 0 0; border-color: #60768A transparent transparent transparent; position: absolute; left: 0; top: 0;
+      z-index: 0; }
+
+      {{! Breaks }}
+      h1, h2, h3, h4, h5, h6, p, ul, ol, .page-break { page-break-inside: avoid; } .page-break-before {
+      page-break-before: always; } .page-break-after { page-break-after: always; }
+    </style>
+
+  </head>
+  <body dir='ltr' style='font-family: {{templateSettings.defaultFont}};'>
+    <style>
+      {{! Places Color }}
+      .text-places { color:
+      {{templateSettings.placesColor}}; }
+
+      {{! Titles Color }}
+      .text-titles { color:
+      {{templateSettings.sectionTitleColor}}; }
+
+      {{! Progress }}
+      .progress-bar .progress-tracker { height: 100%; background-color:
+      {{templateSettings.skillBarColor}}; }
+
+      {{! Margin }}
+      .block-margin { padding-top:
+      {{templateSettings.blockMargins}}; }
+
+    </style>
+
+    <div class='fixed top-0 left-0 h-screen' style='background-color: #D8EBFD; width: 30%; z-index: -1;'></div>
+
+    <div class='relative mx-auto' style='width: 210mm;'>
+      <div class='triangle'></div>
+      <div class='triangle-small'></div>
+
+      <div class='grid grid-cols-12 gap-8'>
+        <div class='col-span-4 h-full'>
+          {{#if image}}
+            <div style='padding-top: 30px; z-index: 10;' class='relative'>
+              <img src='{{image.completedUrl}}' class='w-32 h-32 rounded-full mx-auto' />
+            </div>
+          {{/if}}
+          <div class='flex flex-col px-8'>
+            {{#if image}}
+              <div style='padding-top: 40px;'></div>
+            {{else}}
+              <div style='padding-top: 80px;'></div>
+            {{/if}}
+
+            <div class='space-y-1'>
+              {{#if basic.email}}
+                <div class='flex items-center gap-2 text-xs'>
+                  <i class='fa-solid fa-envelope'></i>
+                  <span>{{basic.email}}</span>
+                </div>
+              {{/if}}
+
+              {{#if basic.phone}}
+                <div class='flex items-center gap-2 text-xs'>
+                  <i class='fa-solid fa-phone'></i>
+                  <span>{{basic.phone.countryCode}}{{basic.phone.text}}</span>
+                </div>
+              {{/if}}
+
+              {{#if basic.url}}
+                <div class='flex items-center gap-2 text-xs'>
+                  <i class='fa-solid fa-globe'></i>
+                  <span>{{basic.url}}</span>
+                </div>
+              {{/if}}
+
+              {{#if basic.birthDate}}
+                <div class='flex items-center gap-2 text-xs'>
+                  <i class='fa-solid fa-calendar-days'></i>
+                  <span>{{basic.birthDate}}</span>
+                </div>
+              {{/if}}
+
+              {{#if basic.location.country}}
+                <div class='flex items-center gap-2 text-xs'>
+                  <i class='fa-solid fa-map-marker-alt'></i>
+                  <span>
+                    <span>{{basic.location.country}}</span>
+                    {{#if basic.location.city}}
+                      <span>,</span>
+                      <span>{{basic.location.city}}</span>
+                    {{/if}}
+                  </span>
+                </div>
+              {{/if}}
+            </div>
+
+            {{! Skills }}
+            {{#if skills}}
+              <div class='pt-6'>
+                <h3 class='font-bold text-secondary'>Skills</h3>
+
+                {{#each skills}}
+                  <div class='pt-3 ps-2'>
+                    <h4 class='font-bold text-xs'>{{name}}</h4>
+                    <p class='text-gray-500 mt-1' style='font-size: 10px;'>
+                      {{description}}
+                    </p>
+
+                    {{#if hasLevel}}
+                      <div class='w-full h-2 bg-gray-300 rounded-md mt-2'>
+                        <div class='progress-bar h-2'>
+                          <div class='progress-tracker h-2' style='width: {{level}}%;'></div>
+                        </div>
+                      </div>
+                    {{/if}}
+                  </div>
+                {{/each}}
+
+              </div>
+            {{/if}}
+
+            {{! Languages }}
+            {{#if languages}}
+              <div class='pt-6'>
+                <h3 class='font-bold text-secondary'>Languages</h3>
+
+                {{#each languages}}
+                  <div class='pt-3 ps-2'>
+                    <h4 class='font-bold text-sm'>{{language}}</h4>
+
+                    {{#if hasLevel}}
+                      <div class='w-full h-2 bg-gray-300 rounded-md mt-2'>
+                        <div class='progress-bar h-2'>
+                          <div class='progress-tracker h-2' style='width: {{level}}%;'></div>
+                        </div>
+                      </div>
+                    {{/if}}
+                  </div>
+                {{/each}}
+
+              </div>
+            {{/if}}
+
+            {{! Social Profiles }}
+            {{#if profiles}}
+              <div class='pt-6'>
+                <h3 class='font-bold text-secondary'>
+                  Social Profiles
+                </h3>
+                <div class='space-y-2 pt-3 ps-2'>
+                  {{#each profiles}}
+                    <div class='flex items-center gap-2 text-sm'>
+                      <i class='fa-brands fa-{{network}}'></i>
+                      <span dir='ltr'>{{username}}</span>
+                    </div>
+                  {{/each}}
+                </div>
+              </div>
+            {{/if}}
+
+            {{! References }}
+            {{#if references}}
+              <div class='pt-6'>
+                <h3 class='font-bold text-secondary'>
+                  References
+                </h3>
+                <div class='space-y-2 pt-3 ps-2'>
+                  {{#each references}}
+                    <div class='flex gap-2 text-sm'>
+                      <i class='fa-solid fa-user'></i>
+                      <div>
+                        <p>{{name}}</p>
+                        <p class='text-xs text-gray-500'>{{reference}}</p>
+                      </div>
+                    </div>
+
+                  {{/each}}
+                </div>
+              </div>
+            {{/if}}
+
+            {{! Interests }}
+            {{#if interests}}
+              <div class='pt-6'>
+                <h3 class='font-bold text-secondary'>
+                  Interests
+                </h3>
+                <div class='space-y-2 pt-3 ps-2'>
+                  {{#each interests}}
+                    <p class='text-sm'>{{name}}</p>
+                    <p class='text-xs text-gray-500'>
+                      {{#each keywords}}
+                        <span>{{this}}</span>
+
+                        {{#if @last}}{{else}}
+                          <span>-&nbsp;</span>
+                        {{/if}}
+                      {{/each}}
+                    </p>
+                  {{/each}}
+                </div>
+              </div>
+            {{/if}}
+          </div>
+        </div>
+
+        <div class='col-span-8 pe-8' style='padding-top: 80px;'>
+          <div>
+            <h1 class='font-bold text-xl' style='color : {{templateSettings.nameColor}}'>
+              {{basic.firstName}}
+              {{#if basic.lastName}}
+                {{basic.lastName}}
+              {{/if}}
+
+            </h1>
+            <h2 class='font-light text-xl mt-1' style='color : {{templateSettings.jobTitleColor}}'>
+              {{basic.label}}
+            </h2>
+          </div>
+
+          <div class='mt-4'>
+            <p class='text-xs text-gray-600' style='line-height: 1.7;'>
+              {{basic.summary}}
+            </p>
+          </div>
+
+          {{! Education }}
+          {{#if education}}
+            <div class='block-margin'>
+              <h3 class='text-titles font-bold text-secondary text-sm'>
+                Education
+              </h3>
+
+              {{#each education}}
+                <div class='ps-2'>
+                  <div class='pt-3 flex items-center gap-1'>
+                    <h4 class='font-bold text-xs'>{{studyType}}&nbsp;of&nbsp;{{area}}</h4>
+                  </div>
+
+                  <div class='flex items-center gap-1'>
+                    <p class='text-gray-500' style='font-size: 10px;'>
+
+                      {{#if stillStudying}}
+                        <span>Since</span>
+                        <span>{{startDate}}</span>
+                      {{else}}
+                        <span>From</span>
+                        <span>{{startDate}}</span>
+                        <span>To</span>
+                        <span>{{endDate}}</span>
+                      {{/if}}
+
+                    </p>
+                    <p class='text-xs w-3 border-t border-t-gray-200'></p>
+
+                    <p class='flex items-center' style='font-size: 10px;'>
+                      {{#if institution}}
+                        <p class='text-places' style='font-size: 10px;'>{{institution}}</p>
+                      {{/if}}
+
+                      {{#if location.country}}
+                        <span class='text-places' style='font-size: 10px;'>،&nbsp;{{location.country}}</span>
+                      {{/if}}
+
+                      {{#if location.city}}
+                        <span class='text-gray-800' style='font-size: 10px;'>،&nbsp;{{location.city}}</span>
+                      {{/if}}
+
+                    </p>
+                  </div>
+                  <ul class='text-xs text-gray-800 list-disc mt-2 mx-6'>
+                    {{#each highlights}}<li style='font-size: 10px;'>{{this}}</li>{{/each}}
+                  </ul>
+                </div>
+              {{/each}}
+            </div>
+          {{/if}}
+
+          {{! Work Experience }}
+          {{#if work}}
+            <div class='block-margin'>
+              <h3 class='text-titles font-bold text-secondary text-sm'>
+                Work Experience
+              </h3>
+
+              {{#each work}}
+                <div class='ps-2 page-break'>
+                  <div class='pt-3 flex items-center gap-1'>
+                    <h4 class='font-bold text-sm'>{{position}}</h4>
+                  </div>
+                  <div class='flex items-center gap-1'>
+                    <p class='text-gray-500' style='font-size: 10px;'>
+
+                      {{#if stillWorking}}
+                        <span>Since</span>
+                        <span>{{startDate}}</span>
+                      {{else}}
+                        <span>From</span>
+                        <span>{{startDate}}</span>
+                        <span>To</span>
+                        <span>{{endDate}}</span>
+                      {{/if}}
+                    </p>
+                    <p class='w-3 border-t border-t-gray-200'></p>
+                    <div class='flex items-center'>
+                      <p class='text-places' style='font-size: 10px;'>{{name}}</p>
+                      <p class='text-gray-800' style='font-size: 10px;'>
+                        {{#if location.country}}
+                          <span>,&nbsp;{{location.country}}</span>
+                        {{/if}}
+
+                        {{#if location.city}}
+                          <span>,&nbsp;{{location.city}}</span>
+                        {{/if}}
+                      </p>
+                    </div>
+                  </div>
+                  <ul class='text-gray-800 list-disc mt-2 mx-6'>
+                    {{#each highlights}}<li style='font-size: 10px;'>{{this}}</li>{{/each}}
+                  </ul>
+                </div>
+              {{/each}}
+            </div>
+          {{/if}}
+
+          {{! Projects }}
+          {{#if projects}}
+            <div class='block-margin'>
+              <h3 class='text-titles font-bold text-secondary text-sm'>
+                Projects
+              </h3>
+              <div class='mt-3 space-y-6'>
+                {{#each projects}}
+                  <div class='flex gap-3'>
+                    <div class='text-xs text-places'>
+                      {{startDate}}
+                      -
+                      {{endDate}}
+                    </div>
+                    <div class='w-full'>
+                      <h4 class='font-bold text-sm'>{{name}}</h4>
+                      <p class='text-xs font-medium mt-0.5 text-gray-600'>
+                        {{description}}
+                      </p>
+                    </div>
+                  </div>
+                {{/each}}
+              </div>
+            </div>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
