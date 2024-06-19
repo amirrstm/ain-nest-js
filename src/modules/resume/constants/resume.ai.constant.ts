@@ -4,6 +4,24 @@ each containing approximately 100 words. The text should be fluent, engaging, an
 Incorporate metrics and numbers to make the content more impressive.JSON Structure Requirements:{"about_me":["","",""]}
 `
 
+export const RESUME_WORK_EXPERIENCE_GENERATE_PROMPT = `
+your task is to Generate three versions of a professional highlights section for work experience,
+each containing approximately 20 words. The text should be fluent, engaging, and tailored to the role as %1$s.
+Incorporate metrics and numbers to make the content more impressive.JSON Structure Requirements:{"highlights":["","",""]}
+`
+
+export const RESUME_EDUCATION_HIGHLIGHT_GENERATE_PROMPT = `
+your task is to Generate three versions of a professional highlights section for education,
+each containing approximately 20 words. The text should be fluent, engaging, and tailored to the role as %1$s.
+Incorporate metrics and numbers to make the content more impressive.JSON Structure Requirements:{"highlights":["","",""]}
+`
+
+export const RESUME_PROJECT_HIGHLIGHT_GENERATE_PROMPT = `
+your task is to Generate three versions of a professional highlights section for project,
+each containing approximately 20 words. The text should be fluent, engaging, and tailored to the project %1$s.
+Incorporate metrics and numbers to make the content more impressive.JSON Structure Requirements:{"highlights":["","",""]}
+`
+
 const JSON_OUTPUT =
   '{"skills":[],"languages":[],"educations":[{"studyType":"","area":"","institution":""}],"work_experiences":[{"name":"","position":"","highlights":[]}],"about_me":""},"job_title":""}'
 

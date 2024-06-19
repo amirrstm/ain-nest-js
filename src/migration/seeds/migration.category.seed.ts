@@ -37,11 +37,11 @@ export class MigrationCategorySeed {
     const business = await this.categoryService.create({
       name: {
         en: 'Professional Shortcuts',
-        fa: 'میابرهای کسب و کار',
+        fa: 'میانبرهای کسب و کار',
       },
       description: {
         en: 'Professional Shortcuts for Business and Marketing',
-        fa: 'میابرهای حرفه‌ای برای کسب و کار و بازاریابی',
+        fa: 'میانبرهای حرفه‌ای برای کسب و کار و بازاریابی',
       },
       maxTokens: 0,
       slug: 'business-shortcuts',

@@ -87,8 +87,11 @@ import { OpenAIService } from 'src/common/open-ai/services/open-ai.service'
 import { ENUM_AI_ROLE } from 'src/common/open-ai/constants/open-ai.enum.constant'
 import {
   RESUME_BIO_GENERATE_PROMPT,
+  RESUME_EDUCATION_HIGHLIGHT_GENERATE_PROMPT,
   RESUME_GENERATE_OCCUPATION_PROMPT,
   RESUME_GENERATE_PROMPT,
+  RESUME_PROJECT_HIGHLIGHT_GENERATE_PROMPT,
+  RESUME_WORK_EXPERIENCE_GENERATE_PROMPT,
 } from '../constants/resume.ai.constant'
 import { ResumeCreateDto } from '../dto/resume.create.dto'
 import { IResumeDoc } from '../interfaces/resume.interface'
@@ -700,6 +703,42 @@ export class ResumeUserController {
     })
 
     return { data: create._id }
+  }
+
+  @Response('resume.update')
+  @ResumeUserGetGuard()
+  @UserProtected()
+  @AuthJwtUserAccessProtected()
+  @Put('/:resume/highlight-ai')
+  async getHighlightFromAI(
+    @GetResume() resume: ResumeDoc,
+    @RequestCustomLang() customLang: string[],
+    @Body() body: { title: string; type: string }
+  ): Promise<IResponse> {
+    const types = {
+      work: RESUME_WORK_EXPERIENCE_GENERATE_PROMPT,
+      project: RESUME_PROJECT_HIGHLIGHT_GENERATE_PROMPT,
+      education: RESUME_EDUCATION_HIGHLIGHT_GENERATE_PROMPT,
+    }
+
+    if (!types[body.type]) {
+      throw new NotFoundException({
+        statusCode: ENUM_TEMPLATE_STATUS_CODE_ERROR.TEMPLATE_NOT_FOUND_ERROR,
+        message: 'template.error.notFound',
+      })
+    }
+
+    const lang = customLang[0]
+    const systemPrompt = sprintf(`${AI_LANG(lang)}${types[body.type]}`, body.title)
+
+    const bio = await this.aiService.getMessageFromPrompt([
+      {
+        role: ENUM_AI_ROLE.SYSTEM,
+        content: systemPrompt,
+      },
+    ])
+
+    return { data: { text: bio.choices[0].message.content } }
   }
 
   @Response('resume.update')
