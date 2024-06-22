@@ -17,10 +17,10 @@ export class MigrationTemplateSeed {
     const dataPersian: TemplateCreateDto[] = [
       {
         lang: 'fa',
-        name: 'بسیک',
+        name: 'بیسیک',
         path: 'templates/pdf/fa/basic',
         image: '546d07a0-ded3-4909-c31a-60cb2606da00',
-        description: 'قالب بسیک',
+        description: 'قالب بیسیک',
         type: ENUM_TEMPLATE_TYPE.PDF,
         defaultSettings: {
           nameColor: '#000',
