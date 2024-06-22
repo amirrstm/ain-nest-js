@@ -17,6 +17,7 @@ import { IUserPlanService } from '../interfaces/user-plan.service.interface'
 import { UserPlanRepository } from '../repository/repositories/user-plan.repository'
 import { UserPlanDoc, UserPlanEntity } from '../repository/entities/user-plan.entity'
 import { APP_LANGUAGE } from 'src/app/constants/app.constant'
+import { IUserPlanUsed } from '../interfaces/user-plan.interface'
 
 @Injectable()
 export class UserPlanService implements IUserPlanService {
@@ -110,7 +111,12 @@ export class UserPlanService implements IUserPlanService {
   async create({ plan, user }: UserPlanCreateDto, options?: IDatabaseCreateOptions): Promise<UserPlanDoc> {
     const create: UserPlanEntity = new UserPlanEntity()
 
-    create.used = 0
+    create.used = {
+      resumeAI: 0,
+      generation: 0,
+      resumeVoice: 0,
+      resumeCustom: 0,
+    }
     create.plan = plan
     create.user = user
     create.planExpired = this.helperDateService.forwardInDays(30)
@@ -123,13 +129,13 @@ export class UserPlanService implements IUserPlanService {
     { used }: UserPlanUpdateDto,
     options?: IDatabaseSaveOptions
   ): Promise<UserPlanDoc> {
-    repository.used = used
+    repository.used = used as unknown as IUserPlanUsed
 
     return this.userPlanRepo.save(repository, options)
   }
 
   async updateExpire(repository: UserPlanDoc, options?: IDatabaseSaveOptions): Promise<UserPlanDoc> {
-    repository.used = 0
+    repository.used = { ...repository.used, generation: 0 }
     repository.planExpired = this.helperDateService.forwardInDays(30)
 
     return this.userPlanRepo.save(repository, options)

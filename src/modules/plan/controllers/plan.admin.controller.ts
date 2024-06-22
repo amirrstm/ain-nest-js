@@ -123,7 +123,20 @@ export class PlanAdminController {
   @Post('/create')
   async create(
     @Body()
-    { name, slug, description, features, generation, models, offForAnnual, price, isDefault }: PlanCreateDto
+    {
+      name,
+      slug,
+      description,
+      features,
+      generation,
+      models,
+      offForAnnual,
+      price,
+      isDefault,
+      resumeAI,
+      resumeCustom,
+      resumeVoice,
+    }: PlanCreateDto
   ): Promise<IResponse> {
     const exist: boolean = await this.planService.existBySlug(slug)
 
@@ -145,13 +158,16 @@ export class PlanAdminController {
     const create = await this.planService.create({
       name,
       slug,
-      description,
-      features,
-      generation,
-      models,
-      offForAnnual,
       price,
+      models,
+      features,
+      resumeAI,
       isDefault,
+      generation,
+      resumeVoice,
+      description,
+      resumeCustom,
+      offForAnnual,
     })
 
     return {

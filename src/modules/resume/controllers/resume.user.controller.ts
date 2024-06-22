@@ -1,5 +1,15 @@
 import { sprintf } from 'sprintf-js'
-import { Body, Controller, Delete, Get, NotFoundException, Post, Put, UploadedFile } from '@nestjs/common'
+import {
+  Body,
+  ConflictException,
+  Controller,
+  Delete,
+  Get,
+  NotFoundException,
+  Post,
+  Put,
+  UploadedFile,
+} from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 
 import { PdfService } from 'src/common/pdf/services/pdf.service'
@@ -96,6 +106,9 @@ import {
 import { ResumeCreateDto } from '../dto/resume.create.dto'
 import { IResumeDoc } from '../interfaces/resume.interface'
 import { ResumeTemplateSettingsDTO } from '../dto/resume.template-settings.dto'
+import { PlanService } from 'src/modules/plan/services/plan.service'
+import { ENUM_RESUME_STATUS_CODE_ERROR } from '../constants/resume.status-code.constant'
+import { UserPlanService } from 'src/modules/user-plan/services/user-plan.service'
 
 @ApiTags('Modules.User.Resume')
 @Controller({ version: '1', path: '/resume' })
@@ -104,8 +117,10 @@ export class ResumeUserController {
     private readonly pdfService: PdfService,
     private readonly awsS3Service: AwsService,
     private readonly aiService: OpenAIService,
+    private readonly planService: PlanService,
     private readonly resumeService: ResumeService,
     private readonly templateService: TemplateService,
+    private readonly userPlanService: UserPlanService,
     private readonly paginationService: PaginationService
   ) {}
 
@@ -161,14 +176,34 @@ export class ResumeUserController {
     @Body() { template, title }: Omit<ResumeCreateDto, 'user'>
   ): Promise<IResponse> {
     const lang = customLang[0]
-    const templateEntity = await this.templateService.findOneById(template)
 
+    const userPlan = await this.userPlanService.findOne({ user: user._id })
+    if (!userPlan) {
+      throw new ConflictException({
+        statusCode: ENUM_RESUME_STATUS_CODE_ERROR.RESUME_GENERATION_ERROR,
+        message: 'resume.error.notFound',
+      })
+    }
+
+    const desiredPlan = await this.planService.findOneById(userPlan.plan)
+    if (userPlan.used.resumeCustom === desiredPlan.resumeCustom) {
+      throw new ConflictException({
+        statusCode: ENUM_RESUME_STATUS_CODE_ERROR.RESUME_GENERATION_ERROR,
+        message: 'resume.error.planGeneration',
+      })
+    }
+
+    const templateEntity = await this.templateService.findOneById(template)
     if (!templateEntity) {
       throw new NotFoundException({
         statusCode: ENUM_TEMPLATE_STATUS_CODE_ERROR.TEMPLATE_NOT_FOUND_ERROR,
         message: 'template.error.notFound',
       })
     }
+
+    await this.userPlanService.update(userPlan, {
+      used: { ...userPlan.used, resumeCustom: userPlan.used.resumeCustom + 1 },
+    })
 
     const create = await this.resumeService.create({
       lang,
@@ -613,6 +648,22 @@ export class ResumeUserController {
     const lang = customLang[0]
     const systemPrompt = `${AI_LANG(lang)}${RESUME_GENERATE_PROMPT}`
 
+    const userPlan = await this.userPlanService.findOne({ user: user._id })
+    if (!userPlan) {
+      throw new ConflictException({
+        statusCode: ENUM_RESUME_STATUS_CODE_ERROR.RESUME_GENERATION_ERROR,
+        message: 'resume.error.notFound',
+      })
+    }
+
+    const desiredPlan = await this.planService.findOneById(userPlan.plan)
+    if (userPlan.used.resumeVoice === desiredPlan.resumeVoice) {
+      throw new ConflictException({
+        statusCode: ENUM_RESUME_STATUS_CODE_ERROR.RESUME_GENERATION_ERROR,
+        message: 'resume.error.planGeneration',
+      })
+    }
+
     const templateEntity = await this.templateService.findOneById(body.template)
     const voiceContent = await this.aiService.transcribeAudio(file.buffer)
 
@@ -647,6 +698,10 @@ export class ResumeUserController {
       languages: (aiData.languages || []).map((language: string) => ({ name: language, hasLevel: true, level: 5 })),
     })
 
+    await this.userPlanService.update(userPlan, {
+      used: { ...userPlan.used, resumeVoice: userPlan.used.resumeVoice + 1 },
+    })
+
     return { data: create._id }
   }
 
@@ -661,8 +716,24 @@ export class ResumeUserController {
     @Body() body: { occupation: string; description?: string; template: string }
   ): Promise<IResponse> {
     const lang = customLang[0]
-    const templateEntity = await this.templateService.findOneById(body.template)
 
+    const userPlan = await this.userPlanService.findOne({ user: user._id })
+    if (!userPlan) {
+      throw new ConflictException({
+        statusCode: ENUM_RESUME_STATUS_CODE_ERROR.RESUME_GENERATION_ERROR,
+        message: 'resume.error.notFound',
+      })
+    }
+
+    const desiredPlan = await this.planService.findOneById(userPlan.plan)
+    if (userPlan.used.resumeAI === desiredPlan.resumeAI) {
+      throw new ConflictException({
+        statusCode: ENUM_RESUME_STATUS_CODE_ERROR.RESUME_GENERATION_ERROR,
+        message: 'resume.error.planGeneration',
+      })
+    }
+
+    const templateEntity = await this.templateService.findOneById(body.template)
     const systemPrompt = sprintf(`${AI_LANG(lang)}${RESUME_GENERATE_OCCUPATION_PROMPT}`, { role: body.occupation })
 
     const bio = await this.aiService.getMessageFromGpt4([
@@ -702,6 +773,10 @@ export class ResumeUserController {
       languages: (aiData.languages || []).map((language: string) => ({ name: language, hasLevel: true, level: 5 })),
     })
 
+    await this.userPlanService.update(userPlan, {
+      used: { ...userPlan.used, resumeAI: userPlan.used.resumeAI + 1 },
+    })
+
     return { data: create._id }
   }
 
@@ -711,7 +786,7 @@ export class ResumeUserController {
   @AuthJwtUserAccessProtected()
   @Put('/:resume/highlight-ai')
   async getHighlightFromAI(
-    @GetResume() resume: ResumeDoc,
+    @GetUser() user: UserDoc,
     @RequestCustomLang() customLang: string[],
     @Body() body: { title: string; type: string }
   ): Promise<IResponse> {
@@ -719,6 +794,22 @@ export class ResumeUserController {
       work: RESUME_WORK_EXPERIENCE_GENERATE_PROMPT,
       project: RESUME_PROJECT_HIGHLIGHT_GENERATE_PROMPT,
       education: RESUME_EDUCATION_HIGHLIGHT_GENERATE_PROMPT,
+    }
+
+    const userPlan = await this.userPlanService.findOne({ user: user._id })
+    if (!userPlan) {
+      throw new ConflictException({
+        statusCode: ENUM_RESUME_STATUS_CODE_ERROR.RESUME_GENERATION_ERROR,
+        message: 'resume.error.notFound',
+      })
+    }
+
+    const desiredPlan = await this.planService.findOneById(userPlan.plan)
+    if (userPlan.used.generation === desiredPlan.generation) {
+      throw new ConflictException({
+        statusCode: ENUM_RESUME_STATUS_CODE_ERROR.RESUME_GENERATION_ERROR,
+        message: 'resume.error.planGeneration',
+      })
     }
 
     if (!types[body.type]) {
@@ -730,13 +821,11 @@ export class ResumeUserController {
 
     const lang = customLang[0]
     const systemPrompt = sprintf(`${AI_LANG(lang)}${types[body.type]}`, body.title)
+    const bio = await this.aiService.getMessageFromPrompt([{ role: ENUM_AI_ROLE.SYSTEM, content: systemPrompt }])
 
-    const bio = await this.aiService.getMessageFromPrompt([
-      {
-        role: ENUM_AI_ROLE.SYSTEM,
-        content: systemPrompt,
-      },
-    ])
+    await this.userPlanService.update(userPlan, {
+      used: { ...userPlan.used, generation: userPlan.used.generation + 1 },
+    })
 
     return { data: { text: bio.choices[0].message.content } }
   }

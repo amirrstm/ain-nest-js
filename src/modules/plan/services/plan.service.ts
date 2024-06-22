@@ -60,7 +60,20 @@ export class PlanService implements IPlanService {
   }
 
   async create(
-    { name, slug, description, features, generation, models, offForAnnual, price, isDefault }: PlanCreateDto,
+    {
+      name,
+      slug,
+      price,
+      models,
+      features,
+      resumeAI,
+      isDefault,
+      generation,
+      description,
+      offForAnnual,
+      resumeVoice,
+      resumeCustom,
+    }: PlanCreateDto,
     options?: IDatabaseCreateOptions
   ): Promise<PlanDoc> {
     const create: PlanEntity = new PlanEntity()
@@ -70,9 +83,12 @@ export class PlanService implements IPlanService {
     create.models = models
     create.isActive = true
     create.features = features
+    create.resumeAI = resumeAI
     create.isDefault = isDefault
     create.generation = generation
+    create.resumeVoice = resumeVoice
     create.description = description
+    create.resumeCustom = resumeCustom
     create.offForAnnual = offForAnnual
 
     return this.planRepository.create<PlanEntity>(create, options)
@@ -128,7 +144,19 @@ export class PlanService implements IPlanService {
 
   async createMany(data: PlanCreateDto[], options?: IDatabaseCreateManyOptions): Promise<boolean> {
     const create: PlanEntity[] = data.map(
-      ({ name, slug, description, features, generation, models, offForAnnual, price }) => {
+      ({
+        name,
+        slug,
+        description,
+        features,
+        generation,
+        models,
+        offForAnnual,
+        price,
+        resumeAI,
+        resumeCustom,
+        resumeVoice,
+      }) => {
         const entity: PlanEntity = new PlanEntity()
         entity.name = name
         entity.slug = slug
@@ -136,8 +164,11 @@ export class PlanService implements IPlanService {
         entity.models = models
         entity.isActive = true
         entity.features = features
+        entity.resumeAI = resumeAI
         entity.generation = generation
+        entity.resumeVoice = resumeVoice
         entity.description = description
+        entity.resumeCustom = resumeCustom
         entity.offForAnnual = offForAnnual
 
         return entity

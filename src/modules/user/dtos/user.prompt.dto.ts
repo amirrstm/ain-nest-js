@@ -41,13 +41,4 @@ export class UserPromptDto {
   @IsNotEmpty()
   @Type(() => Number)
   readonly temperature: number
-
-  @ApiProperty({
-    required: true,
-    example: faker.number.int({ max: 3, min: 1 }),
-    description: 'Number of prompts to generate',
-  })
-  @IsNotEmpty()
-  @Type(() => Number)
-  readonly variant: number
 }

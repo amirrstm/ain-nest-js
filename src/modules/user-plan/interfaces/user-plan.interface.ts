@@ -11,3 +11,10 @@ export interface IUserPlanDoc extends Omit<UserPlanDoc, 'plan' | 'user'> {
   user: IUserDoc
   plan: PlanDoc
 }
+
+export interface IUserPlanUsed {
+  resumeAI: number
+  generation: number
+  resumeVoice: number
+  resumeCustom: number
+}

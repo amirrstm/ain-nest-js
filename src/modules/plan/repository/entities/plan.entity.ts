@@ -49,6 +49,27 @@ export class PlanEntity extends DatabaseMongoUUIDEntityAbstract {
   price: number
 
   @Prop({
+    default: 0,
+    type: Number,
+    required: true,
+  })
+  resumeVoice: number
+
+  @Prop({
+    default: 0,
+    type: Number,
+    required: true,
+  })
+  resumeAI: number
+
+  @Prop({
+    default: 0,
+    type: Number,
+    required: true,
+  })
+  resumeCustom: number
+
+  @Prop({
     required: true,
     default: true,
     type: Boolean,

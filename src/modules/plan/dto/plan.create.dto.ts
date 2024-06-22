@@ -85,6 +85,33 @@ export class PlanCreateDto {
   readonly price: number
 
   @ApiProperty({
+    required: true,
+    description: 'Count of resume voice',
+    example: faker.finance.amount(),
+  })
+  @IsNumber()
+  @Type(() => Number)
+  readonly resumeVoice: number
+
+  @ApiProperty({
+    required: true,
+    description: 'Count of resume AI',
+    example: faker.finance.amount(),
+  })
+  @IsNumber()
+  @Type(() => Number)
+  readonly resumeAI: number
+
+  @ApiProperty({
+    required: true,
+    description: 'Count of resume Custom',
+    example: faker.finance.amount(),
+  })
+  @IsNumber()
+  @Type(() => Number)
+  readonly resumeCustom: number
+
+  @ApiProperty({
     example: true,
     required: true,
     description: 'Off for annual plan',

@@ -3,6 +3,8 @@ import { Document } from 'mongoose'
 
 import { DatabaseEntity } from 'src/common/database/decorators/database.decorator'
 import { DatabaseMongoUUIDEntityAbstract } from 'src/common/database/abstracts/mongo/entities/database.mongo.uuid.entity.abstract'
+
+import { IUserPlanUsed } from '../../interfaces/user-plan.interface'
 import { PlanEntity } from 'src/modules/plan/repository/entities/plan.entity'
 import { UserEntity } from 'src/modules/user/repository/entities/user.entity'
 
@@ -31,11 +33,32 @@ export class UserPlanEntity extends DatabaseMongoUUIDEntityAbstract {
   planExpired: Date
 
   @Prop({
-    default: 0,
-    type: Number,
+    _id: false,
     required: true,
+    type: {
+      generation: {
+        default: 0,
+        type: Number,
+        required: true,
+      },
+      resumeAI: {
+        default: 0,
+        type: Number,
+        required: true,
+      },
+      resumeVoice: {
+        default: 0,
+        type: Number,
+        required: true,
+      },
+      resumeCustom: {
+        default: 0,
+        type: Number,
+        required: true,
+      },
+    },
   })
-  used: number
+  used: IUserPlanUsed
 }
 
 export const UserPlanSchema = SchemaFactory.createForClass(UserPlanEntity)

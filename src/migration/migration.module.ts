@@ -8,6 +8,8 @@ import { RoleModule } from 'src/modules/role/role.module'
 import { PlanModule } from 'src/modules/plan/plan.module'
 import { DataModule } from 'src/modules/data/data.module'
 import { EmailModule } from 'src/modules/email/email.module'
+import { InputModule } from 'src/modules/inputs/input.module'
+import { PromptModule } from 'src/modules/prompts/prompt.module'
 import { CategoryModule } from 'src/modules/category/category.module'
 import { TemplateModule } from 'src/modules/template/template.module'
 
@@ -21,6 +23,7 @@ import { MigrationTemplateSeed } from './seeds/migration.template.seed'
 
 @Module({
   imports: [
+    InputModule,
     CommonModule,
     CommandModule,
     AuthModule,
@@ -29,6 +32,7 @@ import { MigrationTemplateSeed } from './seeds/migration.template.seed'
     EmailModule,
     PlanModule,
     DataModule,
+    PromptModule,
     TemplateModule,
     CategoryModule,
   ],

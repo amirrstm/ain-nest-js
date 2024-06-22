@@ -20,6 +20,8 @@ import { ChatMessagesDto } from '../dto/chat.message.dto'
 import { ENUM_CHAT_ROLE } from '../constants/chat.constant'
 import { ChatUSerDeleteDoc, ChatUserCreateDoc, ChatUserGetDoc } from '../docs/chat.user.doc'
 import { ChatGetSerialization } from '../serializations/chat.get.serialization'
+import { RequestCustomLang } from 'src/common/request/decorators/request.decorator'
+import { AI_LANG } from 'src/common/open-ai/constants/ai.constant'
 
 @ApiTags('Modules.User.Chat')
 @Controller({ version: '1', path: '/chat' })
@@ -47,7 +49,13 @@ export class ChatUserController {
   @UserProtected()
   @AuthJwtUserAccessProtected()
   @Post('/message')
-  async message(@GetUser() user: UserDoc, @Body() body: ChatMessagesDto): Promise<IResponse> {
+  async message(
+    @GetUser() user: UserDoc,
+    @Body() body: ChatMessagesDto,
+    @RequestCustomLang() customLang: string[]
+  ): Promise<IResponse> {
+    const lang = customLang[0]
+    const systemPrompt = `${AI_LANG(lang)}`
     const chat = await this.chatService.findOne({ user: user._id })
 
     const userPlan: UserPlanDoc = await this.userPlanService.findOne({ user: user._id })
@@ -60,7 +68,7 @@ export class ChatUserController {
     }
 
     const desiredPlan = await this.planService.findOneById(userPlan.plan)
-    if (userPlan.used === desiredPlan.generation) {
+    if (userPlan.used.generation === desiredPlan.generation) {
       throw new ConflictException({
         statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_PLAN_GENERATION_ERROR,
         message: 'user.error.planGeneration',
@@ -68,7 +76,7 @@ export class ChatUserController {
     }
 
     if (chat) {
-      const messages: IPromptMessage[] = []
+      const messages: IPromptMessage[] = [{ content: systemPrompt, role: ENUM_AI_ROLE.SYSTEM }]
 
       chat.messages.forEach(message => {
         messages.push({
@@ -77,13 +85,10 @@ export class ChatUserController {
         })
       })
 
-      messages.push({
-        role: ENUM_AI_ROLE.USER,
-        content: body.content,
-      })
+      messages.push({ role: ENUM_AI_ROLE.USER, content: body.content })
 
       await this.chatService.update(chat, { message: body })
-      const aiResponse = await this.aiService.getMessageFromPrompt(messages)
+      const aiResponse = await this.aiService.getChatFromPrompt(messages)
 
       await this.chatService.update(chat, {
         message: { role: ENUM_CHAT_ROLE.ASSISTANT, content: aiResponse.choices[0].message.content },
@@ -93,12 +98,14 @@ export class ChatUserController {
     }
 
     const newChat = await this.chatService.create({ user: user._id, message: body })
-    const messages: IPromptMessage[] = []
+    const messages: IPromptMessage[] = [{ content: systemPrompt, role: ENUM_AI_ROLE.SYSTEM }]
 
     messages.push({ role: ENUM_AI_ROLE.USER, content: body.content })
 
-    const aiResponse = await this.aiService.getMessageFromPrompt(messages, { max_tokens: 1500, temperature: 0.6 })
-    await this.userPlanService.update(userPlan, { used: userPlan.used + 1 })
+    const aiResponse = await this.aiService.getChatFromPrompt(messages, { max_tokens: 1500, temperature: 0.6 })
+    await this.userPlanService.update(userPlan, {
+      used: { ...userPlan.used, generation: userPlan.used.generation + 1 },
+    })
 
     await this.chatService.update(newChat, {
       message: { role: ENUM_CHAT_ROLE.ASSISTANT, content: aiResponse.choices[0].message.content },

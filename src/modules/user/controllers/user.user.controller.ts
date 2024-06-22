@@ -74,7 +74,7 @@ export class UserUserController {
     }
 
     const desiredPlan = await this.planService.findOneById(userPlan.plan)
-    if (userPlan.used === desiredPlan.generation) {
+    if (userPlan.used.generation === desiredPlan.generation) {
       throw new ConflictException({
         statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_PLAN_GENERATION_ERROR,
         message: 'user.error.planGeneration',
@@ -118,10 +118,9 @@ export class UserUserController {
     const tone = await this.toneService.findOneById(body.tone, { plainObject: true })
 
     const language = AI_LANG(lang)
-    const variant = String(body.variant)
     const desiredTone = tone.name['en']
     const systemPrompt = prompt.description[lang]
-    const SYSTEM_MESSAGE = sprintf(SYSTEM_PROMPT_MESSAGE, language, systemPrompt, desiredTone, variant)
+    const SYSTEM_MESSAGE = sprintf(SYSTEM_PROMPT_MESSAGE, language, systemPrompt, desiredTone)
 
     const messages: IPromptMessage[] = [
       {
@@ -139,7 +138,10 @@ export class UserUserController {
       max_tokens: category.maxTokens ?? 3000,
     })
 
-    await this.userPlanService.update(userPlan, { used: userPlan.used + body.variant })
+    await this.userPlanService.update(userPlan, {
+      used: { ...userPlan.used, generation: userPlan.used.generation + 1 },
+    })
+
     const createdHistory = await this.historyService.create({
       user: user._id,
       category: category._id,

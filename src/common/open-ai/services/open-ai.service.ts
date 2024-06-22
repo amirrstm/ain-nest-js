@@ -18,6 +18,22 @@ export class OpenAIService implements IOpenAIService {
     })
   }
 
+  async getChatFromPrompt(messages: IPromptMessage[], options?: IPromptOptions): Promise<ChatCompletion> {
+    if (messages.length === 0) {
+      return
+    }
+
+    return await this.openAI.chat.completions.create({
+      // model: 'gpt-4o-2024-05-13',
+      model: 'gpt-3.5-turbo-0125',
+      messages: messages.map(message => ({
+        role: message.role,
+        content: message.content,
+      })),
+      ...options,
+    })
+  }
+
   async getMessageFromPrompt(messages: IPromptMessage[], options?: IPromptOptions): Promise<ChatCompletion> {
     if (messages.length === 0) {
       return
@@ -52,7 +68,7 @@ export class OpenAIService implements IOpenAIService {
     }
 
     return await this.openAI.chat.completions.create({
-      model: 'gpt-4o',
+      model: 'gpt-4o-2024-05-13',
       messages: messages.map(message => ({
         role: message.role,
         content: message.content,

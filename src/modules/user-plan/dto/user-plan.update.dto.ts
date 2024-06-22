@@ -1,10 +1,17 @@
 import { ApiProperty } from '@nestjs/swagger'
+import { Type } from 'class-transformer'
 
 export class UserPlanUpdateDto {
   @ApiProperty({
     required: true,
-    example: 20,
-    description: 'Usage of Plan',
+    description: 'Description of category',
+    example: {
+      resumeAI: 1,
+      generation: 1,
+      resumeCustom: 1,
+      resumeVoice: 1,
+    },
   })
-  readonly used: number
+  @Type(() => Object)
+  readonly used: Record<string, number>
 }

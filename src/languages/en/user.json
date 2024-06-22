@@ -21,6 +21,7 @@
   "signUpMobile": "Activation code sent.",
   "loginGoogle": "Logged in with Google successfully.",
   "prompt": "Request successful.",
+  "verifyMobile": "Mobile number verified successfully.",
   "error": {
     "notFound": "User not found.",
     "emailExist": "Email already in use.",
