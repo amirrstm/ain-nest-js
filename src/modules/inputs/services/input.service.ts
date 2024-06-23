@@ -48,7 +48,7 @@ export class InputService implements IInputService {
       isRequired: 1,
     }
 
-    return this.inputRepository.rawFindAll(
+    return await this.inputRepository.rawFindAll(
       [
         {
           $match: find,

@@ -91,10 +91,8 @@ export class UserPublicController {
   @Response('user.signUpMobile')
   @Post('/generate-mobile-otp')
   async signUpMobile(@Body() { mobileNumber }: UserSignUpMobileDto): Promise<IResponse> {
+    const role = await this.roleService.findOneByName('user')
     const isDevMode = this.configService.get('app.env') === 'development'
-
-    const promises: Promise<any>[] = [this.roleService.findOneByName('user')]
-    const [role] = await Promise.all(promises)
 
     if (!mobileNumber) {
       throw new ConflictException({
