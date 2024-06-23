@@ -47,6 +47,7 @@ export class InputService implements IInputService {
       multiline: 1,
       isRequired: 1,
     }
+
     return this.inputRepository.rawFindAll(
       [
         {

@@ -210,7 +210,7 @@ export class CategoryPublicController {
       })
     }
 
-    const inputs = await this.inputService.findAllWithTranslation(customLang, { category: category._id })
+    const inputs = await this.inputService.findAllWithTranslation(customLang[0], { category: category._id })
 
     return { data: { ...rawCategories[0], inputs } }
   }
