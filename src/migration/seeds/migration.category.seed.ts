@@ -93,7 +93,7 @@ export class MigrationCategorySeed {
           en: 'Create impactful CTAs with AI to drive engagement and action',
           fa: 'متن دکمه‌های دعوت به عمل قوی با استفاده از هوش مصنوعی برای افزایش مشارکت',
         },
-        maxTokens: 500,
+        maxTokens: 2000,
         slug: 'call-to-action',
         parentId: branding._id,
 
@@ -134,7 +134,7 @@ export class MigrationCategorySeed {
           en: 'Craft compelling ad content for social media to boost engagement',
           fa: 'محتوای تبلیغاتی جذاب برای شبکه‌های مجازی برای افزایش مشارکت و بازخورد',
         },
-        maxTokens: 1500,
+        maxTokens: 2000,
         slug: 'social-media-ads',
         parentId: branding._id,
 
@@ -193,7 +193,7 @@ export class MigrationCategorySeed {
           en: 'Create compelling ad content for Google search to boost engagement',
           fa: 'محتوای تبلیغاتی جذاب برای جستجوی گوگل برای افزایش مشارکت',
         },
-        maxTokens: 250,
+        maxTokens: 2000,
         slug: 'google-search-ads',
         parentId: branding._id,
 
@@ -311,7 +311,7 @@ export class MigrationCategorySeed {
           en: 'Generate engaging and effective SMS and notifications for your marketing campaigns',
           fa: 'محتوای پیامک و اعلان جذاب و موثر برای کمپین های تبلیغاتی و بازاریابی خود تولید کنید',
         },
-        maxTokens: 1000,
+        maxTokens: 2000,
         slug: 'sms-generator',
         parentId: branding._id,
 
@@ -475,7 +475,7 @@ export class MigrationCategorySeed {
           en: 'Write a text using the attention, interest, desire, action framework',
           fa: 'برای محصول یا خدماتتان میل ایجاد کنید و مخاطب را وادار به اقدام کنید',
         },
-        maxTokens: 3000,
+        maxTokens: 4000,
         slug: 'aida-framework',
         parentId: branding._id,
 
@@ -516,7 +516,7 @@ export class MigrationCategorySeed {
           en: 'Write a text using the problem-agitate-solution framework',
           fa: 'مشکل کاربر را برجسته کنید و پس از فضاسازی راه‌حل مناسب را ارائه دهید',
         },
-        maxTokens: 3000,
+        maxTokens: 4000,
         slug: 'pas-framework',
         parentId: branding._id,
 
@@ -934,7 +934,7 @@ export class MigrationCategorySeed {
           en: 'The best possible keywords to identify a website to search engines',
           fa: 'بهترین کلیدواژه‌های ممکن برای شناساندن وب‌سایت به موتور های جستجوگر',
         },
-        maxTokens: 250,
+        maxTokens: 2000,
         slug: 'seo-keywords',
         parentId: website._id,
 
@@ -1278,7 +1278,7 @@ export class MigrationCategorySeed {
           en: 'Generate job descriptions for your business',
           fa: 'توضیحات شغلی برای کسب و کار خود تولید کنید',
         },
-        maxTokens: 3000,
+        maxTokens: 4000,
         slug: 'job-description',
         parentId: business._id,
 
