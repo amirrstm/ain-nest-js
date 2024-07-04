@@ -87,11 +87,11 @@ export class MigrationCategorySeed {
       {
         name: {
           en: 'Call To Action',
-          fa: 'دعوت به عمل (CTA)',
+          fa: 'دعوت به اقدام (CTA)',
         },
         description: {
           en: 'Create impactful CTAs with AI to drive engagement and action',
-          fa: 'متن دکمه‌های دعوت به عمل قوی با استفاده از هوش مصنوعی برای افزایش مشارکت',
+          fa: 'متن‌های دعوت به اقدام تاثیرگزار با استفاده از هوش مصنوعی برای افزایش مشارکت',
         },
         maxTokens: 2000,
         slug: 'call-to-action',
