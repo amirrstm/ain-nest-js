@@ -5,10 +5,18 @@ services:
     build: .
     ports:
       - '4000:4000'
+    networks:
+      - my_network
     depends_on:
       - mongodb
     env_file:
       - .env
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.ainevis-api.rule=Host(`api.ainevis.com`)'
+      - 'traefik.http.routers.ainevis-api.entrypoints=websecure'
+      - 'traefik.http.routers.ainevis-api.tls.certResolver=letsencrypt'
+      - 'traefik.http.services.ainevis-api.loadbalancer.server.port=3000'
 
   mongodb:
     image: mongo:4.4.6
@@ -19,3 +27,7 @@ services:
 
 volumes:
   mongo-data:
+
+networks:
+  my_network:
+    external: true
