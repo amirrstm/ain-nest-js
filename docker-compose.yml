@@ -13,10 +13,10 @@ services:
       - .env
     labels:
       - 'traefik.enable=true'
-      - 'traefik.http.routers.ainevis-api.rule=Host(`api.ainevis.com`)'
-      - 'traefik.http.routers.ainevis-api.entrypoints=websecure'
-      - 'traefik.http.routers.ainevis-api.tls.certResolver=letsencrypt'
-      - 'traefik.http.services.ainevis-api.loadbalancer.server.port=4000'
+      - 'traefik.http.routers.ainevis-api-348fe8-app-1.rule=Host(`api.ainevis.com`)'
+      - 'traefik.http.routers.ainevis-api-348fe8-app-1.entrypoints=websecure'
+      - 'traefik.http.routers.ainevis-api-348fe8-app-1.tls.certResolver=letsencrypt'
+      - 'traefik.http.services.ainevis-api-348fe8-app-1.loadbalancer.server.port=4000'
 
   mongodb:
     image: mongo:4.4.6
