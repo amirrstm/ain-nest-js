@@ -2,7 +2,6 @@ import { Command } from 'nestjs-command'
 import { Injectable } from '@nestjs/common'
 
 import { CategoryService } from 'src/modules/category/services/category.service'
-import { CategoryCreateDto } from 'src/modules/category/dto/category.create.dto'
 import { PromptService } from 'src/modules/prompts/services/prompt.service'
 import { InputService } from 'src/modules/inputs/services/input.service'
 import { InputCreateDto } from 'src/modules/inputs/dto/input.create.dto'

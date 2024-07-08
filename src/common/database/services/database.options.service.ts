@@ -40,6 +40,8 @@ export class DatabaseOptionsService implements IDatabaseOptionsService {
       ...timeoutOptions,
     }
 
+    console.log(mongooseOptions)
+
     if (user && password) {
       mongooseOptions.auth = {
         username: user,
