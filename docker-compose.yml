@@ -5,11 +5,5 @@ services:
     build: .
     ports:
       - '4000:4000'
-    networks:
-      - dokploy-network
     env_file:
       - .env
-
-networks:
-  dokploy-network:
-    external: true
