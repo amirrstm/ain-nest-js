@@ -11,12 +11,6 @@ services:
       - mongodb
     env_file:
       - .env
-    labels:
-      - 'traefik.enable=true'
-      - 'traefik.http.routers.ainevis-api-router.rule=Host(`api.ainevis.com`)'
-      - 'traefik.http.routers.ainevis-api-router.entrypoints=websecure'
-      - 'traefik.http.routers.ainevis-api-router.tls.certResolver=letsencrypt'
-      - 'traefik.http.services.ainevis-api-service.loadbalancer.server.port=4000'
 
   mongodb:
     image: mongo:4.4.6
