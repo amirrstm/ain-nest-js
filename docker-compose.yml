@@ -7,23 +7,9 @@ services:
       - '4000:4000'
     networks:
       - dokploy-network
-    depends_on:
-      - mongodb
     env_file:
       - .env
-
-  mongodb:
-    image: mongo:4.4.6
-    ports:
-      - '27017:27017'
-    volumes:
-      - mongo-data:/data/db
-    networks:
-      - dokploy-network
 
 networks:
   dokploy-network:
     external: true
-
-volumes:
-  mongo-data:
