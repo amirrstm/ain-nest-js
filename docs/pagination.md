@@ -1,501 +1,669 @@
 # Pagination
 
+This document explains how server-side pagination works in the AIN-NestJS application, including query decorators, response formatting, and filtering capabilities.
+
 ## Prerequisites
-Before start, you can read some docs for better understanding
-1. [structure_response][doc-structure-response] 
-2. [response][doc-response] 
+
+Before starting, you can read some docs for better understanding:
+1. [Structure Response][doc-structure-response] 
+2. [Response][doc-response] 
 
 ## Purpose
-Making server-side pagination easier to implement. 
+
+The pagination system provides:
+
+- **Server-side pagination** with configurable limits and offsets
+- **Advanced filtering** with multiple data types and operators
+- **Search functionality** across multiple fields
+- **Sorting and ordering** with validation
+- **Response standardization** with metadata and serialization
+- **Type-safe query handling** with automatic validation
 
 ## Description
 
-Server-Side Pagination that contains 2 main features
+The application implements a comprehensive server-side pagination system with two main components:
 
-1. `@PaginationQuery`
+### 1. `@PaginationQuery` Decorators
 
-    > The details will be described below
+These decorators automatically convert HTTP query parameters into database query objects:
 
-    This decorator is a helper for converting a `@Query` into a `query database`.
-    `@PaginationQuery` has 7 types.
+- **`@PaginationQuery`** - Core pagination (search, paging, ordering)
+- **`@PaginationQueryFilterInBoolean`** - Boolean array filtering
+- **`@PaginationQueryFilterInEnum`** - Enum value filtering
+- **`@PaginationQueryFilterEqual`** - Exact string matching
+- **`@PaginationQueryFilterContain`** - String contains filtering
+- **`@PaginationQueryFilterDate`** - Date range filtering
+- **`@PaginationQueryFilterEqualObjectId`** - MongoDB ObjectId filtering
 
-    - PaginationQuery
-    - PaginationQueryFilterInBoolean
-    - PaginationQueryFilterInEnum
-    - PaginationQueryFilterEqual
-    - PaginationQueryFilterContain
-    - PaginationQueryFilterDate
-    - PaginationQueryFilterEqualObjectId
-  
-2. `@ResponsePaging`
+### 2. `@ResponsePaging` Decorator
 
-    > The details will be described below
+This decorator extends the standard `@Response` decorator with pagination-specific features:
 
-    This decorator is inherited with [response][doc-response]. So in this section, I will describe only the differences.
+- **Required serialization** for consistent data formatting
+- **Automatic pagination metadata** generation
+- **Standardized response structure** with `IResponsePaging` interface
+- **Built-in total count and page calculation**
 
-    The difference is
-    - In `@ResponsePaging` options, serialization is required, but in `@Response`, it is optional. For usage, there is no difference.
-    - In `@Response`, for help inconsistency, that has an `IResponse` interface, but in `@ResponsePaging`, that has an `IResponsePaging`.
+### Architecture Overview
 
+```
+┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+│   HTTP Query    │    │   Pagination     │    │   Database      │
+│   Parameters    │───▶│   Pipes &        │───▶│   Query         │
+│                 │    │   Decorators     │    │   Execution     │
+└─────────────────┘    └──────────────────┘    └─────────────────┘
+                                │                        │
+                                ▼                        ▼
+                       ┌──────────────────┐    ┌─────────────────┐
+                       │   Response       │    │   Serialized    │
+                       │   Formatting     │    │   Data          │
+                       └──────────────────┘    └─────────────────┘
+```
 
---- 
+---
 
-# PaginationQuery
+# PaginationQuery Decorators
 
-`@PaginationQuery` is a helper for converting a `@Query` into a `query database`. 
-This decorator consumes `pipe` from `nestjs` with some manipulation. 
-Now there are 7 Types that have different purpose.
+The pagination system uses a combination of decorators to handle different types of query parameters. Each decorator automatically validates, transforms, and converts query parameters into database query objects.
 
-List of `@Query` that used by `@PaginationQuery`
+## Supported Query Parameters
 
-- `search`: text searching
-- `perPage`: set limit
-- `page`: set page
-- `orderBy`: set order by
-- `orderDirection`: ser order direction
+The pagination system automatically handles these query parameters:
 
-## PaginationQuery
+- **`search`** - Text searching across specified fields
+- **`perPage`** - Number of items per page (limited by max value)
+- **`page`** - Current page number (1-based)
+- **`orderBy`** - Field name for sorting
+- **`orderDirection`** - Sort direction (asc/desc)
 
-> It is a default decorator and will always required when doing server-side pagination. 
+## Core Pagination Decorator
 
-This is uses for make default value for pagination.
+### `@PaginationQuery`
 
-```ts
+The core pagination decorator that handles search, paging, and ordering. This decorator is required for all paginated endpoints.
+
+```typescript
 export function PaginationQuery(
-    defaultPerPage: number,
-    defaultOrderBy: string,
-    defaultOrderDirection: ENUM_PAGINATION_ORDER_DIRECTION_TYPE,
-    availableSearch: string[],
-    availableOrderBy: string[]
-): ParameterDecorator {
-    ...
+  defaultPerPage: number,
+  defaultOrderBy: string,
+  defaultOrderDirection: ENUM_PAGINATION_ORDER_DIRECTION_TYPE,
+  availableSearch: string[],
+  availableOrderBy: string[]
+): ParameterDecorator
+```
+
+#### Parameters
+
+| Parameter | Type | Description | Example |
+|-----------|------|-------------|---------|
+| `defaultPerPage` | `number` | Default number of items per page | `20` |
+| `defaultOrderBy` | `string` | Default field for sorting | `'createdAt'` |
+| `defaultOrderDirection` | `ENUM_PAGINATION_ORDER_DIRECTION_TYPE` | Default sort direction | `ENUM_PAGINATION_ORDER_DIRECTION_TYPE.DESC` |
+| `availableSearch` | `string[]` | Fields that can be searched | `['name', 'email']` |
+| `availableOrderBy` | `string[]` | Fields that can be used for sorting | `['createdAt', 'name', 'email']` |
+
+#### Configuration Constants
+
+```typescript
+// Default pagination constants
+export const PAGINATION_PER_PAGE = 20
+export const PAGINATION_MAX_PER_PAGE = 100
+export const PAGINATION_PAGE = 1
+export const PAGINATION_MAX_PAGE = 20
+export const PAGINATION_ORDER_BY = 'createdAt'
+export const PAGINATION_ORDER_DIRECTION = ENUM_PAGINATION_ORDER_DIRECTION_TYPE.ASC
+export const PAGINATION_AVAILABLE_ORDER_BY = ['createdAt']
+export const PAGINATION_AVAILABLE_ORDER_DIRECTION = [ENUM_PAGINATION_ORDER_DIRECTION_TYPE.ASC, ENUM_PAGINATION_ORDER_DIRECTION_TYPE.DESC]
+```
+
+#### Usage Example
+
+```typescript
+// Define pagination constants for a module
+const USER_DEFAULT_PER_PAGE = 20
+const USER_DEFAULT_ORDER_BY = 'createdAt'
+const USER_DEFAULT_ORDER_DIRECTION = ENUM_PAGINATION_ORDER_DIRECTION_TYPE.DESC
+const USER_DEFAULT_AVAILABLE_SEARCH = ['firstName', 'lastName', 'email']
+const USER_DEFAULT_AVAILABLE_ORDER_BY = ['createdAt', 'firstName', 'lastName', 'email']
+
+@Get('/list')
+async list(
+  @PaginationQuery(
+    USER_DEFAULT_PER_PAGE,
+    USER_DEFAULT_ORDER_BY,
+    USER_DEFAULT_ORDER_DIRECTION,
+    USER_DEFAULT_AVAILABLE_SEARCH,
+    USER_DEFAULT_AVAILABLE_ORDER_BY
+  )
+  { _search, _limit, _offset, _order }: PaginationListDto
+): Promise<IResponsePaging> {
+  // Implementation
 }
 ```
 
-### Params and Options
+## Filter Decorators
 
-#### defaultPerPage
+The pagination system includes several specialized filter decorators for different data types and query operations.
 
-Default per page is a limit data per request.
+### `@PaginationQueryFilterInBoolean`
 
-```ts
-const defaultPerPage = 20;
-```
+Filters data based on boolean values. Returns documents where the field matches any value in the provided boolean array.
 
-#### defaultOrderBy
-Default order by scope base on `availableOrderBy`. Otherwise will return `createdAt`.
-
-```ts
-const defaultOrderBy = 'createdAt';
-```
-
-#### defaultOrderDirection
-Default order direction will following `ENUM_PAGINATION_ORDER_DIRECTION_TYPE`. Otherwise will return `ENUM_PAGINATION_ORDER_DIRECTION_TYPE.DESC`.
-
-```ts
-const defaultOrderDirection = ENUM_PAGINATION_ORDER_DIRECTION_TYPE.DESC;
-```
-
-#### availableSearch
-This will be the scope of text searching.
-
-```ts
-const availableSearch = [
-    'name',
-];
-```
-
-#### availableOrderBy
-This will be the scope for ordering or sorting.
-
-```ts
-const availableSearch = [
-    'createdAt',
-    'name',
-];
-```
-
-## PaginationQueryFilterInBoolean
-
-This is used to set the default boolean value for pagination and convert into query database. 
-If null or undefined, that will be returned as `defaultValue`.
-
-```ts
+```typescript
 export function PaginationQueryFilterInBoolean(
-    field: string,
-    defaultValue: boolean[],
-    queryField?: string,
-    raw = false
-): ParameterDecorator {
-    ...
+  field: string,
+  defaultValue: boolean[],
+  queryField?: string,
+  raw = false
+): ParameterDecorator
+```
+
+#### Parameters
+
+| Parameter | Type | Description | Example |
+|-----------|------|-------------|---------|
+| `field` | `string` | Query parameter name | `'isActive'` |
+| `defaultValue` | `boolean[]` | Default values when no query provided | `[true, false]` |
+| `queryField` | `string` | Database field name (optional) | `'isActive'` |
+| `raw` | `boolean` | Return raw array instead of query object | `false` |
+
+#### Usage Example
+
+```typescript
+const USER_DEFAULT_IS_ACTIVE = [true, false]
+
+@Get('/list')
+async list(
+  @PaginationQuery(...)
+  { _search, _limit, _offset, _order }: PaginationListDto,
+  @PaginationQueryFilterInBoolean('isActive', USER_DEFAULT_IS_ACTIVE)
+  isActive: Record<string, any>
+): Promise<IResponsePaging> {
+  const find: Record<string, any> = {
+    ..._search,
+    ...isActive, // { isActive: { $in: [true, false] } }
+  }
+  // Implementation
 }
 ```
 
-### Params and Options
+### `@PaginationQueryFilterInEnum`
 
-#### field
+Filters data based on enum values with validation against allowed enum values.
 
-This option is required and will be a field name for the query request and database.
-
-#### defaultValue
-
-This option is required and will be a default value when null or undefined query.
-
-#### queryField
-
-This option is optional and will force a field name for the query database.
-
-#### raw
-
-This option is optional and will return value as array of boolean and not convert into query database.
-
-
-## PaginationQueryFilterInEnum
-
-This is used to set the default enum value for pagination and convert into query database. 
-If null or undefined, that will be returned as `defaultValue`.
-
-```ts
+```typescript
 export function PaginationQueryFilterInEnum<T>(
-    field: string,
-    defaultValue: T,
-    defaultEnum: Record<string, any>,
-    queryField?: string,
-    raw = false
-): ParameterDecorator {
-    ...
+  field: string,
+  defaultValue: T,
+  defaultEnum: Record<string, any>,
+  queryField?: string,
+  raw = false
+): ParameterDecorator
+```
+
+#### Parameters
+
+| Parameter | Type | Description | Example |
+|-----------|------|-------------|---------|
+| `field` | `string` | Query parameter name | `'type'` |
+| `defaultValue` | `T` | Default enum value | `'USER'` |
+| `defaultEnum` | `Record<string, any>` | Enum object for validation | `ENUM_USER_TYPE` |
+| `queryField` | `string` | Database field name (optional) | `'type'` |
+| `raw` | `boolean` | Return raw value instead of query object | `false` |
+
+#### Usage Example
+
+```typescript
+const TEMPLATE_DEFAULT_TYPE = 'RESUME'
+
+@Get('/list')
+async list(
+  @PaginationQuery(...)
+  { _search, _limit, _offset, _order }: PaginationListDto,
+  @PaginationQueryFilterInEnum('type', TEMPLATE_DEFAULT_TYPE, ENUM_TEMPLATE_TYPE)
+  type: Record<string, any>
+): Promise<IResponsePaging> {
+  const find: Record<string, any> = {
+    ..._search,
+    ...type, // { type: 'RESUME' }
+  }
+  // Implementation
 }
 ```
 
-### Params and Options
+### `@PaginationQueryFilterEqual`
 
-#### field
+Filters data with exact string matching.
 
-This option is required and will be a field name for the query request and database.
-
-#### defaultValue
-
-This option is required and will be a default value when null or undefined query.
-
-#### defaultEnum
-
-This option is required and will be the default enum for checking the query request value.
-
-#### queryField
-
-This option is optional and will force a field name for the query database.
-
-#### raw
-
-This option is optional and will return value as array of enum and not convert into query database.
-
-
-## PaginationQueryFilterEqual
-
-This is used to set the value for pagination and convert into query database with equal options. 
-If null or undefined, that will be returned `undefined`.
-
-```ts
+```typescript
 export function PaginationQueryFilterEqual(
-    field: string,
-    queryField?: string,
-    options?: IPaginationFilterStringEqualOptions,
-    raw = false
-): ParameterDecorator {
-    ...
-}
+  field: string,
+  queryField?: string,
+  options?: IPaginationFilterStringEqualOptions,
+  raw = false
+): ParameterDecorator
 ```
 
-### Params and Options
+#### Parameters
 
-#### field
+| Parameter | Type | Description | Example |
+|-----------|------|-------------|---------|
+| `field` | `string` | Query parameter name | `'status'` |
+| `queryField` | `string` | Database field name (optional) | `'status'` |
+| `options` | `IPaginationFilterStringEqualOptions` | Additional filtering options | `{ case: 'insensitive' }` |
+| `raw` | `boolean` | Return raw value instead of query object | `false` |
 
-This option is required and will be a field name for the query request and database.
+### `@PaginationQueryFilterContain`
 
-#### queryField
+Filters data with case-insensitive string contains matching.
 
-This option is optional and will force a field name for the query database.
-
-#### options
-
-This option is optional and will used for convert custom query database
-
-#### raw
-
-This option is optional and will return value as raw query request and not convert into query database.
-
-## PaginationQueryFilterContain
-
-This is used to set the value for pagination and convert into query database with equal options and incase sensitive. 
-If null or undefined, that will be returned `undefined`.
-
-```ts
+```typescript
 export function PaginationQueryFilterContain(
-    field: string,
-    queryField?: string,
-    options?: IPaginationFilterStringContainOptions,
-    raw = false
-): ParameterDecorator {
-    ...
-}
+  field: string,
+  queryField?: string,
+  options?: IPaginationFilterStringContainOptions,
+  raw = false
+): ParameterDecorator
 ```
 
-### Params and Options
+#### Parameters
 
-#### field
+| Parameter | Type | Description | Example |
+|-----------|------|-------------|---------|
+| `field` | `string` | Query parameter name | `'description'` |
+| `queryField` | `string` | Database field name (optional) | `'description'` |
+| `options` | `IPaginationFilterStringContainOptions` | Additional filtering options | `{ case: 'insensitive', fullMatch: false }` |
+| `raw` | `boolean` | Return raw value instead of query object | `false` |
 
-This option is required and will be a field name for the query request and database.
+### `@PaginationQueryFilterDate`
 
-#### queryField
+Filters data based on date values.
 
-This option is optional and will force a field name for the query database.
-
-#### options
-
-This option is optional and will used for convert custom query database
-
-#### raw
-
-This option is optional and will return value as raw query request and not convert into query database.
-
-## PaginationQueryFilterDate
-
-This is used to set the value for pagination and convert into query database with equal options and date type. 
-If null or undefined, that will be returned `undefined`.
-
-```ts
+```typescript
 export function PaginationQueryFilterDate(
-    field: string,
-    queryField?: string,
-    options?: IPaginationFilterDateOptions,
-    raw = false
-): ParameterDecorator {
-    ...
-}
+  field: string,
+  queryField?: string,
+  options?: IPaginationFilterDateOptions,
+  raw = false
+): ParameterDecorator
 ```
 
-### Params and Options
+#### Parameters
 
+| Parameter | Type | Description | Example |
+|-----------|------|-------------|---------|
+| `field` | `string` | Query parameter name | `'createdAt'` |
+| `queryField` | `string` | Database field name (optional) | `'createdAt'` |
+| `options` | `IPaginationFilterDateOptions` | Date filtering options | `{ time: 'startOfDay' }` |
+| `raw` | `boolean` | Return raw value instead of query object | `false` |
 
-#### field
+### `@PaginationQueryFilterEqualObjectId`
 
-This option is required and will be a field name for the query request and database.
+Filters data based on MongoDB ObjectId values.
 
-#### queryField
-
-This option is optional and will force a field name for the query database.
-
-#### options
-
-This option is optional and will used for convert custom query database
-
-#### raw
-
-This option is optional and will return value as raw query request and not convert into query database.
-
-## PaginationQueryFilterEqualObjectId
-
-This is used to set the value for pagination and convert into query database with equal options and object id type. 
-If null or undefined, that will be returned `undefined`.
-
-```ts
+```typescript
 export function PaginationQueryFilterEqualObjectId(
-    field: string,
-    queryField?: string,
-    raw = false
-): ParameterDecorator {
-    ...
+  field: string,
+  queryField?: string,
+  raw = false
+): ParameterDecorator
+```
+
+#### Parameters
+
+| Parameter | Type | Description | Example |
+|-----------|------|-------------|---------|
+| `field` | `string` | Query parameter name | `'role'` |
+| `queryField` | `string` | Database field name (optional) | `'role'` |
+| `raw` | `boolean` | Return raw value instead of query object | `false` |
+
+#### Usage Example
+
+```typescript
+@Get('/list')
+async list(
+  @PaginationQuery(...)
+  { _search, _limit, _offset, _order }: PaginationListDto,
+  @PaginationQueryFilterEqualObjectId('role')
+  role: Record<string, any>
+): Promise<IResponsePaging> {
+  const find: Record<string, any> = {
+    ..._search,
+    ...role, // { role: ObjectId('...') }
+  }
+  // Implementation
 }
 ```
 
-### Params and Options
+## How to Use
 
+### Basic Implementation
 
-#### field
+Use pagination decorators as `ParameterDecorator` in your NestJS controllers:
 
-This option is required and will be a field name for the query request and database.
-
-#### queryField
-
-This option is optional and will force a field name for the query database.
-
-#### raw
-
-This option is optional and will return value as raw query request and not convert into query database.
-
-## How to use
-
-Use this decorator as a `ParameterDecorator` from nestjs.
-
-```ts
+```typescript
 @Controller()
-export class Controller {
+export class UserController {
+  constructor(
+    private readonly userService: UserService,
+    private readonly paginationService: PaginationService
+  ) {}
 
-    @Get('/test')
-    async test(
-        @PaginationQuery(
-            TEST_DEFAULT_PER_PAGE,
-            TEST_DEFAULT_ORDER_BY,
-            TEST_DEFAULT_ORDER_DIRECTION,
-            TEST_DEFAULT_AVAILABLE_SEARCH,
-            TEST_DEFAULT_AVAILABLE_ORDER_BY
-        )
-        { _search, _limit, _offset, _order }: PaginationListDto, // <---- here,
-    ): Promise<void> {
-        return;
+  @Get('/list')
+  async list(
+    @PaginationQuery(
+      USER_DEFAULT_PER_PAGE,
+      USER_DEFAULT_ORDER_BY,
+      USER_DEFAULT_ORDER_DIRECTION,
+      USER_DEFAULT_AVAILABLE_SEARCH,
+      USER_DEFAULT_AVAILABLE_ORDER_BY
+    )
+    { _search, _limit, _offset, _order }: PaginationListDto
+  ): Promise<IResponsePaging> {
+    const find: Record<string, any> = {
+      ..._search,
     }
 
+    const users = await this.userService.findAll(find, {
+      paging: { limit: _limit, offset: _offset },
+      order: _order,
+    })
+
+    const total = await this.userService.getTotal(find)
+    const totalPage = this.paginationService.totalPage(total, _limit)
+
+    return {
+      data: users,
+      _pagination: { total, totalPage },
+    }
+  }
 }
 ```
 
-## Scenario
+### Advanced Implementation with Filters
 
-The scenario will be based on the request url, and this is an example of a source that represents RestAPI.
-
-> Imagine total data is 100
-
-```ts
-const TEST_DEFAULT_ORDER_BY = 'createdAt';
-const TEST_DEFAULT_ORDER_DIRECTION =
-    ENUM_PAGINATION_ORDER_DIRECTION_TYPE.ASC;
-const TEST_DEFAULT_PER_PAGE = 20;
-const TEST_DEFAULT_AVAILABLE_ORDER_BY = ['createdAt'];
-const TEST_DEFAULT_AVAILABLE_SEARCH = ["name", "city"];
-
-export const TEST_DEFAULT_BOOLEAN = [true, false];
-
+```typescript
 @Controller()
-export class Controller {
+export class UserController {
+  constructor(
+    private readonly userService: UserService,
+    private readonly paginationService: PaginationService
+  ) {}
 
-    @Response('messagePath')
-    @Get('/test')
-    async test(
-        @PaginationQuery(
-            TEST_DEFAULT_PER_PAGE,
-            TEST_DEFAULT_ORDER_BY,
-            TEST_DEFAULT_ORDER_DIRECTION,
-            TEST_DEFAULT_AVAILABLE_SEARCH,
-            TEST_DEFAULT_AVAILABLE_ORDER_BY
-        )
-        { _search, _limit, _offset, _order }: PaginationListDto, // <---- get PaginationQuery,
-        @PaginationQueryFilterInBoolean('test', TEST_DEFAULT_BOOLEAN)
-        testBoolean: Record<string, any>,
-    ): Promise<IResponse> {
-        return {
-            data: {
-                testBoolean,
-                _search, 
-                _limit, 
-                _offset, 
-                _order 
-            }
-        };
+  @Get('/list')
+  async list(
+    @PaginationQuery(
+      USER_DEFAULT_PER_PAGE,
+      USER_DEFAULT_ORDER_BY,
+      USER_DEFAULT_ORDER_DIRECTION,
+      USER_DEFAULT_AVAILABLE_SEARCH,
+      USER_DEFAULT_AVAILABLE_ORDER_BY
+    )
+    { _search, _limit, _offset, _order }: PaginationListDto,
+    @PaginationQueryFilterInBoolean('isActive', USER_DEFAULT_IS_ACTIVE)
+    isActive: Record<string, any>,
+    @PaginationQueryFilterInBoolean('blocked', USER_DEFAULT_BLOCKED)
+    blocked: Record<string, any>,
+    @PaginationQueryFilterEqualObjectId('role')
+    role: Record<string, any>
+  ): Promise<IResponsePaging> {
+    const find: Record<string, any> = {
+      ..._search,
+      ...isActive,
+      ...blocked,
+      ...role,
     }
 
-}
+    const users = await this.userService.findAll(find, {
+      paging: { limit: _limit, offset: _offset },
+      order: _order,
+    })
 
+    const total = await this.userService.getTotal(find)
+    const totalPage = this.paginationService.totalPage(total, _limit)
+
+    return {
+      data: users,
+      _pagination: { total, totalPage },
+    }
+  }
+}
 ```
 
-### Scenario1
+## Real-World Examples
 
-Url with no query request `http://localhost/v1/test`
+### Example 1: User Management with Filters
 
-The response will be
+```typescript
+// User pagination constants
+const USER_DEFAULT_PER_PAGE = 20
+const USER_DEFAULT_ORDER_BY = 'createdAt'
+const USER_DEFAULT_ORDER_DIRECTION = ENUM_PAGINATION_ORDER_DIRECTION_TYPE.DESC
+const USER_DEFAULT_AVAILABLE_SEARCH = ['firstName', 'lastName', 'email']
+const USER_DEFAULT_AVAILABLE_ORDER_BY = ['createdAt', 'firstName', 'lastName', 'email']
+const USER_DEFAULT_IS_ACTIVE = [true, false]
+const USER_DEFAULT_BLOCKED = [false]
+const USER_DEFAULT_INACTIVE_PERMANENT = [false]
+
+@Controller('/admin/user')
+export class UserAdminController {
+  constructor(
+    private readonly userService: UserService,
+    private readonly paginationService: PaginationService
+  ) {}
+
+  @ResponsePaging('user.list', {
+    serialization: UserListSerialization,
+  })
+  @Get('/list')
+  async list(
+    @PaginationQuery(
+      USER_DEFAULT_PER_PAGE,
+      USER_DEFAULT_ORDER_BY,
+      USER_DEFAULT_ORDER_DIRECTION,
+      USER_DEFAULT_AVAILABLE_SEARCH,
+      USER_DEFAULT_AVAILABLE_ORDER_BY
+    )
+    { _search, _limit, _offset, _order }: PaginationListDto,
+    @PaginationQueryFilterInBoolean('isActive', USER_DEFAULT_IS_ACTIVE)
+    isActive: Record<string, any>,
+    @PaginationQueryFilterInBoolean('blocked', USER_DEFAULT_BLOCKED)
+    blocked: Record<string, any>,
+    @PaginationQueryFilterEqualObjectId('role')
+    role: Record<string, any>
+  ): Promise<IResponsePaging> {
+    const find: Record<string, any> = {
+      ..._search,
+      ...isActive,
+      ...blocked,
+      ...role,
+    }
+
+    const users = await this.userService.findAll(find, {
+      paging: { limit: _limit, offset: _offset },
+      order: _order,
+    })
+
+    const total = await this.userService.getTotal(find)
+    const totalPage = this.paginationService.totalPage(total, _limit)
+
+    return {
+      data: users,
+      _pagination: { total, totalPage },
+    }
+  }
+}
+```
+
+### Example 2: Template Listing with Enum Filter
+
+```typescript
+// Template pagination constants
+const TEMPLATE_DEFAULT_PER_PAGE = 10
+const TEMPLATE_DEFAULT_ORDER_BY = 'createdAt'
+const TEMPLATE_DEFAULT_ORDER_DIRECTION = ENUM_PAGINATION_ORDER_DIRECTION_TYPE.DESC
+const TEMPLATE_DEFAULT_AVAILABLE_SEARCH = ['name', 'description']
+const TEMPLATE_DEFAULT_AVAILABLE_ORDER_BY = ['createdAt', 'name']
+const TEMPLATE_DEFAULT_IS_ACTIVE = [true]
+const TEMPLATE_DEFAULT_TYPE = 'RESUME'
+
+@Controller('/template')
+export class TemplatePublicController {
+  constructor(
+    private readonly templateService: TemplateService,
+    private readonly paginationService: PaginationService
+  ) {}
+
+  @ResponsePaging('template.list', {
+    serialization: TemplateListSerialization,
+  })
+  @Get('/')
+  async list(
+    @PaginationQuery(
+      TEMPLATE_DEFAULT_PER_PAGE,
+      TEMPLATE_DEFAULT_ORDER_BY,
+      TEMPLATE_DEFAULT_ORDER_DIRECTION,
+      TEMPLATE_DEFAULT_AVAILABLE_SEARCH,
+      TEMPLATE_DEFAULT_AVAILABLE_ORDER_BY
+    )
+    { _search, _limit, _offset, _order }: PaginationListDto,
+    @PaginationQueryFilterInBoolean('isActive', TEMPLATE_DEFAULT_IS_ACTIVE)
+    isActive: Record<string, any>,
+    @PaginationQueryFilterInEnum('type', TEMPLATE_DEFAULT_TYPE, ENUM_TEMPLATE_TYPE)
+    type: Record<string, any>
+  ): Promise<IResponsePaging> {
+    const find: Record<string, any> = {
+      ..._search,
+      ...isActive,
+      ...type,
+    }
+
+    const templates = await this.templateService.findAll(find, {
+      paging: { limit: _limit, offset: _offset },
+      order: _order,
+    })
+
+    const total = await this.templateService.getTotal(find)
+    const totalPage = this.paginationService.totalPage(total, _limit)
+
+    return {
+      data: templates,
+      _pagination: { total, totalPage },
+    }
+  }
+}
+```
+
+## Request/Response Examples
+
+### Request Examples
+
+```bash
+# Basic pagination
+GET /api/v1/admin/user/list
+
+# With search and pagination
+GET /api/v1/admin/user/list?search=john&perPage=10&page=2
+
+# With filters
+GET /api/v1/admin/user/list?isActive=true&blocked=false&role=64f8a1b2c3d4e5f6a7b8c9d0
+
+# With ordering
+GET /api/v1/admin/user/list?orderBy=firstName&orderDirection=asc
+
+# Combined parameters
+GET /api/v1/admin/user/list?search=john&perPage=5&page=1&isActive=true&orderBy=createdAt&orderDirection=desc
+```
+
+### Response Examples
+
+#### Basic Response (No Query Parameters)
 
 ```json
 {
-    "statusCode": 200,
-    "message": "messagePath",
-    "_metadata": {
-        "languages": [
-            "en"
-        ],
-        "timestamp": 1692031787997,
-        "timezone": "Asia/Jakarta",
-        "requestId": "165b5484-4287-4812-94cd-33a79c67a0fa",
-        "path": "/api/v1/test",
-        "version": "1",
-        "repoVersion": "1.0.0"
-    },
-    "data": {
-        "testBoolean": {
-            "test" : { 
-                "$in":[
-                    true,
-                    false
-                ]
-            }
-        },
-        "_search": "", 
-        "_limit": 20, 
-        "_offset": 0, 
-        "_order": {
-            "createdAt": -1
-        }
+  "statusCode": 200,
+  "message": "user.list",
+  "_metadata": {
+    "languages": ["en"],
+    "timestamp": 1692031787997,
+    "timezone": "Asia/Tehran",
+    "requestId": "165b5484-4287-4812-94cd-33a79c67a0fa",
+    "path": "/api/v1/admin/user/list",
+    "version": "1",
+    "repoVersion": "1.0.0",
+    "pagination": {
+      "search": "",
+      "availableSearch": ["firstName", "lastName", "email"],
+      "page": 1,
+      "perPage": 20,
+      "orderBy": "createdAt",
+      "orderDirection": "desc",
+      "availableOrderBy": ["createdAt", "firstName", "lastName", "email"],
+      "availableOrderDirection": ["asc", "desc"],
+      "total": 150,
+      "totalPage": 8
     }
+  },
+  "data": [
+    {
+      "_id": "64f8a1b2c3d4e5f6a7b8c9d0",
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "john.doe@example.com",
+      "isActive": true,
+      "blocked": false,
+      "createdAt": "2023-08-15T10:30:00.000Z"
+    }
+  ]
 }
 ```
 
-### Scenario2
-
-Url with set of query request `http://localhost/v1/test?search=try&perPage=10&page=5`
-
-The response will be
+#### Response with Search and Filters
 
 ```json
 {
-    "statusCode": 200,
-    "message": "messagePath",
-    "_metadata": {
-        "languages": [
-            "en"
-        ],
-        "timestamp": 1692031787997,
-        "timezone": "Asia/Jakarta",
-        "requestId": "165b5484-4287-4812-94cd-33a79c67a0fa",
-        "path": "/api/v1/test",
-        "version": "1",
-        "repoVersion": "1.0.0"
-    },
-    "data": {
-        "testBoolean": {
-            "test" : { 
-                "$in":[
-                    true,
-                    false
-                ]
-            }
-        },
-        "_search": {
-            "$or": [
-                {
-                    "name": {
-                        "$regex": "try",
-                        "$options": "i",
-                    }
-                },
-                {
-                    "city": {
-                        "$regex": "try",
-                        "$options": "i",
-                    }
-                }
-            ]
-        }, 
-        "_limit": 10, 
-        "_offset": 40, 
-        "_order": {
-            "createdAt": -1
-        }
+  "statusCode": 200,
+  "message": "user.list",
+  "_metadata": {
+    "languages": ["en"],
+    "timestamp": 1692031787997,
+    "timezone": "Asia/Tehran",
+    "requestId": "165b5484-4287-4812-94cd-33a79c67a0fa",
+    "path": "/api/v1/admin/user/list",
+    "version": "1",
+    "repoVersion": "1.0.0",
+    "pagination": {
+      "search": "john",
+      "availableSearch": ["firstName", "lastName", "email"],
+      "page": 2,
+      "perPage": 10,
+      "orderBy": "createdAt",
+      "orderDirection": "desc",
+      "availableOrderBy": ["createdAt", "firstName", "lastName", "email"],
+      "availableOrderDirection": ["asc", "desc"],
+      "total": 25,
+      "totalPage": 3
     }
+  },
+  "data": [
+    {
+      "_id": "64f8a1b2c3d4e5f6a7b8c9d1",
+      "firstName": "John",
+      "lastName": "Smith",
+      "email": "john.smith@example.com",
+      "isActive": true,
+      "blocked": false,
+      "createdAt": "2023-08-14T15:20:00.000Z"
+    }
+  ]
 }
 ```
 
 --- 
 
-# ResponsePaging
+# ResponsePaging Decorator
 
-> will describe only the differences.
+The `@ResponsePaging` decorator extends the standard `@Response` decorator with pagination-specific features. It automatically handles response formatting, metadata generation, and serialization for paginated endpoints.
 
 ## Params and Options
 
@@ -675,13 +843,23 @@ The response data will convert testNumber into number, and add addValue automati
 }
 ```
 
-# Conclusion
+## Conclusion
 
+The pagination system in AIN-NestJS provides a comprehensive solution for server-side pagination with:
 
+- **Automatic query parameter handling** with validation
+- **Multiple filter types** for different data scenarios
+- **Standardized response formatting** with metadata
+- **Type-safe implementation** with TypeScript
+- **Flexible configuration** for different use cases
+- **Built-in security** with authorization integration
 
-<!-- Docs -->
-[doc-response]: /docs/response.md
-[doc-structure-module]: /docs/stru
-[doc-structure-response]: /docs/structures/structure_response.md
-[doc-structure-module]: /docs/structures/structure_module.md
-[doc-structure-folder]: /docs/structures/structure_folder.md
+This system ensures consistent, efficient, and secure pagination across all endpoints while maintaining code reusability and maintainability.
+
+---
+
+## Documentation References
+
+- [Structure Response Documentation][doc-structure-response]
+- [Structure Module Documentation][doc-structure-module]
+- [Structure Folder Documentation][doc-structure-folder]

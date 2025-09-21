@@ -1,59 +1,213 @@
-# Installation
+# Installation Guide
 
-## Getting Started
+This guide will walk you through the complete installation process for AIN-NestJS, from setting up prerequisites to running the application.
 
-Before start, we need to install some packages and tools.
-The recommended version is the LTS version for every tool and package.
+## Prerequisites
 
-> Make sure to check that the tools have been installed successfully.
+Before starting, ensure you have the following tools installed. We recommend using the LTS (Long Term Support) versions for stability and compatibility.
 
-1. [NodeJs][ref-nodejs]
-2. [MongoDB][ref-mongodb]
-3. [Yarn][ref-yarn]
-4. [Git][ref-git]
+### Required Tools
 
-### Clone Repo
+| Tool | Minimum Version | Recommended Version | Purpose |
+|------|----------------|---------------------|---------|
+| [Node.js][ref-nodejs] | 18.0.0 | 18.17.0+ (LTS) | JavaScript runtime |
+| [MongoDB][ref-mongodb] | 5.0 | 6.0+ | Database |
+| [Yarn][ref-yarn] | 1.22.0 | Latest | Package manager |
+| [Git][ref-git] | 2.0.0 | Latest | Version control |
 
-Clone the project with git.
+### Optional Tools
+
+| Tool | Purpose |
+|------|---------|
+| [Docker][ref-docker] | Containerization |
+| [Docker Compose][ref-dockercompose] | Multi-container orchestration |
+
+### System Requirements
+
+- **Memory**: Minimum 2GB RAM (4GB+ recommended)
+- **Storage**: At least 2GB free space
+- **Operating System**: Windows 10+, macOS 10.15+, Ubuntu 18.04+
+
+### External Services (Required)
+
+Before installation, obtain the following API keys:
+
+1. **OpenAI API Key**: Register at [OpenAI Platform](https://platform.openai.com/)
+2. **AWS S3 Credentials** (Optional): For file storage
+3. **Google OAuth2** (Optional): For social authentication
+4. **LinkedIn OAuth2** (Optional): For social authentication
+5. **SMS Service API** (Optional): For mobile verification
+
+## Installation Methods
+
+### Method 1: Local Installation (Recommended for Development)
+
+#### Step 1: Clone the Repository
 
 ```bash
-git clone https://github.com/
+# Clone the repository
+git clone https://github.com/yourusername/AIN-NestJS.git
+cd AIN-NestJS
+
+# Verify the clone
+ls -la
 ```
 
-### Install Dependencies
-
-This project needs some dependencies. Let's go install it.
+#### Step 2: Install Dependencies
 
 ```bash
+# Install all dependencies
 yarn install
+
+# Verify installation
+yarn --version
+node --version
 ```
 
-### Create environment
-
-Make your own environment file with a copy of `env.example` and adjust values to suit your own environment.
+#### Step 3: Environment Configuration
 
 ```bash
+# Create environment file from template
 cp .env.example .env
+
+# Edit the environment file
+nano .env  # or use your preferred editor
 ```
 
-### Test
-
-> Next development will add e2e test
-
-The project only provide `unit testing`.
+**Required Environment Variables:**
 
 ```bash
-yarn test
+# Application Settings
+APP_NAME=AIN-Development
+APP_ENV=development
+HTTP_PORT=4000
+
+# Database
+DATABASE_HOST=mongodb://localhost:27017
+DATABASE_NAME=ain-development
+
+# Authentication
+AUTH_JWT_ACCESS_TOKEN_SECRET_KEY=your-32-char-secret-key
+AUTH_JWT_REFRESH_TOKEN_SECRET_KEY=your-32-char-refresh-secret
+
+# OpenAI (Required)
+OPEN_AI_SECRET_KEY=sk-your-openai-api-key-here
+
+# Frontend URL
+APP_FRONT_END_URL=http://localhost:3000
 ```
 
-## Run Project
-
-Finally, Cheers 🍻🍻 !!! you passed all steps.
-
-Now you can run the project.
+#### Step 4: Database Setup
 
 ```bash
+# Start MongoDB (if installed locally)
+mongod
+
+# Or start MongoDB service (Linux/macOS)
+sudo systemctl start mongod
+brew services start mongodb/brew/mongodb-community
+
+# Verify MongoDB is running
+mongo --eval "db.runCommand({ connectionStatus: 1 })"
+```
+
+#### Step 5: Seed the Database
+
+```bash
+# Run all database seeds
+yarn seed
+
+# Or run individual seeds
+yarn seed:role
+yarn seed:user
+yarn seed:plan
+yarn seed:template
+```
+
+#### Step 6: Run the Application
+
+```bash
+# Development mode (with hot reload)
 yarn start:dev
+
+# Debug mode
+yarn start:debug
+
+# Verify the application is running
+curl http://localhost:4000/health
+```
+
+### Method 2: Docker Installation (Recommended for Production)
+
+#### Step 1: Install Docker
+
+**For Ubuntu:**
+```bash
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+sudo usermod -aG docker $USER
+```
+
+**For macOS:**
+Download and install [Docker Desktop](https://www.docker.com/products/docker-desktop)
+
+**For Windows:**
+Download and install [Docker Desktop](https://www.docker.com/products/docker-desktop)
+
+#### Step 2: Clone and Configure
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/AIN-NestJS.git
+cd AIN-NestJS
+
+# Create environment file
+cp .env.example .env.production
+# Edit .env.production with your production settings
+```
+
+#### Step 3: Run with Docker Compose
+
+```bash
+# Build and start all services
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Check service status
+docker-compose ps
+```
+
+## Verification
+
+### Health Checks
+
+After installation, verify everything is working:
+
+```bash
+# Check application health
+curl http://localhost:4000/health
+
+# Check database connection
+curl http://localhost:4000/health/database
+
+# Check API documentation
+open http://localhost:4000/docs
+```
+
+### Test the Installation
+
+```bash
+# Run unit tests
+yarn test
+
+# Run tests with coverage
+yarn test:cov
+
+# Check code quality
+yarn lint
+yarn format
 ```
 
 ## Run Project with Docker
