@@ -12,61 +12,60 @@ AIN-NestJS is a sophisticated backend service built with NestJS and TypeScript t
 
 | Document | Description | Audience |
 |----------|-------------|----------|
-| [Installation Guide](installation.md) | Complete setup instructions | Developers |
-| [Configuration Guide](configuration.md) | Environment and service configuration | DevOps, Developers |
-| [API Documentation](api.md) | RESTful API reference | Frontend Developers, Integrators |
+| [Installation Guide](INSTALLATION.md) | Complete setup instructions | Developers |
+| [Configuration Guide](CONFIGURATION.md) | Environment and service configuration | DevOps, Developers |
+| [API Documentation](API.md) | RESTful API reference | Frontend Developers, Integrators |
 
 ### Architecture & Design
 
 | Document | Description | Audience |
 |----------|-------------|----------|
-| [Architecture Overview](architecture.md) | System design and patterns | Architects, Senior Developers |
-| [Database Schema](database.md) | Data models and relationships | Database Developers |
-| [Authentication & Authorization](authentication.md) | Security implementation | Security Engineers |
+| [Architecture Overview](ARCHITECTURE.md) | System design and patterns | Architects, Senior Developers |
+| [Database Schema](DATABASE.md) | Data models and relationships | Database Developers |
+| [Authentication & Authorization](AUTHENTICATION.md) | Security implementation | Security Engineers |
 
 ### Features & Functionality
 
 | Document | Description | Audience |
 |----------|-------------|----------|
-| [AI Features Guide](ai-features.md) | OpenAI integration and AI capabilities | Developers, Product Managers |
-| [Multi-Language Support](language.md) | Internationalization (i18n) | Developers |
-| [Response Handling](response.md) | API response structure | Frontend Developers |
-| [Pagination](pagination.md) | Data pagination system | Frontend Developers |
+| [AI Features Guide](AI-FEATURES.md) | OpenAI integration and AI capabilities | Developers, Product Managers |
+| [Multi-Language Support](LANGUAGE.md) | Internationalization (i18n) | Developers |
+| [Authorization System](AUTHORIZATION.md) | Role-based access control | Developers |
+| [Pagination](PAGINATION.md) | Data pagination system | Frontend Developers |
 
 ### Deployment & Operations
 
 | Document | Description | Audience |
 |----------|-------------|----------|
-| [Deployment Guide](deployment.md) | Production deployment instructions | DevOps, System Administrators |
-| [Environment Configuration](environment.md) | Environment-specific settings | DevOps |
-| [Logging & Debugging](logger.md) | Application logging | Developers, Operations |
+| [Deployment Guide](DEPLOYMENT.md) | Production deployment instructions | DevOps, System Administrators |
+| [Configuration & Settings](CONFIG_AND_SETTING.md) | Advanced configuration management | DevOps |
 
-### Development
+### Development Guides
 
 | Document | Description | Audience |
 |----------|-------------|----------|
-| [Repository Pattern](repository.md) | Data access patterns | Backend Developers |
-| [Guards & Authorization](guard.md) | Security middleware | Developers |
-| [Application Behavior](behaviour.md) | Core application behaviors | Developers |
+| [Project Structure](structures/STRUCTURE_FOLDER.md) | Complete project organization | Developers |
+| [Module Development](structures/STRUCTURE_MODULE.md) | NestJS module patterns | Backend Developers |
+| [API Response Structure](structures/STRUCTURE_RESPONSE.md) | Response formatting patterns | Frontend/Backend Developers |
 
 ## Quick Navigation
 
 ### For New Developers
-1. Start with [Installation Guide](installation.md)
-2. Read [Architecture Overview](architecture.md)
-3. Review [API Documentation](api.md)
-4. Explore [AI Features Guide](ai-features.md)
+1. Start with [Installation Guide](INSTALLATION.md)
+2. Read [Architecture Overview](ARCHITECTURE.md)
+3. Review [API Documentation](API.md)
+4. Explore [AI Features Guide](AI-FEATURES.md)
 
 ### For DevOps Engineers
-1. Review [Deployment Guide](deployment.md)
-2. Configure [Environment Settings](configuration.md)
-3. Set up [Monitoring & Logging](logger.md)
+1. Review [Deployment Guide](DEPLOYMENT.md)
+2. Configure [Environment Settings](CONFIGURATION.md)
+3. Advanced [Configuration & Settings](CONFIG_AND_SETTING.md)
 
 ### For Frontend Developers
-1. Read [API Documentation](api.md)
-2. Understand [Response Handling](response.md)
-3. Implement [Pagination](pagination.md)
-4. Handle [Multi-Language Support](language.md)
+1. Read [API Documentation](API.md)
+2. Understand [API Response Structure](structures/STRUCTURE_RESPONSE.md)
+3. Implement [Pagination](PAGINATION.md)
+4. Handle [Multi-Language Support](LANGUAGE.md)
 
 ## Key Features Covered
 
@@ -122,7 +121,7 @@ The platform provides RESTful APIs organized by access levels:
 
 ### Getting Help
 - Review the relevant documentation section
-- Check the [API Documentation](api.md) for endpoint details
+- Check the [API Documentation](API.md) for endpoint details
 - Refer to [Troubleshooting](#troubleshooting) sections in each guide
 
 ### Documentation Updates
