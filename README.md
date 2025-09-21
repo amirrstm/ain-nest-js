@@ -106,16 +106,46 @@ docker-compose up -d
 
 ## 📚 Documentation
 
+### 📋 Core Documentation
+
 | Document | Description |
 |----------|-------------|
-| [Installation Guide](docs/installation.md) | Detailed setup instructions |
-| [Architecture Overview](docs/architecture.md) | System design and architecture patterns |
-| [API Documentation](docs/api.md) | RESTful API reference and Swagger setup |
-| [Configuration Guide](docs/configuration.md) | Environment variables and settings |
-| [Authentication & Authorization](docs/authentication.md) | Security implementation details |
-| [AI Features Guide](docs/ai-features.md) | OpenAI integration and AI capabilities |
-| [Deployment Guide](docs/deployment.md) | Production deployment instructions |
-| [Database Schema](docs/database.md) | Data models and relationships |
+| [Installation Guide](docs/INSTALLATION.md) | Detailed setup instructions and prerequisites |
+| [Architecture Overview](docs/ARCHITECTURE.md) | System design and architecture patterns |
+| [API Documentation](docs/API.md) | RESTful API reference and Swagger setup |
+| [Configuration Guide](docs/CONFIGURATION.md) | Environment variables and service configuration |
+| [Deployment Guide](docs/DEPLOYMENT.md) | Production deployment with Docker and cloud setup |
+| [Database Schema](docs/DATABASE.md) | MongoDB data models and relationships |
+
+### 🔐 Security & Authentication
+
+| Document | Description |
+|----------|-------------|
+| [Authentication Guide](docs/AUTHENTICATION.md) | JWT, OAuth2, and multi-factor authentication |
+| [Authorization Guide](docs/AUTHORIZATION.md) | Role-based access control and permissions |
+
+### 🤖 AI & Features
+
+| Document | Description |
+|----------|-------------|
+| [AI Features Guide](docs/AI-FEATURES.md) | OpenAI integration, voice-to-resume, and AI capabilities |
+| [Language Support](docs/LANGUAGE.md) | Multi-language implementation and localization |
+| [Pagination System](docs/PAGINATION.md) | API pagination patterns and implementation |
+
+### 🏗️ Development Guides
+
+| Document | Description |
+|----------|-------------|
+| [Project Structure](docs/structures/STRUCTURE_FOLDER.md) | Complete project organization and folder structure |
+| [Module Development](docs/structures/STRUCTURE_MODULE.md) | NestJS module patterns and best practices |
+| [API Response Structure](docs/structures/STRUCTURE_RESPONSE.md) | Response formatting and error handling patterns |
+| [Configuration & Settings](docs/CONFIG_AND_SETTING.md) | Advanced configuration management |
+
+### 📖 Additional Resources
+
+| Document | Description |
+|----------|-------------|
+| [Project README](docs/README.md) | Extended project documentation and overview |
 
 ## 🌐 API Endpoints
 
